@@ -1,0 +1,7 @@
+# Downloads and Mac clutter
+*.zip
+.DS_Store
+
+# Old drafts kept locally, not part of the site
+/aidan-for-comms/
+/aidan-v2.html

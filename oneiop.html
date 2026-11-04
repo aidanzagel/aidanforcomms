@@ -1,0 +1,1439 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try { const t = JSON.parse(localStorage.getItem('oneiop:theme')); if (t === 'dark' || t === 'light') document.documentElement.dataset.theme = t; } catch (e) {}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>OneIOP Demo</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="A working demo of OneIOP: one member site for every IOP event, announcement and contact. Part of Aidan Zagel's platform for IOP Communications Director.">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231b2384'/%3E%3Cpolygon fill='%23d7101b' points='32,9 38.8,25.4 56.5,25.4 42.3,36 47.6,53 32,42.8 16.4,53 21.7,36 7.5,25.4 25.2,25.4'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400..800&family=Sofia+Sans+Extra+Condensed:wght@700..900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* Same campaign palette as the main site: one deliberate light look */
+  :root {
+    --navy: #1b2384;
+    --accent: #1b2384;
+    --field: #ffffff;
+    --navy-2: #121860;
+    --navy-tint: rgba(27, 35, 132, .06);
+    --navy-tint-2: rgba(27, 35, 132, .1);
+    --red: #d7101b;
+    --red-tint: rgba(215, 16, 27, .07);
+    --bg: #f7f6f2;
+    --card: #ffffff;
+    --well: #f1efe9;
+    --ink: #10143d;
+    --muted: #5f627c;
+    --faint: #9597ab;
+    --line: rgba(16, 20, 61, .08);
+    --line-2: rgba(16, 20, 61, .14);
+    --shadow: 0 1px 2px rgba(16, 20, 61, .04);
+    --shadow-up: 0 1px 2px rgba(16, 20, 61, .04), 0 12px 32px rgba(16, 20, 61, .08);
+
+    --sans: "Archivo", "Helvetica Neue", Arial, sans-serif;
+    --display: "Sofia Sans Extra Condensed", "Arial Narrow", "Helvetica Neue", sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+    --ease: cubic-bezier(.2, .8, .2, 1);
+    color-scheme: light;
+  }  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+    --navy: #2f3ac4; --navy-2: #090c24; --accent: #aab2ff; --field: #0f1230;
+    --navy-tint: rgba(170, 178, 255, .07); --navy-tint-2: rgba(170, 178, 255, .14);
+    --red: #ff5a62; --red-tint: rgba(255, 90, 98, .14);
+    --bg: #0b0e25; --card: #13173a; --well: #1a1f47; --ink: #ecebf7; --muted: #a8aac8; --faint: #7d80a4;
+    --line: rgba(236, 235, 247, .09); --line-2: rgba(236, 235, 247, .17);
+    --shadow: 0 1px 2px rgba(0, 0, 0, .35); --shadow-up: 0 1px 2px rgba(0, 0, 0, .35), 0 14px 36px rgba(0, 0, 0, .4);
+    color-scheme: dark;
+  } }
+  :root[data-theme="dark"] {
+    --navy: #2f3ac4; --navy-2: #090c24; --accent: #aab2ff; --field: #0f1230;
+    --navy-tint: rgba(170, 178, 255, .07); --navy-tint-2: rgba(170, 178, 255, .14);
+    --red: #ff5a62; --red-tint: rgba(255, 90, 98, .14);
+    --bg: #0b0e25; --card: #13173a; --well: #1a1f47; --ink: #ecebf7; --muted: #a8aac8; --faint: #7d80a4;
+    --line: rgba(236, 235, 247, .09); --line-2: rgba(236, 235, 247, .17);
+    --shadow: 0 1px 2px rgba(0, 0, 0, .35); --shadow-up: 0 1px 2px rgba(0, 0, 0, .35), 0 14px 36px rgba(0, 0, 0, .4);
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--ink); font-family: var(--sans); font-size: 14.5px; line-height: 1.5; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+  body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 60; background: var(--navy-2); }
+  a { color: inherit; }
+  ul, ol { list-style: none; }
+  button, input, select, textarea { font: inherit; color: inherit; }
+  button { cursor: pointer; }
+  img { display: block; max-width: 100%; }
+  [hidden] { display: none !important; }
+  svg.i { width: 16px; height: 16px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .label { font-family: var(--mono); font-size: 10.5px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; }
+  h1, h2, h3 { text-wrap: balance; }
+  :focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
+
+  /* ====== Demo bar, back to the campaign ====== */
+  .demo-bar {
+    position: sticky; top: env(safe-area-inset-top, 0px); z-index: 50;
+    display: flex; align-items: center; gap: 16px; min-height: 38px;
+    padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+    background: var(--navy-2); color: rgba(255, 255, 255, .7);
+  }
+  .demo-bar a { color: #fff; text-decoration: none; font-weight: 600; font-size: 13px; white-space: nowrap; }
+  .demo-bar a:hover { color: #ff9aa0; }
+  .demo-bar .v2-link { padding: 4px 10px; border-radius: 99px; background: rgba(255, 255, 255, .14); font-size: 12.5px; }
+  .demo-bar .label { margin-left: auto; text-align: right; font-size: 10px; }
+  .demo-bar .label b { color: #ff9aa0; font-weight: 600; }
+
+  /* ====== App shell ====== */
+  .app { display: grid; grid-template-columns: 240px minmax(0, 1fr); min-height: calc(100vh - 38px); }
+  .side {
+    position: sticky; top: calc(38px + env(safe-area-inset-top, 0px)); align-self: start; height: calc(100vh - 38px);
+    display: flex; flex-direction: column; gap: 26px; padding: 22px 12px 16px max(12px, env(safe-area-inset-left, 0px));
+    background: var(--card); border-right: 1px solid var(--line);
+  }
+  .brand { display: flex; align-items: center; gap: 10px; padding: 2px 10px; }
+  .brand-mark { display: grid; place-items: center; width: 32px; height: 32px; flex: none; border-radius: 9px; background: var(--navy); }
+  .brand-mark svg { width: 17px; fill: var(--red); }
+  .brand b { display: block; font-family: var(--display); font-weight: 900; font-size: 27px; text-transform: uppercase; line-height: 1; letter-spacing: .01em; color: var(--accent); }
+  .brand small { display: block; font-family: var(--mono); font-size: 9px; letter-spacing: .14em; text-transform: uppercase; color: var(--faint); margin-top: 3px; }
+  .views { display: grid; gap: 1px; }
+  .views .label { padding: 0 12px 8px; color: var(--faint); font-size: 9.5px; }
+  .views button {
+    display: flex; align-items: center; gap: 11px; width: 100%; padding: 9px 12px; border: 0; border-radius: 8px;
+    background: none; color: var(--muted); font-weight: 550; font-size: 14px; text-align: left;
+    transition: background .2s, color .2s;
+  }
+  .views button svg { width: 17px; height: 17px; }
+  .views button:hover { background: var(--navy-tint); color: var(--ink); }
+  .views button[aria-current="page"] { background: var(--navy-tint-2); color: var(--accent); font-weight: 650; }
+  .views .count { margin-left: auto; font: 600 10px/1 var(--mono); padding: 4px 6px; border-radius: 99px; background: var(--red); color: #fff; }
+  .side-note { margin-top: auto; padding: 14px; border-radius: 12px; background: var(--well); font-size: 12.5px; line-height: 1.5; color: var(--muted); }
+  .side-note strong { display: block; color: var(--ink); margin-bottom: 3px; font-size: 13px; }
+
+  .main { min-width: 0; padding-block: 20px 96px; padding-left: clamp(16px, 3.4vw, 48px); padding-right: max(clamp(16px, 3.4vw, 48px), env(safe-area-inset-right, 0px)); }
+  .inner { max-width: 1160px; margin-inline: auto; }
+  .bar { display: flex; align-items: center; gap: 14px; margin-bottom: 32px; }
+  .search { position: relative; flex: 1; max-width: 480px; }
+  .search svg { position: absolute; left: 13px; top: 50%; translate: 0 -50%; color: var(--faint); }
+  .search input { width: 100%; padding: 10px 44px 10px 38px; border: 1px solid var(--line-2); border-radius: 10px; background: var(--card); font-size: 14px; outline: none; transition: border-color .2s, box-shadow .2s; }
+  .search input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--navy-tint-2); }
+  .search kbd { position: absolute; right: 10px; top: 50%; translate: 0 -50%; padding: 1px 7px; border: 1px solid var(--line-2); border-radius: 5px; font: 500 11px/1.5 var(--mono); color: var(--faint); background: var(--bg); }
+
+  .view { animation: in .4s var(--ease); }
+  @keyframes in { from { opacity: 0; transform: translateY(5px); } }
+  .v-head { margin-bottom: 24px; }
+  .v-head h1, .hello h1 { font-size: clamp(28px, 3vw, 36px); font-weight: 700; letter-spacing: -.025em; line-height: 1.1; }
+  .v-head p, .hello p { font-size: 15px; color: var(--muted); max-width: 60ch; margin-top: 6px; }
+  .sec-title { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin: 40px 0 14px; }
+  .sec-title h2 { font-size: 15px; font-weight: 700; letter-spacing: -.01em; }
+  .sec-title .label { color: var(--faint); }
+
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 16px; box-shadow: var(--shadow); }
+  .grid-2 { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr); gap: 32px; align-items: start; }
+
+  /* ====== Graphics: always shown whole, inside a padded frame ====== */
+  .frame { padding: 10px; border-radius: 14px; background: var(--well); }
+  .frame img { width: 100%; aspect-ratio: 16 / 9; object-fit: contain; border-radius: 8px; background: var(--well); }
+
+  /* ====== Featured banner (graphic or video) ====== */
+  .banner { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.25fr); gap: clamp(20px, 3vw, 40px); align-items: center; padding: clamp(20px, 2.6vw, 32px); border-radius: 20px; background: var(--navy); color: #fff; position: relative; isolation: isolate; overflow: hidden; box-shadow: var(--shadow-up); }
+  .banner::before { content: ""; position: absolute; inset: 0; z-index: -1; background: radial-gradient(ellipse 60% 100% at 100% 0%, rgba(215, 16, 27, .35), transparent 60%), radial-gradient(ellipse 50% 80% at 0% 100%, rgba(83, 96, 255, .3), transparent 60%); }
+  .banner-body { display: grid; gap: 14px; padding: clamp(4px, 1vw, 12px); }
+  .banner-kick { display: inline-flex; justify-self: start; align-items: center; gap: 8px; padding: 5px 10px; border-radius: 99px; background: rgba(255, 255, 255, .1); border: 1px solid rgba(255, 255, 255, .16); color: rgba(255, 255, 255, .88); font-size: 10px; }
+  .banner-kick i { width: 6px; height: 6px; border-radius: 50%; background: #ff4a52; }
+  .banner h2 { font-size: clamp(26px, 2.8vw, 38px); font-weight: 700; letter-spacing: -.025em; line-height: 1.1; }
+  .banner-host { font-size: 14px; color: rgba(255, 255, 255, .7); margin-top: -6px; }
+  .banner-meta { display: grid; gap: 7px; font-size: 14px; color: rgba(255, 255, 255, .86); }
+  .banner-meta span { display: flex; align-items: center; gap: 9px; }
+  .banner-meta svg { color: rgba(255, 255, 255, .55); }
+  .banner-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+  .banner-media { position: relative; padding: 12px; border-radius: 16px; background: rgba(255, 255, 255, .08); border: 1px solid rgba(255, 255, 255, .12); }
+  .banner-media img, .banner-media video { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: contain; border-radius: 8px; background: rgba(0, 0, 0, .2); }
+  .banner-sound { position: absolute; right: 22px; bottom: 22px; display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; border: 0; background: rgba(16, 20, 61, .6); color: #fff; }
+  .banner-sound:hover { background: rgba(16, 20, 61, .85); }
+
+  /* Buttons */
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 7px; padding: 9px 14px; border-radius: 9px; border: 1px solid var(--line-2); background: var(--card); color: var(--ink); font-weight: 600; font-size: 13px; line-height: 1.2; text-decoration: none; white-space: nowrap; transition: background .2s, border-color .2s, color .2s; }
+  .btn:hover { border-color: var(--accent); color: var(--accent); }
+  .btn.primary { background: var(--navy); border-color: var(--accent); color: #fff; }
+  .btn.primary:hover { background: var(--navy-2); color: #fff; }
+  .btn.light { background: #fff; border-color: #fff; color: #1b2384; }
+  .btn.light:hover { background: #eceaf6; }
+  .btn.glass { background: rgba(255, 255, 255, .1); border-color: rgba(255, 255, 255, .22); color: #fff; }
+  .btn.glass:hover { background: rgba(255, 255, 255, .18); }
+  .btn.glass[aria-pressed="true"] { background: #fff; color: #1b2384; }
+  .btn.icon { padding: 9px; color: var(--muted); }
+  .btn[aria-pressed="true"]:not(.glass) { background: var(--navy-tint-2); border-color: transparent; color: var(--accent); }
+
+  /* Day strip */
+  .week { display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 4px; padding: 6px; }
+  .week button { display: grid; gap: 3px; justify-items: center; padding: 10px 2px 9px; border: 0; border-radius: 11px; background: none; transition: background .2s, color .2s; }
+  .week button .label { font-size: 9.5px; color: var(--faint); }
+  .week button b { font-family: var(--display); font-weight: 900; font-size: 28px; line-height: 1; }
+  .week button small { display: flex; gap: 3px; height: 5px; }
+  .week button small i { width: 5px; height: 5px; border-radius: 50%; background: var(--red); }
+  .week button small i.other { background: var(--line-2); }
+  .week button:hover { background: var(--navy-tint); }
+  .week button[aria-pressed="true"] { background: var(--navy); color: #fff; }
+  .week button[aria-pressed="true"] .label { color: rgba(255, 255, 255, .65); }
+  .week button[aria-pressed="true"] small i { background: #fff; }
+  .week button[aria-pressed="true"] small i.other { background: rgba(255, 255, 255, .35); }
+
+  /* ====== Event cards ====== */
+  .events { display: grid; gap: 12px; }
+  .ev { display: grid; grid-template-columns: minmax(200px, 260px) minmax(0, 1fr); gap: 20px; padding: 12px 20px 12px 12px; align-items: center; transition: box-shadow .3s var(--ease), border-color .3s; }
+  .ev:hover { box-shadow: var(--shadow-up); border-color: var(--line-2); }
+  .ev-body { display: grid; gap: 6px; padding-block: 6px; min-width: 0; }
+  .ev-when { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; font-size: 12.5px; color: var(--muted); font-weight: 600; }
+  .ev-when b { color: var(--red); font-weight: 700; }
+  .ev h3 { font-size: 16px; line-height: 1.3; font-weight: 700; letter-spacing: -.01em; }
+  .ev-host { font-size: 13px; color: var(--muted); }
+  .ev-meta { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 13px; color: var(--muted); }
+  .ev-meta span { display: inline-flex; align-items: center; gap: 6px; }
+  .ev-meta svg { color: var(--faint); width: 15px; height: 15px; }
+  .ev-actions { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+  .ev-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 330px), 1fr)); gap: 14px; }
+  .ev-grid .ev { grid-template-columns: minmax(0, 1fr); gap: 4px; padding: 12px; align-items: start; }
+  .ev-grid .ev-body { padding: 8px 8px 6px; }
+  .events .ev .tags { display: none; }
+  .week { margin-top: 24px; }
+  .sec-title .see-all { padding: 0; border: 0; background: none; font: 600 12.5px/1 var(--sans); color: var(--accent); }
+  .sec-title .see-all:hover { color: var(--red); }
+  .mini { padding: 6px; display: grid; }
+  .mini-row { display: grid; grid-template-columns: 32px minmax(0, 1fr); gap: 12px; align-items: center; padding: 12px; border: 0; border-radius: 10px; background: none; text-align: left; }
+  .mini-row + .mini-row { box-shadow: inset 0 1px 0 var(--line); }
+  .mini-row:hover { background: var(--navy-tint); }
+  .mini-row .post-from { margin: 0; }
+  .mini-row b { display: block; font-size: 13.5px; line-height: 1.35; font-weight: 650; }
+  .mini-row small { display: block; margin-top: 2px; font-size: 11.5px; color: var(--faint); }
+  .tags { display: flex; flex-wrap: wrap; gap: 5px; }
+  .tag { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 99px; background: var(--navy-tint-2); color: var(--accent); font: 600 9.5px/1.6 var(--mono); letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; }
+  .tag.coal { background: var(--red-tint); color: var(--red); }
+  .tag.you { background: var(--red); color: #fff; }
+  .empty { padding: 30px; text-align: center; color: var(--muted); font-size: 14.5px; }
+
+  /* Digest */
+  .digest { padding: 22px; }
+  .digest .label { color: var(--red); }
+  .digest h3 { font-size: 19px; font-weight: 700; letter-spacing: -.015em; line-height: 1.25; margin: 8px 0 6px; }
+  .digest p { color: var(--muted); font-size: 13.5px; }
+  .digest-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 16px; }
+  .digest-stats div { padding: 14px; border-radius: 12px; background: var(--well); }
+  .digest-stats b { display: block; font-family: var(--display); font-weight: 900; font-size: 34px; line-height: 1; color: var(--accent); }
+  .digest-stats s { color: var(--faint); }
+  .digest-stats span { font-size: 12px; color: var(--muted); }
+
+  /* Announcements */
+  .news { display: grid; gap: 10px; }
+
+  /* ====== Announcements: inbox with a reading pane ====== */
+  .inbox { display: grid; grid-template-columns: minmax(280px, 380px) minmax(0, 1fr); min-height: 560px; overflow: hidden; }
+  .ib-list { border-right: 1px solid var(--line); display: flex; flex-direction: column; min-width: 0; }
+  .ib-tools { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 14px; border-bottom: 1px solid var(--line); }
+  .ib-tools .chips { margin: 0; }
+  .ib-tools .unread { font-size: 12.5px; color: var(--muted); white-space: nowrap; }
+  .ib-tools .unread b { color: var(--red); }
+  .chips button .n { margin-left: 6px; font: 600 10.5px var(--mono); color: var(--faint); }
+  .chips button[aria-pressed="true"] .n { color: var(--accent); }
+  .ib-rows { overflow-y: auto; max-height: 720px; }
+  .ib-row { position: relative; display: grid; grid-template-columns: 36px minmax(0, 1fr); gap: 12px; width: 100%; padding: 14px 16px 14px 18px; border: 0; border-bottom: 1px solid var(--line); background: none; text-align: left; color: var(--ink); cursor: pointer; transition: background .15s; }
+  .ib-row:hover { background: var(--navy-tint); }
+  .ib-row[aria-current="true"] { background: var(--navy-tint-2); }
+  .ib-row[aria-current="true"]::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--accent); }
+  .ib-row.unread::after { content: ""; position: absolute; left: 7px; top: 22px; width: 6px; height: 6px; border-radius: 50%; background: var(--red); }
+  .ib-av { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 10px; background: var(--navy-tint-2); color: var(--accent); font: 700 9.5px/1 var(--mono); letter-spacing: .02em; }
+  .ib-av.coal { background: var(--red-tint); color: var(--red); }
+  .ib-av.iop { background: var(--navy); color: #fff; }
+  .ib-main { display: grid; gap: 2px; min-width: 0; }
+  .ib-top { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; font-size: 12px; color: var(--faint); }
+  .ib-top b { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; color: var(--muted); }
+  .ib-top time { flex: none; }
+  .ib-title { font-size: 14px; font-weight: 600; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .ib-row.unread .ib-title { font-weight: 750; }
+  .ib-prev { font-size: 12.5px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ib-flags { display: flex; gap: 6px; margin-top: 4px; }
+  .ib-list .hidden-note { margin: 14px; }
+  .ib-empty { padding: 40px 20px; text-align: center; color: var(--muted); font-size: 14px; }
+
+  .ib-read { padding: clamp(22px, 3vw, 40px); min-width: 0; }
+  .ib-read .back { display: none; margin-bottom: 18px; }
+  .ib-kick { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+  .ib-kick .label { color: var(--accent); }
+  .ib-read h2 { margin-top: 12px; font-size: clamp(24px, 2.6vw, 32px); line-height: 1.15; font-weight: 700; letter-spacing: -.025em; text-wrap: balance; max-width: 26ch; }
+  .ib-from { display: flex; align-items: center; gap: 12px; margin-top: 20px; padding-bottom: 20px; border-bottom: 1px solid var(--line); }
+  .ib-from .ib-av { width: 40px; height: 40px; font-size: 10px; }
+  .ib-from b { display: block; font-size: 14px; }
+  .ib-from small { display: block; font-size: 12.5px; color: var(--faint); }
+  .ib-body { margin-top: 20px; max-width: 60ch; font-size: 16px; line-height: 1.6; }
+  .ib-aud { display: flex; gap: 10px; align-items: flex-start; margin-top: 22px; padding: 12px 14px; border-radius: 12px; background: var(--well); color: var(--muted); font-size: 13px; max-width: 60ch; }
+  .ib-aud svg { flex: none; width: 16px; height: 16px; margin-top: 1px; color: var(--accent); }
+  .ib-acts { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
+  .ib-ask { margin-top: 28px; padding-top: 18px; border-top: 1px solid var(--line); font-size: 13px; color: var(--muted); }
+  .ib-ask button { padding: 0; border: 0; background: none; font-weight: 650; font-size: 13px; color: var(--accent); cursor: pointer; }
+  .ib-ask button:hover { text-decoration: underline; text-underline-offset: 2px; }
+
+  /* ====== Week calendar (Events) ====== */
+  .ev-tools { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 20px; }
+  .ev-tools .chips { margin: 0; }
+  .tl-scroll { overflow-x: auto; border-radius: 16px; border: 1px solid var(--line); background: var(--card); box-shadow: var(--shadow); }
+  .tl { display: grid; grid-template-columns: 52px repeat(8, minmax(150px, 1fr)); min-width: 1252px; }
+  .tl-hours { position: sticky; left: 0; z-index: 3; background: var(--card); border-right: 1px solid var(--line); }
+  .tl-head { height: 56px; display: grid; align-content: center; justify-items: start; padding: 0 12px; border-bottom: 1px solid var(--line); background: var(--card); }
+  .tl-head span { font: 500 10px var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--faint); }
+  .tl-head b { font-size: 17px; font-weight: 700; letter-spacing: -.01em; line-height: 1.2; }
+  .tl-col.today .tl-head span, .tl-col.today .tl-head b { color: var(--red); }
+  .tl-col { border-right: 1px solid var(--line); min-width: 0; }
+  .tl-col:last-child { border-right: 0; }
+  .tl-body { position: relative; }
+  .tl-col.today .tl-body { background: var(--navy-tint); }
+  .tl-hour { position: absolute; left: 0; right: 0; border-top: 1px dashed var(--line); }
+  .tl-hours .tl-hour { border: 0; padding-right: 8px; text-align: right; color: var(--faint); font: 500 10px var(--mono); translate: 0 -7px; }
+  .blk { position: absolute; display: grid; align-content: start; gap: 2px; overflow: hidden; padding: 6px 8px; text-align: left; border-radius: 8px; border: 1px solid var(--line-2); background: var(--card); color: var(--ink); font-size: 12px; line-height: 1.25; cursor: pointer; transition: box-shadow .2s, transform .2s var(--ease), border-color .2s; }
+  .blk:hover { box-shadow: var(--shadow-up); border-color: var(--accent); transform: translateY(-1px); z-index: 2; }
+  .blk time { font: 500 10px var(--mono); color: var(--muted); }
+  .blk b { font-weight: 650; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+  .blk.tight { padding: 6px 5px; }
+  .blk.tight b { font: 600 10px var(--mono); letter-spacing: .04em; }
+  .blk.mine { background: var(--navy); border-color: var(--navy); color: #fff; }
+  .blk.mine time { color: rgba(255, 255, 255, .78); }
+  .blk.locked { border-style: dashed; }
+  .blk.mine.locked { border: 1px dashed rgba(255, 255, 255, .7); }
+  .blk.past { opacity: .45; }
+  .blk.saved::after { content: ""; position: absolute; top: 6px; right: 6px; width: 7px; height: 7px; border-radius: 50%; background: var(--red); }
+  .now-line { position: absolute; left: 0; right: 0; height: 0; border-top: 2px solid var(--red); z-index: 3; pointer-events: none; }
+  .now-line::before { content: ""; position: absolute; left: -5px; top: -6px; width: 10px; height: 10px; border-radius: 50%; background: var(--red); }
+  .legend { display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 12px; color: var(--muted); font-size: 12.5px; }
+  .legend span { display: inline-flex; align-items: center; gap: 8px; }
+  .legend i { width: 14px; height: 10px; border-radius: 3px; border: 1px solid var(--line-2); background: var(--card); }
+  .legend i.mine { background: var(--navy); border-color: var(--navy); }
+  .legend i.now { height: 0; border: 0; border-top: 2px solid var(--red); border-radius: 0; }
+  .tl-more { margin-top: 10px; font-size: 13px; color: var(--muted); }
+  .tl-more button { padding: 0; border: 0; background: none; color: var(--accent); font-weight: 650; font-size: 13px; cursor: pointer; }
+
+  /* ====== Dialogs (event details, settings) ====== */
+  .veil { position: fixed; inset: 0; z-index: 60; background: rgba(8, 10, 34, .45); animation: fade .2s; }
+  .modal { position: fixed; z-index: 61; left: 50%; top: 50%; translate: -50% -50%; width: min(520px, calc(100% - 32px)); max-height: calc(100% - 48px); overflow-y: auto; border-radius: 18px; background: var(--card); border: 1px solid var(--line); box-shadow: 0 30px 80px rgba(8, 10, 34, .35); animation: pop .22s var(--ease); }
+  .modal > .m-close { position: absolute; top: 12px; right: 12px; z-index: 2; display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--line-2); background: var(--card); color: var(--ink); cursor: pointer; }
+  .modal .card.ev { border: 0; box-shadow: none; background: none; }
+  .modal .card.ev .frame { margin: 12px 12px 0; }
+  @keyframes fade { from { opacity: 0; } }
+  @keyframes pop { from { opacity: 0; translate: -50% calc(-50% + 10px); } }
+  .settings { padding: 26px; display: grid; gap: 22px; }
+  .settings h2 { font-size: 22px; font-weight: 700; letter-spacing: -.02em; }
+  .set-group { display: grid; gap: 10px; }
+  .set-group > h3 { font-size: 13px; font-weight: 700; }
+  .settings .chips { margin: 0; }
+  .set-group > p { font-size: 12.5px; color: var(--muted); margin-top: -6px; }
+  .themes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+  .themes button { display: grid; gap: 8px; padding: 8px 8px 10px; border-radius: 12px; border: 1px solid var(--line-2); background: var(--card); color: var(--ink); font-weight: 600; font-size: 13px; cursor: pointer; }
+  .themes button[aria-pressed="true"] { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+  .swatch { display: grid; grid-template-columns: 30% 1fr; height: 52px; border-radius: 8px; overflow: hidden; border: 1px solid var(--line); }
+  .swatch i { display: block; }
+  .swatch.light i:first-child { background: #ffffff; } .swatch.light i:last-child { background: linear-gradient(#1b2384 0 26%, #f7f6f2 26%); }
+  .swatch.dark i:first-child { background: #13173a; } .swatch.dark i:last-child { background: linear-gradient(#2f3ac4 0 26%, #0b0e25 26%); }
+  .swatch.system { grid-template-columns: 1fr 1fr; }
+  .swatch.system i:first-child { background: linear-gradient(#1b2384 0 26%, #f7f6f2 26%); } .swatch.system i:last-child { background: linear-gradient(#2f3ac4 0 26%, #0b0e25 26%); }
+  .set-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; padding: 12px 14px; border-radius: 12px; background: var(--well); font-size: 13.5px; }
+  .set-row .tags { display: flex; flex-wrap: wrap; gap: 4px; }
+  .set-foot { display: flex; flex-wrap: wrap; gap: 10px; padding-top: 4px; border-top: 1px solid var(--line); padding-top: 18px; }
+  .icon-btn { display: grid; place-items: center; width: 40px; height: 40px; flex: none; border-radius: 50%; border: 1px solid var(--line-2); background: var(--card); color: var(--muted); cursor: pointer; }
+  .icon-btn:hover { color: var(--accent); border-color: var(--accent); }
+  .icon-btn svg { width: 18px; height: 18px; }
+  @media (max-width: 820px) {
+    .inbox { grid-template-columns: minmax(0, 1fr); min-height: 0; }
+    .ib-list { border-right: 0; }
+    .ib-rows { max-height: none; }
+    .inbox.reading .ib-list { display: none; }
+    .inbox:not(.reading) .ib-read { display: none; }
+    .ib-read .back { display: inline-flex; }
+  }
+  @media (max-width: 560px) { .ib-read { padding: 20px 18px 26px; } .settings { padding: 22px 18px; } .themes button { font-size: 12px; } }
+  .post { padding: 18px 20px; }
+  .post-from { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .post-from i { display: grid; place-items: center; width: 32px; height: 32px; flex: none; border-radius: 50%; background: var(--navy-tint-2); color: var(--accent); font: 700 10px/1 var(--mono); font-style: normal; }
+  .post-from.coal i { background: var(--red-tint); color: var(--red); }
+  .post-from.iop i { background: var(--navy); color: #fff; }
+  .post-from div { min-width: 0; line-height: 1.3; }
+  .post-from b { display: block; font-size: 13px; font-weight: 700; }
+  .post-from small { display: block; font-size: 11.5px; color: var(--faint); }
+  .post-from .tags { margin-left: auto; flex: none; }
+  .post h3 { font-size: 15px; line-height: 1.35; font-weight: 700; letter-spacing: -.01em; }
+  .post p { margin-top: 4px; font-size: 13.5px; color: var(--muted); }
+  .post.pin { box-shadow: var(--shadow), inset 3px 0 0 var(--red); }
+  .post .act { display: inline-flex; gap: 6px; margin-top: 10px; padding: 0; font-weight: 700; font-size: 13px; color: var(--accent); background: none; border: 0; text-decoration: none; }
+  .post .act:hover { color: var(--red); }
+
+  /* Segmented filters */
+  .chips { display: flex; flex-wrap: wrap; gap: 2px; margin-bottom: 20px; padding: 4px; border-radius: 11px; background: var(--well); width: fit-content; max-width: 100%; }
+  .chips button { padding: 7px 12px; border-radius: 8px; border: 0; background: none; color: var(--muted); font-weight: 600; font-size: 13px; transition: background .2s, color .2s, box-shadow .2s; }
+  .chips button:hover { color: var(--ink); }
+  .chips button[aria-pressed="true"] { background: var(--card); color: var(--accent); box-shadow: 0 1px 3px rgba(16, 20, 61, .12); }
+
+  /* Programs */
+  .progs { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+  .pg { display: flex; flex-direction: column; gap: 6px; min-height: 150px; padding: 18px; text-align: left; transition: box-shadow .3s var(--ease), border-color .3s; }
+  .pg:hover { box-shadow: var(--shadow-up); border-color: var(--line-2); }
+  .pg .abbr { font-family: var(--display); font-weight: 900; font-size: 32px; line-height: .9; text-transform: uppercase; color: var(--accent); }
+  .pg.coal .abbr { color: var(--red); }
+  .pg h3 { font-size: 13.5px; line-height: 1.35; font-weight: 600; }
+  .pg .meta { margin-top: auto; display: flex; justify-content: space-between; gap: 8px; padding-top: 10px; border-top: 1px solid var(--line); font-size: 12px; color: var(--muted); }
+  .pg .meta b { color: var(--red); font-weight: 700; }
+
+  .back { display: inline-flex; align-items: center; gap: 6px; margin-bottom: 16px; padding: 0; border: 0; background: none; font-weight: 600; color: var(--muted); }
+  .back:hover { color: var(--accent); }
+  .pp-hero { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 20px; align-items: end; padding: 28px; }
+  .pp-hero .abbr { font-family: var(--display); font-weight: 900; font-size: clamp(48px, 6vw, 72px); line-height: .85; text-transform: uppercase; color: var(--accent); }
+  .pp-hero.coal .abbr { color: var(--red); }
+  .pp-hero h2 { font-size: 18px; font-weight: 700; letter-spacing: -.01em; margin-top: 10px; }
+  .pp-hero p { color: var(--muted); margin-top: 4px; max-width: 56ch; }
+  .facts { padding: 4px 20px; }
+  .facts div { display: grid; grid-template-columns: 104px minmax(0, 1fr); gap: 14px; padding: 13px 0; border-bottom: 1px solid var(--line); font-size: 13.5px; }
+  .facts div:last-child { border-bottom: 0; }
+  .facts dt { color: var(--muted); }
+
+  /* ====== Staff directory ====== */
+  .dir-tools { display: grid; gap: 12px; margin-bottom: 26px; }
+  .dir-tools .chips { margin: 0; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
+  .dir-tools .chips::-webkit-scrollbar { display: none; }
+  .dir-tools .chips button { white-space: nowrap; }
+  .dir-search { position: relative; max-width: 360px; }
+  .dir-search svg { position: absolute; left: 12px; top: 50%; translate: 0 -50%; color: var(--faint); }
+  .dir-search input { width: 100%; padding: 9px 12px 9px 36px; border: 1px solid var(--line-2); border-radius: 10px; background: var(--card); font-size: 13.5px; outline: none; }
+  .dir-search input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--navy-tint-2); }
+  .dept { margin-bottom: 28px; }
+  .dept-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; margin-bottom: 10px; }
+  .dept-head h2 { font-size: 15px; font-weight: 700; letter-spacing: -.01em; }
+  .dept-head p { font-size: 13px; color: var(--faint); }
+  .staff { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 10px; }
+  .person { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 14px; align-items: center; padding: 14px 16px; }
+  .person > i { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; background: var(--navy-tint-2); color: var(--accent); font: 700 13px/1 var(--sans); font-style: normal; letter-spacing: .02em; }
+  .person.lead > i { background: var(--navy); color: #fff; }
+  .person > div { min-width: 0; }
+  .person h3 { font-size: 14.5px; line-height: 1.25; font-weight: 700; }
+  .person p { font-size: 12.5px; color: var(--muted); line-height: 1.35; margin-top: 1px; }
+  .person-foot { display: flex; flex-wrap: wrap; align-items: center; gap: 5px; margin-top: 8px; }
+  .person-foot .tag { border: 0; cursor: pointer; }
+  .person-foot .msg { margin-left: auto; padding: 3px 9px; border: 1px solid var(--line-2); border-radius: 7px; background: var(--card); font-size: 11.5px; font-weight: 600; color: var(--muted); }
+  .person-foot .msg:hover { border-color: var(--accent); color: var(--accent); }
+  .dir-note { margin-top: 8px; font-size: 12px; color: var(--faint); }
+  .dir-note a { color: var(--accent); font-weight: 600; }
+
+  /* Request form */
+  .form { display: grid; gap: 20px; padding: 26px; max-width: 760px; }
+  .form-err { color: var(--red); font-weight: 600; font-size: 13.5px; }
+  .types.two { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
+  .types label:has(input:disabled) { opacity: .45; cursor: not-allowed; }
+  .ev-row { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 14px; }
+  .linkish.lock-btn { justify-self: start; }
+  .tag.lock { display: inline-flex; gap: 4px; background: var(--ink); color: var(--bg); }
+  .tag.lock svg { width: 10px; height: 10px; }
+  .tag.mine-post { background: var(--well); color: var(--ink); }
+  .hidden-note { display: flex; gap: 10px; align-items: flex-start; margin-top: 14px; padding: 12px 14px; border-radius: 12px; background: var(--well); color: var(--muted); font-size: 13px; }
+  .hidden-note svg { flex: none; width: 16px; height: 16px; margin-top: 1px; color: var(--accent); }
+  .hidden-note button { padding: 0; border: 0; background: none; color: var(--accent); font-weight: 700; font-size: 13px; text-decoration: underline; text-underline-offset: 2px; cursor: pointer; }
+  .post-acts { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; }
+  .post .del { margin-top: 10px; padding: 0; border: 0; background: none; color: var(--muted); font-weight: 600; font-size: 13px; cursor: pointer; }
+  .post .del.sure { color: var(--red); font-weight: 700; }
+  .poster { display: grid; align-content: space-between; gap: 14px; width: 100%; aspect-ratio: 16 / 9; padding: 20px; border-radius: 8px; background: var(--navy); color: #fff; }
+  .poster span { font: 600 10.5px var(--mono); letter-spacing: .1em; text-transform: uppercase; opacity: .8; }
+  .poster b { font-family: var(--display); font-weight: 800; font-size: clamp(26px, 3vw, 38px); line-height: 1; text-transform: uppercase; letter-spacing: .01em; text-wrap: balance; }
+  .v-head .btn { margin-top: 14px; }
+  .types { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 8px; }
+  .types label { position: relative; display: grid; gap: 3px; padding: 14px; border: 1px solid var(--line-2); border-radius: 12px; cursor: pointer; transition: border-color .2s, background .2s, box-shadow .2s; }
+  .types input { position: absolute; opacity: 0; pointer-events: none; }
+  .types b { font-size: 14px; }
+  .types span { font-size: 12px; color: var(--muted); line-height: 1.4; }
+  .types label:hover { border-color: var(--accent); }
+  .types label:has(input:checked) { border-color: var(--accent); background: var(--navy-tint); box-shadow: inset 0 0 0 1px var(--navy); }
+  .types label:has(input:focus-visible) { outline: 2px solid var(--red); outline-offset: 2px; }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .field { display: grid; gap: 7px; border: 0; }
+  .field > span { font-weight: 600; font-size: 13px; }
+  .field input, .field select, .field textarea { width: 100%; padding: 10px 12px; border: 1px solid var(--line-2); border-radius: 10px; background: var(--field); color: var(--ink); font-size: 14px; outline: none; transition: border-color .2s, box-shadow .2s; }
+  .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--navy-tint-2); }
+  .field textarea { min-height: 110px; resize: vertical; }
+  .form-foot { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; }
+  .form small { color: var(--faint); font-size: 12px; }
+  .done-msg { display: grid; gap: 10px; padding: 28px; max-width: 760px; }
+  .done-msg h3 { font-size: 24px; font-weight: 700; letter-spacing: -.02em; }
+  .steps { display: grid; gap: 8px; margin-top: 6px; counter-reset: s; }
+  .steps li { display: grid; grid-template-columns: 26px 1fr; gap: 10px; font-size: 13.5px; }
+  .steps li::before { content: counter(s); counter-increment: s; display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: var(--navy); color: #fff; font: 600 10.5px/1 var(--mono); }
+
+  /* Account menu */
+  .me { position: relative; margin-left: auto; }
+  .me-btn { display: flex; align-items: center; gap: 10px; padding: 3px 3px 3px 12px; border: 1px solid transparent; border-radius: 99px; background: none; font-size: 13px; color: var(--muted); white-space: nowrap; transition: border-color .2s, background .2s; }
+  .me-btn:hover, .me-btn[aria-expanded="true"] { border-color: var(--line-2); background: var(--card); }
+  .me-btn b { color: var(--ink); font-weight: 600; }
+  .me-btn i { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 50%; background: var(--red); color: #fff; font: 700 12px/1 var(--sans); font-style: normal; }
+  .me-menu { position: absolute; right: 0; top: calc(100% + 8px); z-index: 30; width: 270px; padding: 6px; background: var(--card); border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow-up); animation: in .2s var(--ease); }
+  .me-menu header { padding: 10px 10px 12px; border-bottom: 1px solid var(--line); margin-bottom: 4px; }
+  .me-menu header b { display: block; font-size: 14.5px; }
+  .me-menu header span { font-size: 12px; color: var(--muted); }
+  .me-menu header .tags { margin-top: 8px; }
+  .me-menu button { display: flex; width: 100%; align-items: center; gap: 10px; padding: 9px 10px; border: 0; border-radius: 8px; background: none; font-weight: 600; font-size: 13.5px; text-align: left; }
+  .me-menu button:hover { background: var(--navy-tint); }
+
+  /* Welcome row */
+  .hello { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 14px 24px; margin-bottom: 22px; }
+  .mine-row { display: flex; flex-wrap: wrap; align-items: center; gap: 5px; }
+  .mine-row .label { color: var(--faint); margin-right: 4px; }
+  .mine-row button.tag { border: 0; cursor: pointer; }
+  .mine-row .edit { padding: 2px 8px; border: 1px dashed var(--line-2); border-radius: 99px; background: none; color: var(--muted); font: 600 9.5px/1.6 var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+  .mine-row .edit:hover { border-color: var(--accent); color: var(--accent); }
+
+  .toast {
+    position: fixed; left: 50%; bottom: calc(24px + env(safe-area-inset-bottom, 0px)); z-index: 80; translate: -50% 20px; opacity: 0;
+    max-width: calc(100% - 32px); padding: 11px 16px; border-radius: 12px; background: var(--ink); color: var(--bg); font-size: 13px; font-weight: 600;
+    box-shadow: var(--shadow-up); pointer-events: none; transition: opacity .3s, translate .3s var(--ease);
+  }
+  .toast.on { opacity: 1; translate: -50% 0; }
+
+  /* ====== Member sign-in ====== */
+  .login { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); min-height: calc(100vh - 38px); }
+  .login-art { position: relative; isolation: isolate; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; gap: 32px; padding: clamp(28px, 5vw, 60px); background: var(--navy); color: #fff; }
+  .login-art::before { content: ""; position: absolute; inset: 0; z-index: -1; background: radial-gradient(ellipse 70% 60% at 100% 0%, rgba(215, 16, 27, .4), transparent 60%), radial-gradient(ellipse 60% 60% at 0% 100%, rgba(83, 96, 255, .35), transparent 60%); }
+  .login-art .brand { padding: 0; }
+  .login-art .brand b { color: #fff; font-size: 30px; }
+  .login-art .brand small { color: rgba(255, 255, 255, .55); }
+  .login-art .brand-mark { background: #fff; }
+  .login-art h1 { font-size: clamp(36px, 4.4vw, 58px); font-weight: 700; letter-spacing: -.03em; line-height: 1.02; max-width: 12ch; }
+  .login-art ul { display: grid; gap: 12px; margin-top: 24px; max-width: 420px; }
+  .login-art li { display: grid; grid-template-columns: 22px 1fr; gap: 12px; font-size: 14.5px; color: rgba(255, 255, 255, .82); }
+  .login-art li svg { width: 19px; height: 19px; color: #ff9aa0; margin-top: 1px; }
+  .peek { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+  .peek div { padding: 6px; border-radius: 10px; background: rgba(255, 255, 255, .08); border: 1px solid rgba(255, 255, 255, .12); }
+  .peek img { width: 100%; aspect-ratio: 16 / 9; object-fit: contain; border-radius: 5px; }
+  .login-form { display: flex; align-items: center; justify-content: center; padding: clamp(28px, 5vw, 60px) max(20px, env(safe-area-inset-right, 0px)) clamp(28px, 5vw, 60px) 20px; }
+  .login-card { width: 100%; max-width: 520px; display: grid; gap: 22px; }
+  .steps-bar { display: flex; gap: 6px; }
+  .steps-bar i { flex: 1; height: 3px; border-radius: 3px; background: var(--line-2); transition: background .3s; }
+  .steps-bar i.on { background: var(--navy); }
+  .login-card h2 { font-size: 28px; font-weight: 700; letter-spacing: -.025em; line-height: 1.1; }
+  .step { display: grid; gap: 18px; }
+  .step > p { color: var(--muted); margin-top: -10px; }
+  .sso { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 12px; border-radius: 11px; border: 1px solid var(--navy); background: var(--navy); color: #fff; font-weight: 650; font-size: 14.5px; transition: background .2s; }
+  .sso:hover { background: var(--navy-2); }
+  .or { display: flex; align-items: center; gap: 12px; color: var(--faint); }
+  .or::before, .or::after { content: ""; flex: 1; height: 1px; background: var(--line-2); }
+  .pick { display: grid; gap: 16px; max-height: min(46vh, 420px); overflow: auto; padding: 4px 2px; margin: -4px -2px; }
+  .pick h3 { font-family: var(--mono); font-size: 10px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--faint); margin-bottom: 8px; }
+  .pick .opts { display: flex; flex-wrap: wrap; gap: 6px; }
+  .pick label { position: relative; display: inline-flex; align-items: center; gap: 6px; padding: 7px 12px; border: 1px solid var(--line-2); border-radius: 99px; background: var(--card); font-size: 13px; font-weight: 600; cursor: pointer; transition: border-color .2s, background .2s, color .2s; }
+  .pick label:hover { border-color: var(--accent); }
+  .pick input { position: absolute; opacity: 0; pointer-events: none; }
+  .pick label svg { width: 13px; height: 13px; display: none; }
+  .pick label:has(input:checked) { background: var(--navy); border-color: var(--accent); color: #fff; }
+  .pick label.coal:has(input:checked) { background: var(--red); border-color: var(--red); }
+  .pick label:has(input:checked) svg { display: block; }
+  .pick label:has(input:focus-visible) { outline: 2px solid var(--red); outline-offset: 2px; }
+  .login-foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; }
+  .login-foot .btn.primary { padding: 11px 18px; font-size: 14px; }
+  .linkish { padding: 0; border: 0; background: none; color: var(--accent); font-weight: 650; font-size: 13.5px; }
+  .linkish:hover { color: var(--red); }
+  .login-note { display: flex; gap: 10px; padding: 12px 14px; border-radius: 10px; background: var(--well); color: var(--muted); font-size: 12.5px; }
+  .login-note svg { width: 17px; height: 17px; color: var(--accent); margin-top: 1px; }
+  .picked { font-size: 12.5px; color: var(--muted); }
+  .picked b { color: var(--accent); }
+
+  @media (max-width: 1100px) { .grid-2 { grid-template-columns: minmax(0, 1fr); gap: 0; } }
+  @media (max-width: 980px) { .banner { grid-template-columns: minmax(0, 1fr); } .banner-media { order: -1; } }
+  @media (max-width: 900px) {
+    .login { grid-template-columns: minmax(0, 1fr); }
+    .login-art { gap: 18px; padding-block: 24px 28px; }
+    .login-art ul, .peek { display: none; }
+    .login-form { padding-top: 28px; align-items: start; }
+    .pick { max-height: none; }
+  }
+  @media (max-width: 820px) {
+    .app { grid-template-columns: minmax(0, 1fr); align-content: start; }
+    .side { position: sticky; top: calc(38px + env(safe-area-inset-top, 0px)); z-index: 40; height: auto; flex-direction: row; align-items: center; gap: 12px; padding: 8px max(16px, env(safe-area-inset-right, 0px)) 8px max(16px, env(safe-area-inset-left, 0px)); border-right: 0; border-bottom: 1px solid var(--line); overflow-x: auto; scrollbar-width: none; }
+    .side::-webkit-scrollbar { display: none; }
+    .brand { padding: 0; }
+    .brand-mark { width: 28px; height: 28px; }
+    .brand b { font-size: 23px; }
+    .brand small, .views .label, .side-note { display: none; }
+    .views { display: flex; gap: 2px; }
+    .views button { padding: 7px 10px; font-size: 13px; white-space: nowrap; }
+    .views button svg { display: none; }
+    .me-btn span, .search kbd { display: none; }
+    .me-btn { padding: 0; }
+    .ev { grid-template-columns: minmax(0, 1fr); gap: 4px; padding: 12px; }
+    .ev-body { padding: 8px 6px 4px; }
+  }
+  @media (max-width: 560px) {
+    .demo-bar .label { display: none; }
+    .week { grid-template-columns: repeat(8, minmax(44px, 1fr)); overflow-x: auto; scrollbar-width: none; }
+    .week::-webkit-scrollbar { display: none; }
+    .week button b { font-size: 23px; }
+    .row { grid-template-columns: minmax(0, 1fr); }
+    .pp-hero { grid-template-columns: minmax(0, 1fr); padding: 22px; }
+    .pp-hero .btn { justify-self: start; }
+    .facts div { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+    .form, .done-msg { padding: 20px; }
+    .ev-row { grid-template-columns: minmax(0, 1fr); }
+    .chips { width: auto; }
+    .staff { grid-template-columns: minmax(0, 1fr); }
+    .dir-search { max-width: none; }
+  }
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+</style>
+</head>
+<body>
+
+<div class="demo-bar">
+  <a href="index.html">← Back to Aidan for Comms</a>
+  <span class="label"><b>Demo</b> · Events and student leaders from iop.harvard.edu · Announcements are samples</span>
+</div>
+
+<section class="login" id="login" hidden>
+  <div class="login-art">
+    <div class="brand"><span class="brand-mark"><svg viewBox="0 0 100 95" aria-hidden="true"><polygon points="50,0 61.5,37 97,37 68.5,58 79.5,92 50,71 20.5,92 31.5,58 3,37 38.5,37"/></svg></span><div><b>OneIOP</b><small>Institute of Politics</small></div></div>
+    <div>
+      <h1>Your IOP, in one place.</h1>
+      <ul>
+        <li><svg class="i" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Your programs' events first, with one click to Google Calendar</li>
+        <li><svg class="i" viewBox="0 0 24 24"><path d="M4 5h16v14H4zM8 9h8M8 13h8M8 17h5"/></svg>Announcements from your programs, from the people who run them</li>
+        <li><svg class="i" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/></svg>Every student leader and program chair, in one directory</li>
+      </ul>
+    </div>
+    <div class="peek" aria-hidden="true">
+      <div><img src="assets/iop/midterms.jpg" alt=""></div>
+      <div><img src="assets/iop/latino.jpg" alt=""></div>
+      <div><img src="assets/iop/lu.jpg" alt=""></div>
+    </div>
+  </div>
+  <div class="login-form">
+    <form class="login-card" id="login-form" novalidate>
+      <div class="steps-bar" aria-hidden="true"><i class="on"></i><i id="bar-2"></i></div>
+      <div class="step" id="step-1">
+        <h2>Sign in to OneIOP</h2>
+        <p>Members sign in with their Harvard email. In this demo, just tell us your name.</p>
+        <button type="button" class="sso" id="sso"><svg class="i" viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>Continue with Harvard sign-in</button>
+        <div class="or label">or, for the demo</div>
+        <div class="row">
+          <label class="field"><span>First name</span><input name="name" autocomplete="off" placeholder="Your first name" maxlength="24"></label>
+          <label class="field"><span>Class year</span><select name="year"><option>2027</option><option>2028</option><option selected>2029</option><option>2030</option></select></label>
+        </div>
+        <div class="login-note"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg><span>This is a demo. Nothing you enter is sent anywhere; it only stays in this browser so the page can personalize itself.</span></div>
+        <div class="login-foot"><button type="button" class="linkish" id="guest">Look around as a guest →</button><button type="button" class="btn primary" id="next">Continue</button></div>
+      </div>
+      <div class="step" id="step-2" hidden>
+        <h2 id="pick-title">Pick your programs</h2>
+        <p>OneIOP puts their events, announcements and contacts first. You can change these any time.</p>
+        <div class="pick" id="pick"></div>
+        <div class="login-foot"><button type="button" class="linkish" id="back-1">← Back</button><span class="picked" id="picked"></span><button type="submit" class="btn primary">Enter OneIOP →</button></div>
+      </div>
+    </form>
+  </div>
+</section>
+
+<div class="app" id="app" hidden>
+  <aside class="side">
+    <div class="brand"><span class="brand-mark"><svg viewBox="0 0 100 95" aria-hidden="true"><polygon points="50,0 61.5,37 97,37 68.5,58 79.5,92 50,71 20.5,92 31.5,58 3,37 38.5,37"/></svg></span><div><b>OneIOP</b><small>Institute of Politics</small></div></div>
+    <nav class="views" aria-label="OneIOP sections">
+      <span class="label">Menu</span>
+      <button type="button" data-view="home" aria-current="page"><svg class="i" viewBox="0 0 24 24"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg>This week</button>
+      <button type="button" data-view="events"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Events</button>
+      <button type="button" data-view="news"><svg class="i" viewBox="0 0 24 24"><path d="M4 5h16v14H4zM8 9h8M8 13h8M8 17h5"/></svg>Announcements<span class="count" id="news-count"></span></button>
+      <button type="button" data-view="programs"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></svg>Programs</button>
+      <button type="button" data-view="people"><svg class="i" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5M16 4.8a3.5 3.5 0 0 1 0 6.4M18.5 14.8c1.6.8 2.6 2.5 3 5.2"/></svg>Staff directory</button>
+      <button type="button" data-view="request"><svg class="i" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Request comms help</button>
+    </nav>
+    <p class="side-note"><strong>Why OneIOP?</strong>Today the details are spread across emails, group chats and Instagram. Here, everything lives in one place, and the inbox gets one digest a week.</p>
+  </aside>
+
+  <main class="main">
+    <div class="inner">
+      <div class="bar">
+        <label class="search"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><input id="q" type="search" placeholder="Search events, programs, people…" aria-label="Search OneIOP" autocomplete="off"><kbd>/</kbd></label>
+        <button type="button" class="icon-btn" id="settings-btn" aria-label="Settings" title="Settings"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
+        <div class="me"><button type="button" class="me-btn" id="me-btn" aria-expanded="false" aria-haspopup="menu"><span>Signed in as <b id="me-name"></b></span><i id="me-ini" aria-hidden="true"></i></button><div class="me-menu" id="me-menu" role="menu" hidden></div></div>
+      </div>
+      <div id="view"></div>
+    </div>
+  </main>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+  // ====== Banner ======
+  // By default the banner shows the featured event's own graphic.
+  // To use your own graphic instead, set image (e.g. 'assets/oneiop-banner.jpg', 16:9 works best).
+  // To use a video, set video (an .mp4) and, optionally, poster (a still shown while it loads).
+  const BANNER = {
+    image: '',
+    video: '',
+    poster: '',
+    kicker: 'Featured this week',
+    event: 'auto', // 'auto' features the next event from the member's programs, or set an event's iop.harvard.edu URL slug
+  };
+
+  // ====== Programs ======
+  const PROGRAMS = [
+    ['Forum', 'John F. Kennedy Jr. Forum', 'events', 'Speakers, debates and discussions in the Forum, most weeknights.'],
+    ['FSG', 'Fellows & Study Groups', 'events', 'Weekly, off-the-record study groups led by this semester’s Resident Fellows.'],
+    ['Conferences', 'Conferences Committee', 'events', 'Plans the IOP’s national and campus conferences.'],
+    ['HPU', 'Harvard Political Union', 'events', 'Weekly debates on the questions that divide us.'],
+    ['WIL', 'Women’s Initiative in Leadership', 'events', 'A cohort and speaker series on women in public life.'],
+    ['PRE', 'Politics of Race and Ethnicity', 'events', 'Discussions on race, ethnicity and American politics.'],
+    ['GAP', 'Global Affairs Program', 'events', 'Speakers and opportunities in international affairs.'],
+    ['Environment', 'Program for Environmental Politics', 'events', 'Discussions on climate and environmental policy.'],
+    ['Policy', 'The Policy Program', 'research', 'Student teams writing real policy proposals.'],
+    ['HPOP', 'Harvard Public Opinion Project', 'research', 'The team behind the Harvard Youth Poll.'],
+    ['RSG', 'Research & Strategy Group', 'research', 'Research projects for public-sector clients.'],
+    ['GovLab', 'Governance Lab', 'research', 'Student founders building civic startups.'],
+    ['CIVICS', 'CIVICS', 'service', 'Teaching civics in local classrooms.'],
+    ['Cit Tut', 'Citizenship Tutoring', 'service', 'Helping neighbors prepare for the citizenship test.'],
+    ['HVC', 'Harvard Votes Challenge', 'service', 'Student registration and turnout across Harvard.'],
+    ['HPR', 'Harvard Political Review', 'media', 'The IOP’s magazine of politics and policy.'],
+    ['CAP', 'Campaigns and Advocacy Program', 'media', 'Workshops on running campaigns and advocacy.'],
+    ['Arts', 'Coalition for the Arts', 'coalition', 'Where art and politics meet.'],
+    ['Conservative', 'Conservative Coalition', 'coalition', 'Conservative speakers and discussions.'],
+    ['GSC', 'Gender & Sexuality Coalition', 'coalition', 'Conversations on gender, sexuality and politics.'],
+    ['Service', 'Service Coalition', 'coalition', 'Service projects across Cambridge and Boston.'],
+  ].map(([id, name, cat, about]) => ({ id, name, cat, about }));
+  const IOP = { id: 'IOP', name: 'Institute of Politics', cat: 'events', about: '' };
+  const prog = (id) => PROGRAMS.find((p) => p.id === id) || IOP;
+
+  // ====== Real IOP events (from iop.harvard.edu/events) ======
+  // tools/update_events.py refreshes events.json and this built-in copy once a day.
+  // Times are 24-hour Eastern. Past events are dropped when the page loads.
+  const URL_BASE = 'https://iop.harvard.edu/events/';
+  let DATA = /*EVENTS*/{"updated": "2026-11-04T12:47-05:00", "source": "https://iop.harvard.edu/events", "events": [{"p": "FSG", "date": "2026-11-04", "s": "16:00", "e": "17:15", "where": "L-166", "img": "assets/iop/rayes1.jpg", "url": "study-group-ambassador-nathalie-rayes-behind-scenes-power-leadership-diplomacy-and-white", "title": "Behind the Scenes of Power: Leadership, Diplomacy, and the White House", "host": "Study group with Ambassador Nathalie Rayes", "desc": "With Ambassador Capricia Marshall and Opal Vadhan, on leading at the highest levels of government.", "id": 1}, {"p": "FSG", "date": "2026-11-04", "s": "16:30", "e": "17:45", "where": "B-400 (Land Hall)", "img": "assets/iop/craft-ducey.jpg", "url": "study-group-ambassador-kelly-craft-governor-doug-ducey-and-honorable-alejandro-mayorkas", "title": "Politics in an Age of Discontent: Civil Discourse and the Future of Democracy", "host": "Study group with Ambassador Kelly Craft, Gov. Doug Ducey and Sec. Alejandro Mayorkas", "desc": "Can we still see each other as legitimate opponents? A conversation on civil discourse in a fragmented media world.", "id": 2}, {"p": "Forum", "date": "2026-11-04", "s": "18:00", "e": "19:15", "where": "JFK Jr. Forum", "img": "assets/iop/new-political-landscape-what-happened-last-night-and-what-co.webp", "url": "new-political-landscape-what-happened-last-night-and-what-comes-next", "title": "The New Political Landscape: What Happened Last Night and What Comes Next", "host": "David Plouffe and Jonathan Martin", "desc": "With Democrats winning big in traditionally red states like Texas, Kansas and South Carolina, what does the new Democratic majority mean for the country's political landscape going forward?", "id": 3}, {"p": "FSG", "date": "2026-11-05", "s": "14:00", "e": "15:15", "where": "L-166", "img": "assets/iop/rayes2.jpg", "url": "study-group-ambassador-nathalie-rayes-front-lines-european-security-nato-ukraine-and-future", "title": "At the Front Lines of European Security: NATO, Ukraine, and the Future of the West", "host": "Study group with Ambassador Nathalie Rayes", "desc": "With Croatia’s Deputy Prime Minister and Minister of Defense, Ivan Anušić.", "id": 4}, {"p": "FSG", "date": "2026-11-05", "s": "16:00", "e": "17:15", "where": "L-166", "img": "assets/iop/lu.jpg", "url": "study-group-ambassador-chris-lu-finding-your-voice-how-leaders-communicate-sarah-hurwitz", "title": "Finding Your Voice: How Leaders Communicate", "host": "Study group with Ambassador Chris Lu", "desc": "Former head speechwriter Sarah Hurwitz on how leaders use words to build trust and inspire action.", "id": 5}, {"p": "FSG", "date": "2026-11-05", "s": "16:30", "e": "17:45", "where": "L-163", "img": "assets/iop/mayorkas.jpg", "url": "study-group-honorable-alejandro-mayorkas-policymaking-and-governance-homeland-security", "title": "Policymaking and Governance in Homeland Security", "host": "Study group with Secretary Alejandro Mayorkas", "desc": "Case studies on the choices and tradeoffs behind homeland security policy.", "id": 6}, {"p": "IOP", "date": "2026-11-05", "s": "17:15", "e": "18:30", "where": "Nye ABC, Taubman Building", "img": "assets/iop/afghanistan.jpg", "url": "afghanistan-america-war-refuge-and-power-welcome", "title": "From Afghanistan to America: War, Refuge, and the Power of Welcome", "host": "Rebecca Blumenstein and Diana Kapp, with Mursal Rahim", "desc": "The authors of The Last Free Women in conversation with journalist Ellen Nakashima.", "id": 7}, {"p": "FSG", "date": "2026-11-09", "s": "16:15", "e": "17:30", "where": "L-130", "img": "assets/iop/rayes3.jpg", "url": "study-group-ambassador-nathalie-rayes-power-opportunity-education-philanthropy-and-american", "title": "The Power of Opportunity: Education, Philanthropy, and the American Dream", "host": "Study group with Ambassador Nathalie Rayes", "desc": "With Mike Bezos, co-founder and chair of the Bezos Family Foundation.", "id": 8}, {"p": "FSG", "date": "2026-11-09", "s": "16:30", "e": "17:45", "where": "L-163", "img": "assets/iop/whipple.jpg", "url": "study-group-chris-whipple-diplomacy-and-spycraft-william-j-burns", "title": "Diplomacy and Spycraft", "host": "Study group with Chris Whipple", "desc": "Former CIA Director William J. Burns on leading the world’s most powerful spy agency.", "id": 9}, {"p": "Forum", "date": "2026-11-09", "s": "18:00", "e": "19:15", "where": "JFK Jr. Forum", "img": "assets/iop/latino.jpg", "url": "beyond-ballot-latino-voters-and-new-political-landscape", "title": "Beyond the Ballot: Latino Voters and the New Political Landscape", "host": "Sen. Rubén Gallego and panel, moderated by Ambassador Nathalie Rayes", "desc": "What the midterms revealed about Latino voters, and what to watch next.", "id": 10}, {"p": "IOP", "date": "2026-11-10", "s": "12:00", "e": "13:30", "where": "L-166", "img": "assets/iop/advocacy-public-service-building-coalitions-and-driving-chan.webp", "url": "advocacy-public-service-building-coalitions-and-driving-change-laphonza-butler-and", "title": "From Advocacy to Public Service: Building Coalitions and Driving Change with Laphonza Butler and Ambassador Nathalie Rayes", "host": "Laphonza Butler and Ambassador Nathalie Rayes", "desc": "How do leaders build coalitions, expand political representation, and turn public service into meaningful change?", "id": 11}, {"p": "FSG", "date": "2026-11-10", "s": "16:00", "e": "17:15", "where": "L-130", "img": "assets/iop/study-group-ambassador-nathalie-rayes-diplomacy-front-lines-.webp", "url": "study-group-ambassador-nathalie-rayes-diplomacy-front-lines-leadership-democracy-and-future", "title": "Diplomacy on the Front Lines: Leadership, Democracy, and the Future of the Transatlantic Alliance", "host": "Study group with Ambassador Nathalie Rayes", "desc": "What does it take to lead American diplomacy during a defining moment in European history?", "id": 12}, {"p": "FSG", "date": "2026-11-10", "s": "16:00", "e": "17:15", "where": "L-166", "img": "assets/iop/craft.jpg", "url": "study-group-ambassador-kelly-craft-trumps-foreign-policy-final-two-years-marc-thiessen", "title": "Trump’s Foreign Policy: The Final Two Years", "host": "Study group with Ambassador Kelly Craft", "desc": "With former White House chief speechwriter Marc Thiessen.", "id": 13}, {"p": "FSG", "date": "2026-11-10", "s": "16:30", "e": "17:45", "where": "L-163", "img": "assets/iop/study-group-chris-whipple-conclusion-all-presidents-men-and-.webp", "url": "study-group-chris-whipple-conclusion-all-presidents-men-and-women", "title": "Conclusion: All the President's Men and Women", "host": "Study group with Chris Whipple", "desc": "In the final Study Group Session, we’ll wrap up our themes. How important are the roles of the White House chiefs, CIA directors, and campaign managers? What makes them effective or not?", "id": 14}, {"p": "FSG", "date": "2026-11-12", "s": "17:00", "e": "18:15", "where": "L-130", "img": "assets/iop/study-group-ambassador-nathalie-rayes-leadership-under-press.webp", "url": "study-group-ambassador-nathalie-rayes-leadership-under-pressure-lessons-los-angeles-city", "title": "Leadership Under Pressure: Lessons from Los Angeles City Hall with Jim Hahn", "host": "Study group with Ambassador Nathalie Rayes", "desc": "What does it take to lead one of America’s most complex cities?", "id": 15}, {"p": "Forum", "date": "2026-11-12", "s": "18:00", "e": "19:15", "where": "JFK Jr. Forum", "img": "assets/iop/military-service-city-hall-mayors-patrick-farrell-beach-pace.webp", "url": "military-service-city-hall-mayors-patrick-farrell-beach-pace-sly-james", "title": "From Military Service to City Hall with Mayors Patrick Farrell, Beach Pace, & Sly James", "host": "Mayor Patrick Farrell, Mayor Beach Pace and Mayor Sly James", "desc": "This Forum event will be held in honor of former Director of the Institute of Politics, Setti D. Warren.", "id": 16}, {"p": "IOP", "date": "2026-11-13", "s": "16:00", "e": "17:15", "where": "JFK Jr. Forum", "img": "assets/iop/our-narratives-fall-2026-showcase.webp", "url": "our-narratives-fall-2026-showcase", "title": "Our Narratives | Fall 2026 Showcase", "host": "Institute of Politics", "desc": "Join us on November 13 at 4:00pm for the Our Narratives Fall 2026 Showcase!", "id": 17}, {"p": "Forum", "date": "2026-11-16", "s": "18:00", "e": "19:15", "where": "JFK Jr. Forum", "img": "assets/iop/making-vision-venture-capital-creativity-and-power-story-dav.webp", "url": "making-vision-venture-capital-creativity-and-power-story-david-fialkow-oscar-winning", "title": "Making the Vision: Venture Capital, Creativity, and the Power of Story with David Fialkow, Oscar-Winning Filmmaker", "host": "David Fialkow, Reza R. Satchu and Amogh Ganjikunta", "desc": "David Fialkow joins us for a conversation that will explore the intersection of entrepreneurship, investing, and storytelling, drawing on his experience as a successful venture capitalist…", "id": 18}, {"p": "IOP", "date": "2026-11-18", "s": "12:00", "e": "13:30", "where": "Malkin Penthouse", "img": "assets/iop/inside-alliance-conversation-ambassadors-americas-nato-allie.webp", "url": "inside-alliance-conversation-ambassadors-americas-nato-allies", "title": "Inside the Alliance: A Conversation with Ambassadors from America's NATO Allies", "host": "Ángeles Moreno Bau, Jens Hanefeld and Svanhildur Hólm Valsdóttir", "desc": "Join IOP Fellows Ambassador Kelly Craft (former U.S. Ambassador to the United Nations and U.S. Ambassador to Canada) and Ambassador Nathalie Rayes (former U.S. Ambassador to Croatia) for a…", "id": 19}]}/*END*/;
+  let EVENTS = [], DAYS = [];
+  const TODAY = 0;
+  const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const WD = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  // "Now" in Eastern time, as a plain y-m-d and minutes, whatever the viewer's time zone
+  const eastern = () => {
+    const parts = Object.fromEntries(new Intl.DateTimeFormat('en-US', { timeZone: 'America/New_York', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).formatToParts(new Date()).map((x) => [x.type, x.value]));
+    return { date: `${parts.year}-${parts.month}-${parts.day}`, min: +parts.hour * 60 + +parts.minute };
+  };
+  const ymd = (d) => d.toISOString().slice(0, 10);
+  const addDays = (date, n) => { const d = new Date(date + 'T12:00:00Z'); d.setUTCDate(d.getUTCDate() + n); return ymd(d); };
+  const loadEvents = (data) => {
+    const now = eastern();
+    const toMin = (t) => { const [h, m] = t.split(':'); return +h * 60 + +m; };
+    let list = (data.events || []).filter((e) => e.date > now.date || (e.date === now.date && toMin(e.e) > now.min));
+    // If the data is older than the events in it (the daily update hasn't run), show it from its own first day
+    let start = now.date;
+    if (!list.length && data.events && data.events.length) { list = data.events.slice(); start = list.map((e) => e.date).sort()[0]; }
+    DAYS = Array.from({ length: 8 }, (_, i) => { const date = addDays(start, i), d = new Date(date + 'T12:00:00Z'); return { i, date, d: WD[d.getUTCDay()], n: d.getUTCDate(), m: MONTHS[d.getUTCMonth()] }; });
+    const index = Object.fromEntries(DAYS.map((d) => [d.date, d.i]));
+    // Events past the 8-day strip still appear on the Events page
+    BASE = list.map((e) => ({ ...e, day: index[e.date] ?? Math.round((new Date(e.date) - new Date(start)) / 864e5) }));
+    EVENTS = BASE;
+    DATA = data;
+  };
+  let BASE = [];
+  const dayOf = (date) => Math.round((new Date(date + 'T12:00:00Z') - new Date(DAYS[0].date + 'T12:00:00Z')) / 864e5);
+  const dayInfo = (i) => DAYS[i] || (() => { const date = addDays(DAYS[0].date, i), d = new Date(date + 'T12:00:00Z'); return { i, date, d: WD[d.getUTCDay()], n: d.getUTCDate(), m: MONTHS[d.getUTCMonth()] }; })();
+  loadEvents(DATA);
+  const imgSrc = (e) => e.img;
+  // Events without an IOP graphic (members-only and posted ones) get a simple title card
+  const art = (e) => e.img ? `<img src="${esc(imgSrc(e))}" alt="${esc(e.title)} event graphic" loading="lazy">`
+    : `<span class="poster"><span>${esc(prog(e.p).name)}${e.aud === 'members' ? ' · Members only' : ''}</span><b>${esc(e.title)}</b><span>${esc(dayName(e.day))} · ${esc(fmt(e.s))}</span></span>`;
+
+  // ====== Sample announcements (illustrative) ======
+  // The first and third posts follow the live event data, so they never go stale
+  let NEWS = [];
+  const buildNews = () => {
+    const forum = EVENTS.filter((e) => e.p === 'Forum').sort(byTime)[0];
+    const sg = EVENTS.filter((e) => e.p === 'FSG' && e.day < DAYS.length).length;
+    NEWS = [
+      forum && { id: 1, p: 'Forum', pin: true, when: 'Today', title: `Next in the Forum: ${forum.title}`, body: `${dayName(forum.day)} at ${fmt(forum.s)}. ${forum.host}. Doors open 30 minutes early; seating is first come, first served.`, link: URL_BASE + forum.url, act: 'Event details' },
+      { id: 2, p: null, pin: true, when: 'Today', title: 'Welcome to OneIOP', body: 'Every announcement, event and contact now lives here. Emails get shorter: one digest every Sunday, with the details one click away.' },
+      sg && { id: 3, p: 'FSG', when: 'Yesterday', title: 'Study groups this week: RSVP with your Harvard email', body: `${plural(sg, 'study group')} in the next eight days. They’re off the record and fill up fast.`, act: 'See study groups', go: 'FSG' },
+      { id: 9, p: 'CIVICS', aud: 'members', when: 'Yesterday', title: `Teachers’ social on ${dayInfo(2).d}`, body: 'Dinner in the IOP Conference Room for everyone teaching with CIVICS this fall, 6 PM. It’s on your Events calendar.', act: 'See it in Events', goto: 'events' },
+      { id: 4, p: 'HPOP', when: 'Yesterday', title: 'Join the next Youth Poll team', body: 'No experience needed. Info session details coming soon.' },
+      { id: 5, p: 'HPR', when: '2 days ago', title: 'Pitch a piece for the next issue', body: 'Midterm takes welcome. Pitches go to the HPR editors through the request form.' },
+      { id: 6, p: 'HVC', when: '3 days ago', title: 'Thanks, turnout captains', body: 'Every house and dorm had a registration push this fall. Results recap coming after the election.' },
+      { id: 7, p: 'Service', when: '4 days ago', title: 'Saturday service day sign-ups', body: 'Twenty spots left for this weekend’s food bank shift.', act: 'Sign up' },
+      { id: 8, p: 'CAP', from: 'Communications Director', when: '5 days ago', title: 'New: campaign graphics templates', body: 'Running for office on campus? Grab the templates from the Comms Playbook.', act: 'Get the templates' },
+    ].filter(Boolean);
+    NEWS.forEach((n) => { n.from = n.from || (n.p ? `${n.p} chair` : 'Communications Director'); });
+  };
+
+  // ====== IOP student leadership (from iop.harvard.edu/about/student-leadership) ======
+  const DEPTS = [
+    ['exec', 'Executive Team', 'Elected to lead the IOP this year'],
+    ['dir', 'Student Advisory Committee Directors', 'Membership, organizing, diversity and careers'],
+    ['chair', 'Program Chairs', 'The students who run each IOP program'],
+    ['coal', 'Coalition Chairs', 'The students who lead each coalition'],
+  ];
+  const STAFF = [
+    ['Lorenzo Ruiz', 'President', 'exec', '2027'],
+    ['Will Smialek', 'Vice President', 'exec', '2027'],
+    ['Jack Tueting', 'Treasurer', 'exec', '2027'],
+    ['Dhara Patel', 'Communications Director', 'exec', '2027'],
+    ['Taylor Beljon-Regen', 'Director of Membership', 'dir', '2029'],
+    ['Patterson Frazier', 'Director of Membership', 'dir', '2029'],
+    ['Scarlett Eldaief', 'Director of Organizing and Special Projects', 'dir', '2028'],
+    ['Alfredo Hernandez', 'Director of Diversity and Engagement', 'dir', '2028'],
+    ['Allison McGourty', 'Director of Diversity and Engagement', 'dir', '2029'],
+    ['Jordan Schwartz', 'Director of Internships and Career Services', 'dir', '2027'],
+    ['Tucker Coombs', 'JFK Jr. Forum Chair', 'chair', '2028', 'Forum'],
+    ['Cynthia Garcia', 'JFK Jr. Forum Chair', 'chair', '2027', 'Forum'],
+    ['Anoushka Lal', 'Fellows & Study Groups Chair', 'chair', '2028', 'FSG'],
+    ['Samantha Ruazol', 'Fellows & Study Groups Chair', 'chair', '2027', 'FSG'],
+    ['Emma Pham-Tran', 'Conferences Chair', 'chair', '2027', 'Conferences'],
+    ['Angelina Xu', 'Conferences Chair', 'chair', '2028', 'Conferences'],
+    ['Bella Evans', 'Harvard Political Union Chair', 'chair', '2027', 'HPU'],
+    ['Layla Kelly', 'Women’s Initiative in Leadership Chair', 'chair', '2028', 'WIL'],
+    ['Ana Cabrera Antkowiak', 'Politics of Race and Ethnicity Chair', 'chair', '2028', 'PRE'],
+    ['Mark McDonald', 'Global Affairs Program Chair', 'chair', '2028', 'GAP'],
+    ['Gaia Alexandra Negrini', 'Global Affairs Program Chair', 'chair', '2027', 'GAP'],
+    ['Sophia Heinrich', 'Program for Environmental Politics Chair', 'chair', '2029', 'Environment'],
+    ['Alisa Lee', 'Policy Program Chair', 'chair', '2028', 'Policy'],
+    ['Matthew Tobin', 'Policy Program Chair', 'chair', '2027', 'Policy'],
+    ['Sophia Robertson', 'Harvard Public Opinion Project Chair', 'chair', '2028', 'HPOP'],
+    ['Jimmy Merino', 'Research & Strategy Group Chair', 'chair', '2028', 'RSG'],
+    ['Nathan Georg', 'Governance Lab Chair', 'chair', '2028', 'GovLab'],
+    ['Rhea Maniar', 'CIVICS Chair', 'chair', '2028', 'CIVICS'],
+    ['Siri Panetta', 'CIVICS Chair', 'chair', '2027', 'CIVICS'],
+    ['Susie Coakley', 'Citizenship Tutoring Chair', 'chair', '2029', 'Cit Tut'],
+    ['Mateo Hernández-Hernández', 'Citizenship Tutoring Chair', 'chair', '2028', 'Cit Tut'],
+    ['Carter Umphress', 'Harvard Votes Challenge Chair', 'chair', '2028', 'HVC'],
+    ['Donald Cruse', 'Harvard Political Review Chair', 'chair', '2027', 'HPR'],
+    ['Henry Pahlow', 'Campaigns and Advocacy Program Chair', 'chair', '2028', 'CAP'],
+    ['Evan Wang', 'Coalition for the Arts Chair', 'coal', '2029', 'Arts'],
+    ['Justin Dunning', 'Conservative Coalition Chair', 'coal', '', 'Conservative'],
+    ['Theresa Bartelme', 'Service Coalition Chair', 'coal', '2029', 'Service'],
+  ].map(([name, title, dept, year, p]) => ({ name, title, dept, year, p }));
+  const chairsOf = (id) => STAFF.filter((s) => s.p === id);
+
+  // ====== Per-viewer conveniences (saved events, the member's profile) ======
+  const store = {
+    get(k, d) { try { const v = localStorage.getItem('oneiop:' + k); return v ? JSON.parse(v) : d; } catch { return d; } },
+    set(k, v) { try { localStorage.setItem('oneiop:' + k, JSON.stringify(v)); } catch {} },
+  };
+  const saved = new Set(store.get('saved', []));
+  let profile = store.get('profile', null);
+  const following = new Set(profile ? profile.programs : []);
+  const read = new Set(store.get('read', []));
+
+  // ====== Members only ======
+  // "Your programs" are the programs you're a member of. Members-only posts and events from a program show up
+  // only for its members. In this demo you pick your programs yourself; with Harvard sign-in, membership would
+  // come from each program's roster.
+  const canSee = (x) => x.aud !== 'members' || following.has(x.p);
+  const SAMPLE_EVENTS = () => [
+    { id: 990001, p: 'CIVICS', aud: 'members', local: true, date: addDays(DAYS[0].date, 2), s: '18:00', e: '19:30', where: 'IOP Conference Room',
+      title: 'CIVICS teachers’ social', host: 'CIVICS chairs', desc: 'Dinner and a semester debrief for everyone teaching with CIVICS this fall.' },
+  ];
+  const refreshEvents = () => {
+    const now = eastern(), live = DAYS[0].date === now.date;
+    const extra = SAMPLE_EVENTS()
+      .filter((e) => !live || e.date > now.date || (e.date === now.date && min(e.e) > now.min))
+      .map((e) => ({ ...e, day: dayOf(e.date) }));
+    EVENTS = [...BASE, ...extra].filter(canSee);
+  };
+  const allNews = () => NEWS;
+  const newsFor = () => allNews().filter(canSee);
+  const hiddenNews = () => allNews().filter((n) => !canSee(n));
+
+  // ====== Helpers ======
+  const $ = (s, r = document) => r.querySelector(s);
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const isCoal = (id) => id && prog(id).cat === 'coalition';
+  const tag = (id) => id ? `<span class="tag${isCoal(id) ? ' coal' : ''}">${esc(id)}</span>` : '<span class="tag">IOP</span>';
+  const initials = (s) => s.split(/[ -]/).filter((w) => /^[A-Za-zÀ-ſ]/.test(w)).slice(0, 2).map((w) => w[0]).join('').toUpperCase();
+  const ICON = {
+    clock: '<svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
+    pin: '<svg class="i" viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>',
+    cal: '<svg class="i" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M12 13v5M9.5 15.5h5"/></svg>',
+    star: '<svg class="i" viewBox="0 0 24 24"><path d="M12 3.5l2.6 5.6 6 .7-4.5 4.1 1.2 6-5.3-3-5.3 3 1.2-6L3.4 9.8l6-.7z"/></svg>',
+    check: '<svg class="i" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
+    out: '<svg class="i" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>',
+    sound: '<svg class="i" viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M17 9l4 6M21 9l-4 6"/></svg>',
+    soundOn: '<svg class="i" viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></svg>',
+    search: '<svg class="i" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>',
+    x: '<svg class="i" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+    lock: '<svg class="i" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>',
+  };
+  const LOCK = '<span class="tag lock"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>Members only</span>';
+  const toastEl = $('#toast');
+  let toastT;
+  const toast = (msg) => { toastEl.textContent = msg; toastEl.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(() => toastEl.classList.remove('on'), 2600); };
+
+  const min = (t) => { const [h, m] = t.split(':'); return +h * 60 + +m; };
+  const fmt = (t) => { let [h, m] = t.split(':').map(Number); const ap = h >= 12 ? 'PM' : 'AM'; h = h % 12 || 12; return `${h}:${String(m).padStart(2, '0')} ${ap}`; };
+  const range = (e) => { const a = fmt(e.s), b = fmt(e.e); return a.slice(-2) === b.slice(-2) ? `${a.slice(0, -3)} – ${b}` : `${a} – ${b}`; };
+  const byTime = (a, b) => a.day - b.day || min(a.s) - min(b.s);
+  const dayName = (i) => { const d = dayInfo(i); return i === TODAY ? `Today, ${d.m} ${d.n}` : i === TODAY + 1 ? `Tomorrow, ${d.m} ${d.n}` : `${d.d}, ${d.m} ${d.n}`; };
+  const where = (e) => /^[LB]-/.test(e.where) ? `${e.where}, Harvard Kennedy School` : e.where;
+  const plural = (n, w) => `${n} ${w}${n === 1 ? '' : 's'}`;
+
+  // Google Calendar "add event" link, in Eastern time
+  const gcal = (e) => {
+    const d = e.date.replace(/-/g, '');
+    const t = (x) => x.replace(':', '') + '00';
+    const qs = new URLSearchParams({
+      action: 'TEMPLATE',
+      text: e.title,
+      dates: `${d}T${t(e.s)}/${d}T${t(e.e)}`,
+      ctz: 'America/New_York',
+      details: `${e.host}. ${e.desc}` + (e.local ? '' : `\n\n${URL_BASE}${e.url}`),
+      location: `${where(e)}, 79 John F. Kennedy St., Cambridge, MA 02138`,
+    });
+    return `https://calendar.google.com/calendar/render?${qs}`;
+  };
+
+  const evCard = (e) => `
+    <article class="card ev">
+      <div class="frame">${art(e)}</div>
+      <div class="ev-body">
+        <div class="ev-when">${e.day === TODAY ? '<b>Today</b>' : `<span>${dayInfo(e.day).d}, ${dayInfo(e.day).m} ${dayInfo(e.day).n}</span>`}<span>·</span><span>${range(e)}</span></div>
+        <h3>${esc(e.title)}</h3>
+        <p class="ev-host">${esc(e.host)}</p>
+        <div class="ev-meta"><span>${ICON.pin}${esc(where(e))}</span></div>
+        <div class="tags">${tag(e.p)}${e.aud === 'members' ? LOCK : ''}${following.has(e.p) ? '<span class="tag you">Your program</span>' : ''}</div>
+        <div class="ev-actions">
+          <a class="btn primary" href="${esc(gcal(e))}" target="_blank" rel="noopener">${ICON.cal}Add to Google Calendar</a>
+          <button type="button" class="btn" data-save="${e.id}" aria-pressed="${saved.has(e.id)}">${saved.has(e.id) ? ICON.check + 'Saved' : ICON.star + 'Save'}</button>
+          ${e.local ? '' : `<a class="btn icon" href="${URL_BASE}${e.url}" target="_blank" rel="noopener" title="Details on iop.harvard.edu" aria-label="Details on iop.harvard.edu">${ICON.out}</a>`}
+        </div>
+      </div>
+    </article>`;
+  const evList = (list) => `<div class="events">${list.map(evCard).join('')}</div>`;
+  const evGrid = (list) => `<div class="ev-grid">${list.map(evCard).join('')}</div>`;
+  const postCard = (n) => `
+    <article class="card post${n.pin ? ' pin' : ''}">
+      <div class="post-from${!n.p ? ' iop' : isCoal(n.p) ? ' coal' : ''}">
+        <i aria-hidden="true">${n.p ? esc(n.p.slice(0, 3).toUpperCase()) : 'IOP'}</i>
+        <div><b>${esc(n.from)}</b><small>${n.p ? esc(prog(n.p).name) : 'Institute of Politics'} · ${n.when}</small></div>
+        <span class="tags">${n.pin ? '<span class="tag coal">Pinned</span>' : ''}${n.aud === 'members' ? LOCK : ''}${n.byMe ? '<span class="tag mine-post">Posted by you</span>' : n.p && following.has(n.p) ? '<span class="tag you">Your program</span>' : ''}</span>
+      </div>
+      <h3>${esc(n.title)}</h3>${n.body ? `<p>${esc(n.body)}</p>` : ''}
+      <div class="post-acts">
+      ${n.link ? `<a class="act" href="${esc(n.link)}" target="_blank" rel="noopener">${esc(n.act)} →</a>` : n.go ? `<button type="button" class="act" data-prog="${esc(n.go)}">${esc(n.act)} →</button>` : n.goto ? `<button type="button" class="act" data-goto="${esc(n.goto)}">${esc(n.act)} →</button>` : n.act ? `<button type="button" class="act" data-demo="${esc(n.act)}">${esc(n.act)} →</button>` : ''}
+      </div>
+    </article>`;
+  const hiddenNote = (list) => {
+    if (!list.length) return '';
+    const names = [...new Set(list.map((n) => prog(n.p).name))].join(' and ');
+    return `<p class="hidden-note">${ICON.lock}<span>${plural(list.length, 'members-only post')} from ${esc(names)} ${list.length === 1 ? 'isn’t' : 'aren’t'} shown. Only that program’s members see them. <button type="button" data-edit>Edit my programs</button></span></p>`;
+  };
+  const secTitle = (h, note = '') => `<div class="sec-title"><h2>${h}</h2>${note.startsWith('<') ? note : note ? `<span class="label">${note}</span>` : ''}</div>`;
+
+  const nextMine = () => EVENTS.filter((x) => following.has(x.p)).sort(byTime)[0];
+  const featured = () => (BANNER.event === 'auto' ? nextMine() || EVENTS.filter((x) => x.p === 'Forum').sort(byTime)[0] : EVENTS.find((x) => x.url === BANNER.event)) || EVENTS[0];
+  const banner = () => {
+    const mine = nextMine();
+    const e = featured();
+    const media = BANNER.video
+      ? `<video src="${esc(BANNER.video)}"${BANNER.poster ? ` poster="${esc(BANNER.poster)}"` : ''} autoplay muted loop playsinline></video><button type="button" class="banner-sound" data-sound aria-label="Turn sound on">${ICON.sound}</button>`
+      : BANNER.image || e.img ? `<img src="${esc(BANNER.image || imgSrc(e))}" alt="${esc(e.title)} event graphic">` : art(e);
+    return `
+      <section class="banner" aria-label="Featured event">
+        <div class="banner-body">
+          <span class="banner-kick label"><i></i>${e.aud === 'members' ? 'Members only · ' : ''}${esc(mine && BANNER.event === 'auto' ? 'Next up in your programs' : BANNER.kicker)}</span>
+          <h2>${esc(e.title)}</h2>
+          <p class="banner-host">${esc(e.host)}</p>
+          <div class="banner-meta"><span>${ICON.cal}${dayName(e.day)}</span><span>${ICON.clock}${range(e)}</span><span>${ICON.pin}${esc(where(e))}</span></div>
+          <div class="banner-actions">
+            <a class="btn light" href="${esc(gcal(e))}" target="_blank" rel="noopener">${ICON.cal}Add to Google Calendar</a>
+            <button type="button" class="btn glass" data-save="${e.id}" aria-pressed="${saved.has(e.id)}">${saved.has(e.id) ? ICON.check + 'Saved' : ICON.star + 'Save'}</button>
+          </div>
+        </div>
+        <div class="banner-media">${media}</div>
+      </section>`;
+  };
+
+  // ====== Views ======
+  const state = { newsSel: null, evMode: store.get('evMode', null), view: 'home', day: TODAY, evFilter: 'all', newsFilter: 'following', progFilter: 'all', dept: 'all', dq: '', program: null, sent: null, confirmDel: null, gateErr: false, postErr: '' };
+
+  const views = {
+    home() {
+      const top = featured();
+      const dayAll = EVENTS.filter((e) => e.day === state.day);
+      const dayEvents = dayAll.filter((e) => e !== top).sort((a, b) => following.has(b.p) - following.has(a.p) || byTime(a, b));
+      const mine = newsFor().filter((n) => n.pin || n.byMe || following.has(n.p)).slice(0, 4);
+      const yours = EVENTS.filter((e) => following.has(e.p) && e.day < 7).length;
+      const h = new Date().getHours();
+      const hi = h < 12 ? 'Good morning' : h < 18 ? 'Good afternoon' : 'Good evening';
+      return `
+        <header class="hello"><div><h1>${hi}${profile.guest ? '' : ', ' + esc(profile.name)}.</h1><p>${following.size ? `${plural(yours, 'event')} from your programs this week.` : 'Pick a few programs and OneIOP will put them first.'}</p></div></header>
+        ${banner()}
+        <div class="card week" role="group" aria-label="Pick a day">
+          ${DAYS.map((d) => { const l = EVENTS.filter((e) => e.day === d.i).sort((a, b) => following.has(b.p) - following.has(a.p)).slice(0, 3); return `<button type="button" data-day="${d.i}" aria-pressed="${state.day === d.i}"><span class="label">${d.i === TODAY ? 'Today' : d.d}</span><b>${d.n}</b><small>${l.map((e) => `<i${following.has(e.p) ? '' : ' class="other"'}></i>`).join('')}</small></button>`; }).join('')}
+        </div>
+        <div class="grid-2">
+          <div>
+            ${secTitle(dayEvents.length && dayEvents.length < dayAll.length ? `Also ${dayName(state.day).replace(/^(Today|Tomorrow)/, (w) => w.toLowerCase())}` : dayName(state.day), dayEvents.length ? plural(dayEvents.length, 'event') : '')}
+            ${dayEvents.length ? evList(dayEvents) : `<div class="card empty">${dayAll.length ? 'That\u2019s the only event today. It\u2019s featured above.' : 'No IOP events this day.'} Pick another day to see more.</div>`}
+          </div>
+          <div>
+            ${secTitle('Announcements', `<button type="button" class="see-all" data-goto="news">See all</button>`)}
+            <div class="card mini">${mine.map((n) => `
+              <button type="button" class="mini-row" data-goto="news" data-sel="${esc(n.id)}"><span class="post-from${!n.p ? ' iop' : isCoal(n.p) ? ' coal' : ''}"><i aria-hidden="true">${n.p ? esc(n.p.slice(0, 3).toUpperCase()) : 'IOP'}</i></span>
+                <span><b>${esc(n.title)}</b><small>${esc(n.from)} · ${n.when}</small></span></button>`).join('')}
+            </div>
+          </div>
+        </div>`;
+    },
+    events() {
+      const cats = [['all', 'All'], ['foryou', 'Your programs'], ['saved', 'Saved'], ['Forum', 'Forum'], ['FSG', 'Study groups']];
+      const list = EVENTS.filter((e) => state.evFilter === 'all' || (state.evFilter === 'foryou' ? following.has(e.p) : state.evFilter === 'saved' ? saved.has(e.id) : e.p === state.evFilter)).sort(byTime);
+      const mode = state.evMode || (matchMedia('(max-width: 820px)').matches ? 'list' : 'week');
+      const later = list.filter((e) => e.day >= DAYS.length).length;
+      return `
+        <header class="v-head"><h1>Events</h1><p>Every IOP event on one calendar, pulled from iop.harvard.edu. Add any of them to Google Calendar in one click.</p></header>
+        <div class="ev-tools">
+          <div class="chips" role="group" aria-label="Filter events">${cats.map(([k, l]) => `<button type="button" data-evf="${k}" aria-pressed="${state.evFilter === k}">${l}</button>`).join('')}</div>
+          <div class="chips" role="group" aria-label="Layout">${[['week', 'Week'], ['list', 'List']].map(([k, l]) => `<button type="button" data-evmode="${k}" aria-pressed="${mode === k}">${l}</button>`).join('')}</div>
+        </div>
+        ${mode === 'week' ? timeline(list) + (later ? `<p class="tl-more">${plural(later, 'more event')} after ${esc(dayName(DAYS.length - 1))}. <button type="button" data-evmode="list">See them in List →</button></p>` : '')
+          : [...new Set(list.map((e) => e.day))].sort((a, b) => a - b).map((i) => { const l = list.filter((e) => e.day === i); return secTitle(dayName(i), plural(l.length, 'event')) + evGrid(l); }).join('') || '<div class="card empty">Nothing here yet. Try another filter.</div>'}`;
+    },
+    news() {
+      const all = newsFor();
+      const forYou = (n) => n.pin || following.has(n.p);
+      const list = all.filter((n) => state.newsFilter === 'all' || forYou(n));
+      const wide = !matchMedia('(max-width: 820px)').matches;
+      let sel = list.find((n) => String(n.id) === String(state.newsSel)) || null;
+      if (!sel && wide) sel = list[0] || null;
+      const unreadBefore = new Set(list.filter((n) => !read.has(n.id)).map((n) => n.id));
+      if (sel && !read.has(sel.id)) { read.add(sel.id); store.set('read', [...read]); updateCount(); }
+      const unread = list.filter((n) => !read.has(n.id)).length;
+      const av = (n) => `<span class="ib-av${!n.p ? ' iop' : isCoal(n.p) ? ' coal' : ''}" aria-hidden="true">${n.p ? esc(n.p.slice(0, 4).toUpperCase()) : 'IOP'}</span>`;
+      const src = (n) => n.p ? prog(n.p).name : 'Institute of Politics';
+      const PIN = '<span class="tag coal">Pinned</span>';
+      const actBtn = (n) => n.link ? `<a class="btn primary" href="${esc(n.link)}" target="_blank" rel="noopener">${esc(n.act)} ${ICON.out}</a>`
+        : n.go ? `<button type="button" class="btn primary" data-prog="${esc(n.go)}">${esc(n.act)} →</button>`
+        : n.goto ? `<button type="button" class="btn primary" data-goto="${esc(n.goto)}">${esc(n.act)} →</button>`
+        : n.act ? `<button type="button" class="btn primary" data-demo="${esc(n.act)}">${esc(n.act)} →</button>` : '';
+      const chairs = sel && sel.p ? chairsOf(sel.p) : [];
+      const reader = sel ? `
+        <article class="ib-read" aria-labelledby="ib-title">
+          <button type="button" class="back" data-nback>← All announcements</button>
+          <div class="ib-kick"><span class="label">${esc(src(sel))}</span>${sel.pin ? PIN : ''}${sel.aud === 'members' ? LOCK : ''}</div>
+          <h2 id="ib-title">${esc(sel.title)}</h2>
+          <div class="ib-from">${av(sel)}<div><b>${esc(sel.from)}</b><small>${esc(src(sel))} · ${esc(sel.when)}</small></div></div>
+          <p class="ib-body">${esc(sel.body)}</p>
+          ${actBtn(sel) ? `<div class="ib-acts">${actBtn(sel)}</div>` : ''}
+          <p class="ib-aud">${sel.aud === 'members' ? ICON.lock : '<svg class="i" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5M16 4.8a3.5 3.5 0 0 1 0 6.4M18.5 14.8c1.6.8 2.6 2.5 3 5.2"/></svg>'}<span>${sel.aud === 'members'
+            ? `Sent to ${esc(prog(sel.p).name)} members only. You can see it because ${esc(sel.p)} is one of your programs.`
+            : 'Sent to all IOP members.'}</span></p>
+          ${chairs.length ? `<p class="ib-ask">Questions? Ask ${chairs.map((c) => esc(c.name)).join(' or ')}, ${chairs.length > 1 ? 'the chairs' : 'the chair'}. <button type="button" data-prog="${esc(sel.p)}">${esc(sel.p)} page →</button></p>` : ''}
+        </article>` : '<article class="ib-read"><p class="ib-empty">Pick an announcement to read it.</p></article>';
+      return `
+        <header class="v-head"><h1>Announcements</h1><p>Short updates from the IOP and program chairs, in place of long emails.</p></header>
+        <div class="card inbox${sel && !wide ? ' reading' : ''}">
+          <div class="ib-list">
+            <div class="ib-tools">
+              <div class="chips" role="group" aria-label="Filter announcements">${[['following', 'For you', all.filter(forYou).length], ['all', 'Everything', all.length]].map(([k, l, c]) => `<button type="button" data-nf="${k}" aria-pressed="${state.newsFilter === k}">${l}<span class="n">${c}</span></button>`).join('')}</div>
+              <span class="unread">${unread ? `<b>${unread}</b> unread` : 'All read'}</span>
+            </div>
+            <div class="ib-rows" role="list">${list.map((n) => `
+              <button type="button" role="listitem" class="ib-row${unreadBefore.has(n.id) && n !== sel ? ' unread' : ''}" data-nsel="${esc(n.id)}" aria-current="${n === sel}">
+                ${av(n)}
+                <span class="ib-main">
+                  <span class="ib-top"><b>${esc(src(n))}</b><time>${esc(n.when)}</time></span>
+                  <span class="ib-title">${esc(n.title)}</span>
+                  <span class="ib-prev">${esc(n.body)}</span>
+                  ${n.pin || n.aud === 'members' ? `<span class="ib-flags">${n.pin ? PIN : ''}${n.aud === 'members' ? LOCK : ''}</span>` : ''}
+                </span>
+              </button>`).join('') || '<p class="ib-empty">Nothing here yet.</p>'}
+            </div>
+            ${hiddenNote(hiddenNews())}
+          </div>
+          ${reader}
+        </div>`;
+    },
+    programs() {
+      if (state.program) return views.program(prog(state.program));
+      const cats = [['all', 'All'], ['following', 'Your programs'], ['events', 'Events'], ['research', 'Research'], ['service', 'Service'], ['media', 'Media'], ['coalition', 'Coalitions']];
+      const list = PROGRAMS.filter((p) => state.progFilter === 'all' || (state.progFilter === 'following' ? following.has(p.id) : p.cat === state.progFilter));
+      return `
+        <header class="v-head"><h1>Programs</h1><p>All ${PROGRAMS.length} programs and coalitions, each with its own page.</p></header>
+        <div class="chips" role="group" aria-label="Filter programs">${cats.map(([k, l]) => `<button type="button" data-pf="${k}" aria-pressed="${state.progFilter === k}">${l}</button>`).join('')}</div>
+        <div class="progs">${list.map(progCard).join('') || '<div class="card empty">You haven’t picked any programs yet.</div>'}</div>`;
+    },
+    program(p) {
+      const evs = EVENTS.filter((e) => e.p === p.id).sort(byTime);
+      const posts = newsFor().filter((n) => n.p === p.id);
+      const locked = hiddenNews().filter((n) => n.p === p.id);
+      const coal = p.cat === 'coalition';
+      return `
+        <button type="button" class="back" data-back>← All programs</button>
+        <section class="card pp-hero${coal ? ' coal' : ''}">
+          <div><span class="abbr">${esc(p.id)}</span><h2>${esc(p.name)}</h2><p>${esc(p.about)}</p></div>
+          <button type="button" class="btn ${following.has(p.id) ? '' : 'primary'}" data-follow="${esc(p.id)}" aria-pressed="${following.has(p.id)}">${following.has(p.id) ? ICON.check + 'In my programs' : '+ Add to my programs'}</button>
+        </section>
+        ${secTitle('Coming up', plural(evs.length, 'event'))}${evs.length ? evGrid(evs) : '<div class="card empty">No events on the calendar this week.</div>'}
+        <div class="grid-2">
+          <div>${secTitle('Announcements')}${posts.length ? `<div class="news">${posts.map(postCard).join('')}</div>` : '<div class="card empty">No announcements this week.</div>'}${locked.length ? `<p class="hidden-note">${ICON.lock}<span>${plural(locked.length, 'members-only post')} for ${esc(p.name)} members. Add it to your programs if you’re a member.</span></p>` : ''}</div>
+          <div>
+            ${secTitle('The basics')}
+            <dl class="card facts">
+              <div><dt>Type</dt><dd>${coal ? 'Coalition' : { events: 'Events + discussion', research: 'Research + policy', service: 'Service + civic', media: 'Media + campaigns' }[p.cat]}</dd></div>
+              <div><dt>${chairsOf(p.id).length > 1 ? 'Co-chairs' : 'Chair'}</dt><dd>${chairsOf(p.id).map((c) => esc(c.name)).join(' and ') || 'Not listed yet'}</dd></div>
+              <div><dt>How to join</dt><dd>Open to all IOP members. Sign up at any event or message the ${chairsOf(p.id).length > 1 ? 'co-chairs' : 'chair'}. Members also see the program’s members-only posts.</dd></div>
+              <div><dt>Comms</dt><dd>Templates from the Comms Playbook, photos back within 24 hours.</dd></div>
+            </dl>
+          </div>
+        </div>`;
+    },
+    people() {
+      return `
+        <header class="v-head"><h1>Staff directory</h1><p>The IOP’s student leaders: the Executive Team and the Student Advisory Committee, so you always know who runs what.</p></header>
+        <div class="dir-tools">
+          <label class="dir-search">${ICON.search}<input id="dq" type="search" placeholder="Search by name, role or program" value="${esc(state.dq)}" aria-label="Search staff"></label>
+          <div class="chips" role="group" aria-label="Filter by team">${[['all', 'Everyone'], ['mine', 'Your programs'], ['exec', 'Executive Team'], ['dir', 'Directors'], ['chair', 'Program chairs'], ['coal', 'Coalition chairs']].map(([k, l]) => `<button type="button" data-dept="${k}" aria-pressed="${state.dept === k}">${esc(l)}</button>`).join('')}</div>
+        </div>
+        ${dirList()}
+        <p class="dir-note">From the IOP’s <a href="https://iop.harvard.edu/about/student-leadership" target="_blank" rel="noopener">Student Leadership page</a>. Messages are a demo and aren’t sent.</p>`;
+    },
+    request() {
+      if (state.sent) return `
+        <header class="v-head"><h1>Request sent</h1><p>No email chain. You can track it right here.</p></header>
+        <section class="card done-msg">
+          <span class="label">Request #${state.sent.n} · ${esc(state.sent.type)} · ${esc(state.sent.prog)}</span>
+          <h3>We’ve got it.</h3>
+          <p>Comms will reply within 24 hours. Here’s what happens next:</p>
+          <ol class="steps"><li>A comms team member claims your request today.</li><li>You get a first draft, or a photographer confirmed, within 24 hours.</li><li>You approve it, and it goes out on the IOP’s channels.</li></ol>
+          <div><button type="button" class="btn primary" data-again>Make another request</button></div>
+        </section>`;
+      const first = [...following][0];
+      return `
+        <header class="v-head"><h1>Request comms help</h1><p>One form for every program. A reply within 24 hours.</p></header>
+        <form class="card form" id="req" novalidate>
+          <fieldset class="field"><span>What do you need?</span>
+            <div class="types">
+              ${[['Graphic', 'A poster, post or story from your templates'], ['Photographer', 'Someone to shoot your event'], ['Video', 'A short clip or recap'], ['Post on IOP channels', 'Share your event or news']].map(([t, d], i) => `<label><input type="radio" name="type" value="${t}"${i === 0 ? ' checked' : ''}><b>${t}</b><span>${d}</span></label>`).join('')}
+            </div>
+          </fieldset>
+          <div class="row">
+            <label class="field"><span>Program</span><select name="prog">${PROGRAMS.map((p) => `<option${p.id === first ? ' selected' : ''}>${esc(p.name)}</option>`).join('')}</select></label>
+            <label class="field"><span>Needed by</span><input type="date" name="date" value="2026-11-12" min="2026-11-03"></label>
+          </div>
+          <label class="field"><span>Details</span><textarea name="details" placeholder="Event name, time, place, and anything we should know"></textarea></label>
+          <div class="form-foot"><button type="submit" class="btn primary">Send request</button><small>Demo only: nothing is actually sent.</small></div>
+        </form>`;
+    },
+    search(q) {
+      const m = (s) => s.toLowerCase().includes(q.toLowerCase());
+      const evs = EVENTS.filter((e) => m([e.title, e.host, e.desc, e.p, prog(e.p).name, e.where].join(' '))).sort(byTime);
+      const ps = PROGRAMS.filter((p) => m(p.id + ' ' + p.name + ' ' + p.about));
+      const ns = newsFor().filter((n) => m(n.title + ' ' + n.body + ' ' + (n.p || '') + ' ' + n.from));
+      const pp = STAFF.filter((s) => m(s.name + ' ' + s.title + ' ' + (s.p || '')));
+      const total = evs.length + ps.length + ns.length + pp.length;
+      return `
+        <header class="v-head"><h1>Search</h1><p>${plural(total, 'result')} for “${esc(q)}”</p></header>
+        ${ps.length ? secTitle('Programs', String(ps.length)) + `<div class="progs">${ps.map(progCard).join('')}</div>` : ''}
+        ${evs.length ? secTitle('Events', String(evs.length)) + evGrid(evs) : ''}
+        ${pp.length ? secTitle('Student leaders', String(pp.length)) + `<div class="staff">${pp.map(personCard).join('')}</div>` : ''}
+        ${ns.length ? secTitle('Announcements', String(ns.length)) + `<div class="news">${ns.map(postCard).join('')}</div>` : ''}
+        ${total ? '' : '<div class="card empty">Nothing matches. Try a name, a program like “Forum”, or a topic like “midterms”.</div>'}`;
+    },
+  };
+  const dirList = () => {
+    const q = state.dq.trim().toLowerCase();
+    const list = STAFF.filter((s) => (state.dept === 'all' || (state.dept === 'mine' ? following.has(s.p) : s.dept === state.dept)) && (!q || [s.name, s.title, s.p || '', s.p ? prog(s.p).name : ''].join(' ').toLowerCase().includes(q)));
+    if (state.dept === 'mine' && !list.length && !q) return '<div id="dir-list"><div class="card empty">None of your programs have chairs listed yet.</div></div>';
+    return `<div id="dir-list">${DEPTS.filter(([k]) => list.some((s) => s.dept === k)).map(([k, l, d]) => `
+      <section class="dept"><div class="dept-head"><h2>${esc(l)}</h2><p>${esc(d)}</p></div>
+        <div class="staff">${list.filter((s) => s.dept === k).map(personCard).join('')}</div>
+      </section>`).join('') || '<div class="card empty">No one matches that search.</div>'}</div>`;
+  };
+  const progCard = (p) => { const n = EVENTS.filter((e) => e.p === p.id).length; return `
+    <button type="button" class="card pg${p.cat === 'coalition' ? ' coal' : ''}" data-prog="${esc(p.id)}">
+      <span class="abbr">${esc(p.id)}</span><h3>${esc(p.name)}</h3>
+      <span class="meta"><span>${n ? `${plural(n, 'event')} this week` : 'No events this week'}</span>${following.has(p.id) ? '<b>Your program</b>' : ''}</span>
+    </button>`; };
+  const personCard = (s) => `
+    <article class="card person${s.dept === 'exec' ? ' lead' : ''}"><i aria-hidden="true">${esc(initials(s.name))}</i>
+      <div><h3>${esc(s.name)}</h3><p>${esc(s.title)}${s.year ? ` · Class of ${s.year}` : ''}</p>
+        <div class="person-foot">${s.p ? `<button type="button" class="tag${isCoal(s.p) ? ' coal' : ''}" data-prog="${esc(s.p)}">${esc(s.p)}</button>${following.has(s.p) ? '<span class="tag you">Your program</span>' : ''}` : ''}<button type="button" class="msg" data-demo="Message ${esc(s.name.split(' ')[0])}">Message</button></div>
+      </div>
+    </article>`;
+
+  // ====== Week calendar ======
+  // Overlapping events in a day share the column side by side
+  const lanes = (list) => {
+    const out = [], items = list.map((e) => ({ e, a: min(e.s), b: min(e.e) })).sort((x, y) => x.a - y.a);
+    let group = [], end = -1;
+    const flush = () => {
+      const cols = [];
+      group.forEach((it) => { let c = cols.findIndex((last) => last <= it.a); if (c < 0) { c = cols.length; cols.push(0); } cols[c] = it.b; it.lane = c; });
+      group.forEach((it) => out.push({ ...it, n: cols.length }));
+      group = [];
+    };
+    items.forEach((it) => { if (it.a >= end && group.length) flush(); group.push(it); end = Math.max(end, it.b); });
+    if (group.length) flush();
+    return out;
+  };
+  const timeline = (list) => {
+    const wk = EVENTS.filter((e) => e.day >= 0 && e.day < DAYS.length);
+    const lo = Math.min(12 * 60, ...wk.map((e) => min(e.s))), hi = Math.max(20 * 60, ...wk.map((e) => min(e.e)));
+    const H0 = Math.floor(lo / 60), H1 = Math.ceil(hi / 60), PX = 60, PAD = 14, h = (H1 - H0) * PX + PAD * 2;
+    const y = (m) => PAD + ((m - H0 * 60) / 60) * PX;
+    const hours = Array.from({ length: H1 - H0 + 1 }, (_, i) => H0 + i);
+    const now = eastern(), live = DAYS[0].date === now.date;
+    const lines = (lab) => hours.map((hr) => `<div class="tl-hour" style="top:${PAD + (hr - H0) * PX}px">${lab ? (hr % 12 || 12) + (hr < 12 ? 'a' : 'p') : ''}</div>`).join('');
+    return `
+      <div class="tl-scroll" role="region" aria-label="This week's events by day and time" tabindex="0">
+        <div class="tl">
+          <div class="tl-hours"><div class="tl-head"></div><div class="tl-body" style="height:${h}px">${lines(true)}</div></div>
+          ${DAYS.map((d) => {
+            const today = d.i === TODAY && live;
+            const nowLine = today && now.min >= H0 * 60 && now.min <= H1 * 60 ? `<div class="now-line" style="top:${y(now.min)}px" aria-hidden="true"></div>` : '';
+            return `<div class="tl-col${d.i === TODAY ? ' today' : ''}">
+              <div class="tl-head"><span>${d.i === TODAY ? 'Today' : d.i === TODAY + 1 ? 'Tomorrow' : esc(d.d)}</span><b>${esc(d.m)} ${d.n}</b></div>
+              <div class="tl-body" style="height:${h}px">${lines(false)}${nowLine}
+                ${lanes(list.filter((e) => e.day === d.i)).map(({ e, a, b, lane, n }) => {
+                  const lk = e.aud === 'members';
+                  return `<button type="button" class="blk${n >= 3 ? ' tight' : ''}${following.has(e.p) ? ' mine' : ''}${lk ? ' locked' : ''}${saved.has(e.id) ? ' saved' : ''}${today && b <= now.min ? ' past' : ''}" data-evopen="${e.id}"
+                    style="top:${y(a) + 2}px;height:${Math.max(y(b) - y(a) - 4, 30)}px;left:calc(${(lane / n) * 100}% + 4px);width:calc(${100 / n}% - 8px)"
+                    title="${esc(e.title)}" aria-label="${esc(dayName(e.day) + ', ' + fmt(e.s) + ': ' + e.title + (lk ? ', members only' : ''))}"><time>${esc(n >= 3 ? fmt(e.s).replace(/:00| /g, '') : fmt(e.s))}</time><b>${esc(n >= 3 ? e.p : e.title)}</b></button>`;
+                }).join('')}
+              </div>
+            </div>`;
+          }).join('')}
+        </div>
+      </div>
+      <div class="legend"><span><i class="mine"></i>Your programs</span><span><i></i>Everything else</span><span><i class="now"></i>Right now</span><span>Dashed outline: members only</span><span>Tap an event for details</span></div>`;
+  };
+
+  // ====== Dialogs ======
+  let modal = null, lastFocus = null;
+  const closeModal = () => {
+    if (!modal) return;
+    modal.remove(); document.querySelector('.veil')?.remove(); modal = null;
+    if (lastFocus && document.contains(lastFocus)) lastFocus.focus();
+  };
+  const openModal = (html, label) => {
+    if (!modal) {
+      lastFocus = document.activeElement;
+      const v = document.createElement('div'); v.className = 'veil'; v.dataset.mclose = '';
+      modal = document.createElement('div'); modal.className = 'modal'; modal.setAttribute('role', 'dialog'); modal.setAttribute('aria-modal', 'true');
+      document.body.append(v, modal);
+    }
+    modal.setAttribute('aria-label', label);
+    modal.innerHTML = `<button type="button" class="m-close" data-mclose aria-label="Close">${ICON.x}</button>${html}`;
+    modal.querySelector('.m-close').focus();
+  };
+  let openEv = null;
+  const openEvent = (id) => { const e = EVENTS.find((x) => x.id === id); if (!e) return; openEv = id; openModal(evCard(e), e.title); };
+
+  // ====== Settings ======
+  const THEMES = [['system', 'System'], ['light', 'Light'], ['dark', 'Dark']];
+  const applyTheme = (t) => { if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t; else delete document.documentElement.dataset.theme; };
+  const settingsHTML = () => {
+    const theme = store.get('theme', 'system'), mode = state.evMode || 'auto';
+    return `
+      <div class="settings">
+        <h2>Settings</h2>
+        <section class="set-group"><h3>Appearance</h3><p>System follows your device’s light or dark setting.</p>
+          <div class="themes" role="group" aria-label="Appearance">${THEMES.map(([k, l]) => `<button type="button" data-theme-set="${k}" aria-pressed="${theme === k}"><span class="swatch ${k}"><i></i><i></i></span>${l}</button>`).join('')}</div>
+        </section>
+        <section class="set-group"><h3>Events page opens in</h3>
+          <div class="chips" role="group" aria-label="Events layout">${[['auto', 'Automatic'], ['week', 'Week'], ['list', 'List']].map(([k, l]) => `<button type="button" data-evdef="${k}" aria-pressed="${mode === k}">${l}</button>`).join('')}</div>
+          <p style="margin-top:0">Automatic shows the week calendar on bigger screens and the list on phones.</p>
+        </section>
+        <section class="set-group"><h3>Your programs</h3>
+          <div class="set-row"><span class="tags">${[...following].map((id) => tag(id)).join('') || 'None yet'}</span><button type="button" class="linkish" data-set="edit">Edit →</button></div>
+          <p style="margin-top:0">Members-only posts and events from these programs show up for you.</p>
+        </section>
+        <div class="set-foot">
+          <span style="flex:1;font-size:13px;color:var(--muted)">Signed in as <b style="color:var(--ink)">${profile.guest ? 'a guest' : esc(profile.name)}</b>${profile.guest ? '' : ` · Class of ${esc(profile.year)}`}</span>
+          <button type="button" class="btn" data-set="out">Sign out</button>
+        </div>
+      </div>`;
+  };
+  const openSettings = () => { $('#me-menu').hidden = true; openModal(settingsHTML(), 'Settings'); };
+  document.addEventListener('click', (ev) => {
+    if (!modal) return;
+    const t = ev.target.closest('[data-mclose], [data-theme-set], [data-evdef], [data-set], .modal [data-save]');
+    if (!t) return;
+    if (t.hasAttribute('data-mclose')) { closeModal(); return; }
+    if (t.dataset.themeSet) { store.set('theme', t.dataset.themeSet); applyTheme(t.dataset.themeSet); openModal(settingsHTML(), 'Settings'); return; }
+    if (t.dataset.evdef) { state.evMode = t.dataset.evdef === 'auto' ? null : t.dataset.evdef; store.set('evMode', state.evMode); openModal(settingsHTML(), 'Settings'); render(); return; }
+    if (t.dataset.set === 'edit') { closeModal(); showLogin(2); return; }
+    if (t.dataset.set === 'out') { closeModal(); profile = null; following.clear(); store.set('profile', null); form.reset(); showLogin(1); return; }
+    if (t.dataset.save) {
+      const id = +t.dataset.save;
+      saved.has(id) ? saved.delete(id) : saved.add(id);
+      store.set('saved', [...saved]);
+      toast(saved.has(id) ? 'Saved to your events on OneIOP.' : 'Removed from your saved events.');
+      render(); openEvent(id);
+    }
+  });
+  addEventListener('keydown', (ev) => { if (ev.key === 'Escape' && modal) closeModal(); });
+  matchMedia('(max-width: 820px)').addEventListener('change', () => { if (!appEl.hidden) render(); });
+
+  const viewEl = $('#view');
+  const q = $('#q');
+  const render = (scroll) => {
+    const term = q.value.trim();
+    refreshEvents();
+    viewEl.innerHTML = `<div class="view">${term ? views.search(term) : views[state.view]()}</div>`;
+    document.querySelectorAll('.views button').forEach((b) => { if (!term && b.dataset.view === state.view) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current'); });
+    if (scroll) scrollTo({ top: 0, behavior: 'instant' });
+  };
+  const go = (view, extra = {}) => { q.value = ''; Object.assign(state, { view, program: null }, extra); render(true); };
+  const updateCount = () => { const n = newsFor().filter((x) => !read.has(x.id)).length; const c = $('#news-count'); c.textContent = n; c.hidden = !n; };
+  const saveProfile = () => { profile.programs = [...following]; store.set('profile', profile); };
+
+  document.querySelectorAll('.views button').forEach((b) => b.addEventListener('click', () => go(b.dataset.view, b.dataset.view === 'request' ? { sent: null } : {})));
+  q.addEventListener('input', () => render(false));
+  addEventListener('keydown', (ev) => { if (ev.key === '/' && !appEl.hidden && !/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)) { ev.preventDefault(); q.focus(); } });
+
+  // Staff search swaps only the list, so the field keeps focus while typing
+  viewEl.addEventListener('input', (ev) => {
+    if (ev.target.id !== 'dq') return;
+    state.dq = ev.target.value;
+    const tmp = document.createElement('div');
+    tmp.innerHTML = dirList();
+    $('#dir-list').replaceWith(tmp.firstElementChild);
+  });
+
+  viewEl.addEventListener('click', (ev) => {
+    const t = ev.target.closest('button');
+    if (!t) return;
+    if (t.dataset.nsel) { state.newsSel = t.dataset.nsel; render(); if (matchMedia('(max-width: 820px)').matches) scrollTo({ top: 0, behavior: 'instant' }); }
+    else if (t.hasAttribute('data-nback')) { state.newsSel = null; render(true); }
+    else if (t.dataset.evopen) openEvent(+t.dataset.evopen);
+    else if (t.dataset.evmode) { state.evMode = t.dataset.evmode; render(); }
+    else if (t.dataset.day) { state.day = +t.dataset.day; render(); }
+    else if (t.dataset.goto) go(t.dataset.goto, t.dataset.sel ? { newsSel: t.dataset.sel, newsFilter: 'all' } : t.dataset.goto === 'news' ? { newsSel: null } : {});
+    else if (t.dataset.save) {
+      const id = +t.dataset.save;
+      saved.has(id) ? saved.delete(id) : saved.add(id);
+      store.set('saved', [...saved]);
+      toast(saved.has(id) ? 'Saved to your events on OneIOP.' : 'Removed from your saved events.');
+      render();
+    }
+    else if (t.dataset.evf) { state.evFilter = t.dataset.evf; render(); }
+    else if (t.dataset.nf) { state.newsFilter = t.dataset.nf; state.newsSel = null; render(); }
+    else if (t.dataset.pf) { state.progFilter = t.dataset.pf; render(); }
+    else if (t.dataset.dept) { state.dept = t.dataset.dept; render(); }
+    else if (t.dataset.prog) go('programs', { program: t.dataset.prog });
+    else if (t.hasAttribute('data-back')) { state.program = null; render(true); }
+    else if (t.dataset.follow) {
+      const id = t.dataset.follow;
+      following.has(id) ? following.delete(id) : following.add(id);
+      saveProfile();
+      toast(following.has(id) ? `${id} added to your programs.` : `${id} removed from your programs.`);
+      render();
+    }
+    else if (t.hasAttribute('data-sound')) {
+      const v = $('.banner-media video');
+      v.muted = !v.muted;
+      t.innerHTML = v.muted ? ICON.sound : ICON.soundOn;
+      t.setAttribute('aria-label', v.muted ? 'Turn sound on' : 'Turn sound off');
+    }
+    else if (t.dataset.demo) toast(`“${t.dataset.demo}” would open here. This is a demo.`);
+    else if (t.hasAttribute('data-again')) { state.sent = null; render(true); }
+    else if (t.hasAttribute('data-edit')) showLogin(2);
+  });
+
+  viewEl.addEventListener('submit', (ev) => {
+    ev.preventDefault();
+    const f = new FormData(ev.target);
+    state.sent = { n: 1000 + Math.floor(Math.random() * 9000), type: f.get('type'), prog: f.get('prog') };
+    render(true);
+  });
+
+  // ====== Member sign-in (demo: nothing leaves the browser) ======
+  const loginEl = $('#login'), appEl = $('#app'), form = $('#login-form');
+  const CAT_NAMES = { events: 'Events + discussion', research: 'Research + policy', service: 'Service + civic', media: 'Media + campaigns', coalition: 'Coalitions' };
+  const countPicked = () => { const n = form.querySelectorAll('#pick input:checked').length; $('#picked').innerHTML = n ? `<b>${n}</b> picked` : 'Pick at least one'; };
+
+  const showLogin = (step = 1) => {
+    $('#me-menu').hidden = true;
+    $('#pick').innerHTML = Object.entries(CAT_NAMES).map(([c, label]) => `
+      <div><h3>${label}</h3><div class="opts">${PROGRAMS.filter((p) => p.cat === c).map((p) => `
+        <label class="${c === 'coalition' ? 'coal' : ''}" title="${esc(p.name)}"><input type="checkbox" name="prog" value="${esc(p.id)}"${following.has(p.id) ? ' checked' : ''}>${ICON.check}${esc(p.id)}</label>`).join('')}</div></div>`).join('');
+    if (profile) { form.name.value = profile.guest ? '' : profile.name; form.year.value = profile.year; }
+    setStep(step);
+    countPicked();
+    appEl.hidden = true; loginEl.hidden = false;
+    scrollTo({ top: 0, behavior: 'instant' });
+  };
+  const setStep = (n) => {
+    $('#step-1').hidden = n !== 1; $('#step-2').hidden = n !== 2;
+    $('#bar-2').classList.toggle('on', n === 2);
+    const nm = form.name.value.trim();
+    $('#pick-title').textContent = nm ? `${nm}, pick your programs` : 'Pick your programs';
+  };
+  const enter = () => {
+    loginEl.hidden = true; appEl.hidden = false;
+    $('#me-name').textContent = profile.guest ? 'a guest' : profile.name;
+    $('#me-ini').textContent = profile.guest ? '?' : initials(profile.name) || '?';
+    Object.assign(state, { view: 'home', day: TODAY, program: null, sent: null });
+    q.value = '';
+    updateCount();
+    render(true);
+  };
+
+  $('#next').addEventListener('click', () => {
+    if (!form.name.value.trim()) { form.name.focus(); toast('Add your first name, or look around as a guest.'); return; }
+    setStep(2);
+  });
+  $('#sso').addEventListener('click', () => toast('On the real site this opens Harvard sign-in. For now, enter your name below.'));
+  form.name.addEventListener('keydown', (ev) => { if (ev.key === 'Enter') { ev.preventDefault(); $('#next').click(); } });
+  $('#back-1').addEventListener('click', () => setStep(1));
+  $('#pick').addEventListener('change', countPicked);
+  $('#guest').addEventListener('click', () => {
+    profile = { name: 'Guest', year: form.year.value, guest: true, programs: ['Forum', 'FSG', 'HPR'] };
+    following.clear(); profile.programs.forEach((id) => following.add(id));
+    store.set('profile', profile);
+    enter();
+  });
+  form.addEventListener('submit', (ev) => {
+    ev.preventDefault();
+    const picks = [...form.querySelectorAll('#pick input:checked')].map((i) => i.value);
+    if (!picks.length) { toast('Pick at least one program.'); return; }
+    const nm = form.name.value.trim();
+    profile = { name: nm || 'Guest', year: form.year.value, guest: !nm, programs: picks };
+    following.clear(); picks.forEach((id) => following.add(id));
+    store.set('profile', profile);
+    enter();
+    toast(`Welcome${profile.guest ? '' : ', ' + profile.name}. OneIOP is set up for your ${plural(picks.length, 'program')}.`);
+  });
+
+  // Account menu
+  const meBtn = $('#me-btn'), meMenu = $('#me-menu');
+  meBtn.addEventListener('click', (ev) => {
+    ev.stopPropagation();
+    const open = meMenu.hidden;
+    if (open) meMenu.innerHTML = `
+      <header><b>${profile.guest ? 'Guest' : esc(profile.name)}</b><span>${profile.guest ? 'Looking around' : `Class of ${esc(profile.year)}`} · ${plural(following.size, 'program')}</span>
+        <div class="tags">${[...following].map((id) => tag(id)).join('')}</div></header>
+      <button type="button" role="menuitem" data-m="edit">${ICON.star}Edit my programs</button>
+      <button type="button" role="menuitem" data-m="settings"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg>Settings</button>
+      <button type="button" role="menuitem" data-m="out"><svg class="i" viewBox="0 0 24 24"><path d="M15 4h4v16h-4M10 8l-4 4 4 4M6 12h10"/></svg>Sign out</button>`;
+    meMenu.hidden = !open;
+    meBtn.setAttribute('aria-expanded', open);
+  });
+  meMenu.addEventListener('click', (ev) => {
+    const b = ev.target.closest('[data-m]');
+    if (!b) return;
+    meMenu.hidden = true; meBtn.setAttribute('aria-expanded', false);
+    if (b.dataset.m === 'edit') showLogin(2);
+    else if (b.dataset.m === 'settings') openSettings();
+    else { profile = null; following.clear(); store.set('profile', null); form.reset(); showLogin(1); }
+  });
+  addEventListener('click', (ev) => { if (!meMenu.hidden && !ev.target.closest('.me')) { meMenu.hidden = true; meBtn.setAttribute('aria-expanded', false); } });
+
+  $('#settings-btn').addEventListener('click', openSettings);
+  buildNews();
+  updateCount();
+  if (profile && profile.programs) enter(); else { profile = null; showLogin(1); }
+
+  // Pick up the latest daily refresh (events.json, next to this page) when it's newer than the built-in copy
+  fetch('events.json', { cache: 'no-store' })
+    .then((r) => (r.ok ? r.json() : null))
+    .then((d) => {
+      if (!d || !Array.isArray(d.events) || (d.updated || '') < (DATA.updated || '')) return;
+      loadEvents(d); buildNews(); updateCount();
+      if (!appEl.hidden) render();
+    })
+    .catch(() => {});
+</script>
+</body>
+</html>

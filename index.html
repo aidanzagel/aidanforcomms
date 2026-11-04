@@ -1,0 +1,1981 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Aidan for Comms</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Aidan Zagel for IOP Communications Director. Programs First. OneIOP. Comms Playbook. Member Perks.">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231b2384'/%3E%3Cpolygon fill='%23d7101b' points='32,9 38.8,25.4 56.5,25.4 42.3,36 47.6,53 32,42.8 16.4,53 21.7,36 7.5,25.4 25.2,25.4'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400..800&family=Sofia+Sans+Extra+Condensed:wght@700..900&family=IBM+Plex+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..600&display=swap" rel="stylesheet">
+<style>
+  /* ====== Campaign palette: one deliberate look, no dark mode ====== */
+  :root {
+    --navy: #1b2384;
+    --red: #d7101b;
+    --paper: #f4f1ea;
+    --paper-2: #e9e4d8;
+    --ink: #10143d;
+    --muted: #5d607c;
+    --line: rgba(16, 20, 61, .2);
+    --line-light: rgba(244, 241, 234, .22);
+
+    --sans: "Archivo", "Helvetica Neue", Arial, sans-serif;
+    --display: "Sofia Sans Extra Condensed", "Arial Narrow", "Helvetica Neue", sans-serif;
+    --serif: "Newsreader", Georgia, "Times New Roman", serif;
+    --mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+
+    --ease: cubic-bezier(.2, .8, .2, 1);
+    color-scheme: light;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--paper); color: var(--ink);
+    font-family: var(--sans); font-size: 17px; line-height: 1.5;
+    -webkit-font-smoothing: antialiased; overflow-x: hidden;
+  }
+  body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 60; background: var(--paper); }
+  img { display: block; max-width: 100%; height: auto; }
+  a { color: inherit; }
+  ul, ol { list-style: none; }
+  strong { font-weight: 700; }
+
+  .wrap {
+    width: 100%; max-width: 1320px; margin-inline: auto;
+    padding-left: max(24px, env(safe-area-inset-left, 0px));
+    padding-right: max(24px, env(safe-area-inset-right, 0px));
+  }
+  .panel { position: relative; isolation: isolate; }
+
+  /* Three voices: condensed poster caps, editorial serif, ballot-form mono */
+  .disp { font-family: var(--display); font-weight: 900; text-transform: uppercase; line-height: .86; letter-spacing: .005em; }
+  .label { font-family: var(--mono); font-size: 12px; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; }
+  .kicker { display: flex; align-items: center; gap: 12px; }
+  .kicker::before { content: ""; width: 30px; height: 2px; background: var(--red); flex: none; }
+
+  /* ====== Announcement bar ====== */
+  /* The bar and header sit at the top of the page and scroll away with it */
+  .masthead { position: relative; z-index: 50; }
+  .announce { display: block; background: var(--navy); color: var(--paper); text-decoration: none; font-size: 14px; line-height: 1.4; transition: background .25s; }
+  .announce:hover { background: var(--ink); }
+  .announce .wrap { display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; padding-block: 10px; text-align: center; }
+  .announce .label { padding: 3px 8px; border-radius: 999px; background: var(--red); color: #fff; font-size: 10.5px; }
+  .announce b { font-weight: 650; white-space: nowrap; }
+  .announce b span { display: inline-block; transition: transform .25s var(--ease); }
+  .announce:hover b span { transform: translateX(3px); }
+  @media (max-width: 560px) { .announce .more { display: none; } }
+  /* ====== Header ====== */
+  .top {
+    position: relative; z-index: 2;
+    background: var(--paper);
+    border-bottom: 1px solid var(--line);
+  }
+  .top .wrap { display: flex; align-items: center; gap: 28px; height: 76px; max-width: none; }
+  .mark { display: flex; align-items: baseline; gap: 7px; text-decoration: none; white-space: nowrap; }
+  .mark svg { width: 20px; align-self: center; fill: var(--red); }
+  .mark b { font-family: var(--display); font-weight: 900; font-size: 30px; letter-spacing: .01em; text-transform: uppercase; color: var(--navy); line-height: 1; }
+  .mark i { font-family: var(--serif); font-size: 22px; color: var(--ink); line-height: 1; }
+  /* Section links sit in one soft track; the one under the pointer lifts out as a white chip */
+  .nav {
+    display: flex; gap: 2px; margin-left: auto; padding: 5px;
+    border: 1px solid var(--line); border-radius: 999px; background: var(--paper-2);
+  }
+  .nav a {
+    padding: 9px 15px; border-radius: 999px; text-decoration: none; white-space: nowrap;
+    font-size: 11.5px; letter-spacing: .11em; color: var(--ink);
+    transition: background .2s, color .2s, box-shadow .2s;
+  }
+  .nav a:hover, .nav a:focus-visible { background: #fff; color: var(--navy); box-shadow: 0 1px 2px rgba(16, 20, 61, .12), 0 4px 12px rgba(16, 20, 61, .08); outline: none; }
+  .nav a:active { background: var(--navy); color: var(--paper); box-shadow: none; }
+  .pill {
+    display: inline-flex; align-items: center; gap: 8px; white-space: nowrap;
+    padding: 9px 16px; border-radius: 999px; background: var(--navy); color: var(--paper);
+    text-decoration: none; transition: background .2s;
+  }
+  .pill:hover { background: var(--red); }
+  .menu-btn { display: none; align-items: center; gap: 10px; margin-left: auto; padding: 9px 14px; border: 1.5px solid var(--navy); border-radius: 999px; background: none; color: var(--navy); cursor: pointer; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+  .menu-btn i { position: relative; width: 14px; height: 1.5px; background: currentColor; transition: background .2s; }
+  .menu-btn i::before, .menu-btn i::after { content: ""; position: absolute; left: 0; width: 14px; height: 1.5px; background: currentColor; transition: translate .25s var(--ease), rotate .25s var(--ease); }
+  .menu-btn i::before { translate: 0 -4.5px; }
+  .menu-btn i::after { translate: 0 4.5px; }
+  .top.open .menu-btn i { background: transparent; }
+  .top.open .menu-btn i::before { translate: 0; rotate: 45deg; }
+  .top.open .menu-btn i::after { translate: 0; rotate: -45deg; }
+  @media (max-width: 1100px) and (min-width: 860px) {
+    .top .wrap { gap: 18px; }
+    .nav { gap: 0; padding: 4px; }
+    .nav a { padding: 8px 10px; font-size: 10.5px; letter-spacing: .08em; }
+  }
+  @media (max-width: 859px) {
+    .top .wrap { gap: 12px; }
+    .menu-btn { display: inline-flex; }
+    .nav {
+      position: absolute; z-index: 10; left: 0; right: 0; top: 100%; display: grid; gap: 0; margin: 0;
+      padding: 6px max(18px, env(safe-area-inset-right, 0px)) 14px max(18px, env(safe-area-inset-left, 0px));
+      background: var(--paper); border: 0; border-bottom: 1px solid var(--line); border-radius: 0; box-shadow: 0 18px 30px rgba(16, 20, 61, .12);
+      opacity: 0; visibility: hidden; translate: 0 -8px; transition: opacity .25s, translate .25s var(--ease), visibility 0s .25s;
+    }
+    .nav a { padding: 15px 0; border-radius: 0; border-top: 1px solid var(--line); font-size: 13px; color: var(--ink); }
+    .nav a:hover, .nav a:focus-visible { background: none; box-shadow: none; color: var(--red); }
+    .nav a:first-child { border-top: 0; }
+    .top.open .nav { opacity: 1; visibility: visible; translate: 0; transition: opacity .25s, translate .25s var(--ease); }
+  }
+  .progress { display: none; position: absolute; left: 0; bottom: -1px; height: 2px; width: 100%; background: var(--red); transform-origin: left; transform: scaleX(0); }
+
+  /* ====== Hero ====== */
+  .hero { background: var(--navy); color: var(--paper); overflow: hidden; }
+  .hero-grid {
+    display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); gap: 24px;
+    min-height: min(860px, calc(100svh - 118px));
+  }
+  .hero-copy { align-self: center; padding-block: clamp(44px, 5vw, 72px); position: relative; z-index: 3; }
+  .hero-copy .kicker { color: rgba(244, 241, 234, .8); }
+  .hl { margin: 20px 0 26px; font-size: clamp(80px, 10.8vw, 166px); }
+  .hl .line { display: block; overflow: hidden; padding-bottom: .015em; }
+  .hl .line > span { display: inline-block; transform: translateY(105%); animation: up 1s var(--ease) forwards; }
+  .hl em { font-family: var(--serif); font-weight: 400; font-style: italic; text-transform: none; font-size: .5em; letter-spacing: 0; line-height: 1; }
+  .hl .dot { color: var(--red); }
+  /* Lines glide up out of a soft blur, one after another, then the dot fades in */
+  .hl .line > span { transform: translateY(60%); opacity: 0; filter: blur(10px); animation: glide 1.3s cubic-bezier(.16, 1, .3, 1) forwards; }
+  .hl .l1 > span { animation-delay: .2s; }
+  .hl .l2 > span { animation-delay: .4s; }
+  .hl .l3 > span { animation-delay: .6s; }
+  @keyframes glide { to { transform: none; opacity: 1; filter: blur(0); } }
+  .hl .dot { opacity: 0; animation: fade-in .9s ease 1.5s forwards; }
+  @keyframes fade-in { to { opacity: 1; } }
+  @keyframes up { to { transform: none; } }
+  .lede { max-width: 46ch; font-size: 18px; line-height: 1.55; color: rgba(244, 241, 234, .86); }
+  .lede strong { color: var(--paper); }
+  .ctas { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 26px; margin-top: 34px; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 12px; padding: 16px 26px;
+    background: var(--red); color: #fff; text-decoration: none; border: 0; cursor: pointer;
+    font: 700 15px/1 var(--sans); letter-spacing: .02em; transition: transform .2s var(--ease), background .2s;
+  }
+  .btn:hover { transform: translateY(-2px); background: #ea1722; }
+  .btn .arr { transition: transform .25s var(--ease); }
+  .btn:hover .arr { transform: translateX(4px); }
+  .text-link { text-decoration: none; font-weight: 600; font-size: 15px; }
+  .text-link:hover { color: #fff; }
+
+  .hero-art { position: relative; min-height: 560px; }
+  .star { position: absolute; left: -8%; top: 6%; width: 118%; overflow: visible; transition: translate .4s var(--ease); }
+  .star .fill { fill: var(--red); }
+  .star .ghost { fill: none; stroke: var(--paper); stroke-width: .45; }
+  .star.s1 { rotate: -8deg; animation: star-in 1.3s var(--ease) .15s both; }
+  .star.s2 { rotate: -8deg; translate: 2.4% 1.8%; animation: star-in 1.3s var(--ease) .35s both; }
+  @keyframes star-in { from { opacity: 0; scale: .6; } to { opacity: 1; scale: 1; } }
+  .portrait {
+    position: absolute; bottom: 0; left: 50%; translate: -50% 0; z-index: 2;
+    width: min(96%, 500px); filter: drop-shadow(0 24px 40px rgba(6, 9, 48, .5));
+    animation: rise 1.1s var(--ease) .45s both;
+  }
+  @keyframes rise { from { opacity: 0; transform: translateY(70px); } to { opacity: 1; transform: none; } }
+  .sig {
+    position: absolute; z-index: 3; right: -2%; bottom: 8%; width: 46%; rotate: -7deg;
+    clip-path: inset(0 100% 0 0); animation: write 1.8s ease-in-out 1.3s forwards;
+    filter: drop-shadow(0 2px 6px rgba(6, 9, 48, .5));
+  }
+  @keyframes write { to { clip-path: inset(0 0 0 0); } }
+
+  /* The ballot: the one object only this campaign would have */
+  .ballot {
+    position: absolute; z-index: 4; left: -8%; bottom: 4%; width: 250px;
+    background: var(--paper); color: var(--ink); padding: 14px 16px 12px; rotate: -3deg;
+    box-shadow: 0 24px 50px rgba(6, 9, 48, .45);
+    cursor: pointer; transition: rotate .4s cubic-bezier(.3, 1.6, .5, 1);
+    user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: transparent;
+  }
+  .ballot:hover { rotate: 1deg; }
+  .ballot .b-hint { display: block; margin-top: 8px; font-size: 9.5px; color: var(--red); }
+  .ballot .b-top { display: flex; justify-content: space-between; border-bottom: 1.5px solid var(--ink); padding-bottom: 7px; font-size: 10.5px; }
+  .ballot .b-office { font-family: var(--display); font-weight: 900; text-transform: uppercase; font-size: 23px; line-height: 1; margin: 10px 0 2px; color: var(--navy); }
+  .ballot .b-note { font-family: var(--serif); font-style: italic; font-size: 15px; color: var(--muted); }
+  .ballot .b-row { display: flex; align-items: center; gap: 12px; margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--line); font-weight: 700; font-size: 17px; }
+  .ballot svg { width: 30px; flex: none; overflow: visible; }
+  .ballot .box { fill: none; stroke: var(--ink); stroke-width: 2; }
+  .ballot .tick { fill: none; stroke: var(--red); stroke-width: 3.6; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 24; stroke-dashoffset: 0; }
+  @keyframes tick { from { stroke-dashoffset: 24; } to { stroke-dashoffset: 0; } }
+
+  .hero-side {
+    position: absolute; right: max(8px, env(safe-area-inset-right, 0px)); top: 50%; z-index: 1;
+    writing-mode: vertical-rl; transform: translateY(-50%) rotate(180deg);
+    color: rgba(244, 241, 234, .45); white-space: nowrap;
+  }
+
+  /* ====== Marquee ====== */
+  .marquee { background: var(--red); color: var(--paper); overflow: hidden; white-space: nowrap; }
+  .marquee .mq-track span { transition: color .2s; }
+  .mq-track { display: inline-flex; align-items: center; padding-block: 14px; animation: mq 70s linear infinite; }
+  .mq-track span { font-family: var(--display); font-weight: 900; text-transform: uppercase; font-size: clamp(30px, 3.4vw, 46px); line-height: 1; padding-inline: 22px; }
+  .mq-track i { font-family: var(--serif); font-size: clamp(30px, 3.4vw, 46px); line-height: 1; opacity: .7; }
+  @keyframes mq { to { transform: translateX(-50%); } }
+
+  /* Crossing banners, like campaign tape */
+  .tape { position: relative; overflow: hidden; padding-block: 30px; background: var(--paper); }
+  .tape .marquee { position: relative; z-index: 2; width: 106%; margin-left: -3%; rotate: -2deg; box-shadow: 0 10px 24px rgba(16, 20, 61, .2); }
+  .tape .m2 { position: absolute; z-index: 1; left: 0; top: 50%; translate: 0 -50%; rotate: 2.5deg; background: var(--navy); box-shadow: none; }
+  .m2 .mq-track { animation-direction: reverse; animation-duration: 95s; padding-block: 9px; }
+  .m2 .mq-track span { font-size: clamp(20px, 2vw, 26px); }
+  .m2 .mq-track i { font-size: clamp(20px, 2vw, 26px); }
+
+  .confetti { position: fixed; z-index: 100; width: 8px; height: 13px; pointer-events: none; }
+
+  /* ====== 00 Video ====== */
+  .video-sec { padding-top: clamp(56px, 7vw, 96px); }
+  .vid-frame {
+    position: relative; aspect-ratio: 16 / 9; background: var(--ink); rotate: -.6deg;
+    box-shadow: 0 30px 60px rgba(16, 20, 61, .25); transition: rotate .5s var(--ease);
+  }
+  .vid-frame:hover { rotate: 0deg; }
+  .vid-frame::before, .vid-frame::after {
+    content: ""; position: absolute; z-index: 3; width: 110px; height: 28px; background: rgba(244, 241, 234, .8);
+    box-shadow: 0 1px 3px rgba(16, 20, 61, .2);
+  }
+  .vid-frame::before { top: -12px; left: -26px; rotate: -32deg; }
+  .vid-frame::after { bottom: -12px; right: -26px; rotate: -32deg; }
+  .vid-frame video { width: 100%; height: 100%; display: block; background: var(--ink); }
+  .vid-ph {
+    position: absolute; inset: 0; z-index: 2; overflow: hidden; isolation: isolate;
+    display: grid; place-content: center; justify-items: center; gap: 16px; text-align: center; padding: 16px;
+    background: var(--navy); color: var(--paper);
+  }
+  .vid-ph .ghost-star { position: absolute; z-index: -1; width: 70%; left: 15%; top: 50%; translate: 0 -50%; fill: none; stroke: rgba(244, 241, 234, .14); stroke-width: .5; animation: spin 120s linear infinite; }
+  .vid-ph h3 { font-size: clamp(44px, 6vw, 92px); }
+  .vid-ph .label { color: rgba(244, 241, 234, .7); }
+  .play {
+    position: relative; width: 104px; aspect-ratio: 1; border-radius: 50%;
+    background: var(--red); color: #fff; display: grid; place-items: center;
+    box-shadow: 0 14px 30px rgba(0, 0, 0, .3);
+  }
+  .play svg { width: 34%; margin-left: 8%; fill: currentColor; }
+  .play::before, .play::after { content: ""; position: absolute; inset: 0; border-radius: 50%; border: 2px solid var(--red); animation: ring 2.4s ease-out infinite; }
+  .play::after { animation-delay: 1.2s; }
+  @keyframes ring { from { scale: 1; opacity: .9; } to { scale: 1.9; opacity: 0; } }
+  .vid-caption { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; margin-top: 22px; color: var(--muted); }
+
+  /* Signal rings broadcasting out from behind the photo */
+  .rings { position: absolute; z-index: 0; left: 50%; top: 50%; width: 130%; aspect-ratio: 1; translate: -50% -50%; pointer-events: none; }
+  .rings i { position: absolute; inset: 0; border-radius: 50%; border: 2.5px solid rgba(244, 241, 234, .55); box-shadow: 0 0 28px rgba(244, 241, 234, .16), inset 0 0 28px rgba(244, 241, 234, .1); opacity: 0; animation: wave 12s cubic-bezier(.2, .6, .4, 1) infinite; }
+  .rings i:nth-child(2) { animation-delay: 3s; }
+  .rings i:nth-child(3) { animation-delay: 6s; border-color: rgba(215, 16, 27, .85); box-shadow: 0 0 30px rgba(215, 16, 27, .35), inset 0 0 30px rgba(215, 16, 27, .2); }
+  .rings i:nth-child(4) { animation-delay: 9s; }
+  @keyframes wave { 0% { scale: .2; opacity: 0; } 12% { opacity: 1; } 100% { scale: 1.1; opacity: 0; } }
+  @keyframes spin { to { rotate: 360deg; } }
+
+  /* ====== Section scaffolding ====== */
+  .sec { padding-block: clamp(80px, 10vw, 140px); }
+  .sec-head {
+    display: grid; grid-template-columns: 140px minmax(0, 1fr) minmax(0, 340px); align-items: end; gap: 24px;
+    border-top: 2px solid currentColor; padding-top: 18px; margin-bottom: clamp(40px, 5vw, 72px);
+  }
+  .sec-head .label { align-self: start; padding-top: 4px; }
+  .sec-head h2 { font-size: clamp(60px, 8.4vw, 132px); }
+  .sec-head p { font-family: var(--serif); font-size: 22px; line-height: 1.2; color: var(--muted); }
+
+  .reveal { opacity: 0; transform: translateY(34px); transition: opacity .9s var(--ease), transform .9s var(--ease); }
+  .reveal.in { opacity: 1; transform: none; }
+
+  /* ====== 01 Meet ====== */
+  .meet-grid { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: clamp(32px, 6vw, 96px); align-items: start; }
+  .pull { font-family: var(--serif); font-size: clamp(38px, 4.4vw, 66px); line-height: 1.04; letter-spacing: -.01em; color: var(--navy); text-wrap: balance; }
+  .pull em { color: var(--red); position: relative; white-space: nowrap; }
+  .squig { position: absolute; left: 0; bottom: -.16em; width: 100%; height: .28em; overflow: visible; }
+  .squig path { fill: none; stroke: var(--red); stroke-width: 3; stroke-linecap: round; vector-effect: non-scaling-stroke; stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset 1.3s var(--ease) .5s; }
+  .reveal.in .squig path { stroke-dashoffset: 0; }
+  .meet-grid > div:first-child { position: relative; }
+  .pull + .label { display: block; margin-top: 22px; color: var(--muted); }
+  .why-run { margin-top: 30px; max-width: 52ch; font-size: 18px; line-height: 1.6; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 22px; }
+  .chips span { padding: 7px 12px; border: 1.5px solid var(--navy); border-radius: 999px; color: var(--navy); transition: background .2s, color .2s, rotate .3s var(--ease); }
+  .chips span:hover { background: var(--navy); color: var(--paper); rotate: -3deg; }
+  .spec > div { display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 18px; padding: 16px 0; border-top: 1px solid var(--line); }
+  .spec > div:last-child { border-bottom: 1px solid var(--line); }
+  .spec dt { color: var(--muted); padding-top: 4px; }
+  .spec dd { font-size: 19px; line-height: 1.35; font-weight: 600; }
+  .spec dd span { display: block; font-weight: 400; color: var(--muted); font-size: 16px; }
+
+  /* ====== Numbers ====== */
+  .stats { background: var(--paper-2); border-block: 1px solid var(--line); }
+  .stats .wrap { position: relative; }
+  .stat:hover b { animation: jiggle .5s var(--ease); }
+  @keyframes jiggle { 25% { rotate: -4deg; scale: 1.06; } 60% { rotate: 3deg; } }
+  .stats .wrap { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .stat { padding: 34px 26px 30px; border-left: 1px solid var(--line); }
+  .stat:first-child { border-left: 0; padding-left: 0; }
+  .stat .n { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 8px; color: var(--navy); }
+  .stat b { font-family: var(--display); font-weight: 900; font-size: clamp(84px, 10vw, 156px); line-height: .8; letter-spacing: -.01em; }
+  .stat small { font-family: var(--serif); font-style: italic; font-size: clamp(24px, 2.4vw, 34px); color: var(--red); }
+  .stat p { margin-top: 14px; max-width: 22ch; color: var(--muted); font-size: 16px; line-height: 1.4; }
+
+  /* ====== 02 Platform: rows fill with navy on hover ====== */
+  .platform { position: relative; isolation: isolate; }
+  .pillar {
+    display: grid; grid-template-columns: 140px minmax(0, 1.1fr) minmax(0, 1fr); gap: 24px; align-items: start;
+    padding: 30px 0; border-top: 1px solid var(--line); position: relative;
+  }
+  .pillar:last-child { border-bottom: 1px solid var(--line); }
+  .pillar::before {
+    content: ""; position: absolute; inset: 0 calc(-1 * max(24px, env(safe-area-inset-left, 0px))); z-index: -1;
+    background: var(--navy);
+    transform: scaleY(0); transform-origin: bottom; transition: transform .45s var(--ease);
+  }
+  .pillar:hover::before { transform: scaleY(1); }
+  .pillar h3, .pillar li, .pillar .label { transition: color .3s; }
+  .pillar:hover { color: var(--paper); }
+  .pillar .label { padding-top: 10px; color: var(--muted); }
+  .pillar:hover .label { color: var(--paper); }
+  .pillar h3 { font-size: clamp(54px, 6.6vw, 104px); color: var(--navy); }
+  .pillar .why { font-family: var(--serif); font-style: italic; font-size: 22px; line-height: 1.2; margin-top: 12px; max-width: 30ch; color: var(--muted); transition: color .3s; }
+  .pillar:hover .why { color: rgba(244, 241, 234, .8); }
+  .pillar:hover h3 { color: var(--paper); }
+  .pillar ul { display: grid; gap: 10px; padding-top: 8px; font-size: 18px; line-height: 1.4; }
+  .pillar li { position: relative; padding-left: 24px; }
+  .demo-link { display: inline-flex; align-items: center; margin-top: 18px; padding: 12px 18px; border-radius: 999px; background: var(--red); color: #fff; font-weight: 700; font-size: 15px; text-decoration: none; transition: background .2s, color .2s; }
+  .demo-link:hover { background: var(--paper); color: var(--navy); }
+  .pillar li::before { content: "→"; position: absolute; left: 0; color: var(--red); }
+
+  /* ====== 03 Before / after: flip cards ====== */
+  .ba { background: var(--navy); color: var(--paper); }
+  .ba .sec-head p { color: rgba(244, 241, 234, .65); }
+  .ba-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 22px; margin-bottom: 34px; }
+  .toggle { position: relative; display: inline-grid; grid-template-columns: 1fr 1fr; padding: 4px; border: 1.5px solid rgba(244, 241, 234, .5); border-radius: 999px; }
+  .toggle::before { content: ""; position: absolute; top: 4px; bottom: 4px; left: 4px; width: calc(50% - 4px); border-radius: 999px; background: var(--red); transition: translate .45s cubic-bezier(.3, 1.4, .5, 1); }
+  .toggle[data-mode="aidan"]::before { translate: 100% 0; }
+  .toggle button { position: relative; z-index: 1; background: none; border: 0; color: var(--paper); cursor: pointer; padding: 11px 22px; font: 700 14px/1 var(--sans); letter-spacing: .02em; white-space: nowrap; }
+  .ba-controls .hint { color: rgba(244, 241, 234, .6); }
+  .flip-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+  .flip { perspective: 1200px; cursor: pointer; outline: none; }
+  .flip-inner { display: grid; transform-style: preserve-3d; transition: transform .85s cubic-bezier(.3, 1.25, .45, 1), translate .3s var(--ease); transition-delay: var(--d, 0s), 0s; }
+  .flip.flipped .flip-inner { transform: rotateY(180deg); }
+  .flip:hover .flip-inner { translate: 0 -4px; }
+  .flip:focus-visible .face { outline: 3px solid var(--paper); outline-offset: 3px; }
+  .face {
+    grid-area: 1 / 1; display: flex; flex-direction: column; gap: 10px; min-height: 230px; padding: 22px 22px 20px;
+    backface-visibility: hidden; -webkit-backface-visibility: hidden; position: relative;
+  }
+  .face h3 { font-size: clamp(34px, 3.2vw, 46px); padding-right: 30px; }
+  .face p { font-size: 17px; line-height: 1.4; margin-top: auto; }
+  .face .flip-icon { position: absolute; right: 18px; top: 18px; font-size: 20px; line-height: 1; transition: rotate .5s var(--ease); }
+  .flip:hover .flip-icon { rotate: 180deg; }
+  .face.front { background: var(--paper); color: var(--ink); }
+  .face.front .label { color: var(--muted); }
+  .face.front h3 { color: var(--navy); }
+  .face.front p { color: var(--muted); }
+  .face.back { background: var(--red); color: var(--paper); transform: rotateY(180deg); }
+  .face.back .label { color: rgba(244, 241, 234, .8); }
+  .face.back p strong { box-shadow: inset 0 -.36em 0 rgba(27, 35, 132, .55); }
+
+  /* ====== 03 Every program ====== */
+  .filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 26px; }
+  .filters button {
+    font: 500 12px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; cursor: pointer;
+    padding: 11px 15px; border-radius: 999px; border: 1.5px solid var(--navy); background: none; color: var(--navy);
+    transition: background .2s, color .2s;
+  }
+  .filters button:hover { background: rgba(27, 35, 132, .08); }
+  .filters button[aria-pressed="true"] { background: var(--navy); color: var(--paper); }
+  .prog-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 14px; }
+  .prog {
+    position: relative; display: flex; flex-direction: column; gap: 6px; min-height: 230px; padding: 20px 20px 18px;
+    color: var(--paper); background: var(--navy); border-radius: 4px; overflow: hidden;
+    box-shadow: 0 16px 34px rgba(16, 20, 61, .24), inset 0 -60px 80px rgba(0, 0, 0, .2), inset 0 1px 0 rgba(255, 255, 255, .12);
+    transition: translate .35s var(--ease), rotate .35s var(--ease), box-shadow .35s var(--ease);
+  }
+  .prog:hover { translate: 0 -6px; rotate: -1deg; box-shadow: 0 24px 44px rgba(16, 20, 61, .32), inset 0 -60px 80px rgba(0, 0, 0, .2), inset 0 1px 0 rgba(255, 255, 255, .12); }
+  .prog .abbr { font-family: var(--display); font-weight: 900; font-size: 52px; line-height: .86; text-transform: uppercase; letter-spacing: .005em; }
+  .prog .abbr.long { font-size: 33px; padding-top: 10px; }
+  .prog .abbr::after { content: ""; display: block; width: 34px; height: 4px; margin-top: 12px; background: var(--red); transition: width .4s var(--ease); }
+  .prog:hover .abbr::after { width: 70px; }
+  .prog h3 { font-size: 15.5px; font-weight: 700; line-height: 1.25; margin-top: 4px; }
+  .prog .cat { position: absolute; top: 18px; right: 18px; font-family: var(--mono); font-size: 9.5px; letter-spacing: .14em; text-transform: uppercase; color: rgba(244, 241, 234, .55); }
+  .prog p { margin-top: auto; padding-top: 12px; border-top: 1px solid rgba(244, 241, 234, .2); font-size: 14.5px; line-height: 1.38; color: rgba(244, 241, 234, .85); }
+  .prog p b { display: block; font-family: var(--mono); font-weight: 500; font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: #ff8a90; margin-bottom: 4px; }
+  .prog { cursor: pointer; }
+  .prog:focus-visible { outline: 3px solid var(--red); outline-offset: 4px; }
+  .prog-open { margin-top: 12px; font-size: 10px; color: var(--paper); opacity: .6; transition: opacity .25s, translate .3s var(--ease); }
+  .prog:hover .prog-open, .prog:focus-visible .prog-open { opacity: 1; translate: 4px 0; }
+  .prog-source { margin-top: 18px; color: var(--muted); text-align: center; }
+  .prog-more { position: relative; display: flex; justify-content: center; margin-top: 22px; }
+  .prog-more::before { content: ""; position: absolute; left: 0; right: 0; bottom: 100%; height: 70px; margin-bottom: 22px; background: linear-gradient(rgba(244, 241, 234, 0), var(--paper)); pointer-events: none; transition: opacity .3s; }
+  .prog-more.open::before, .prog-more.none::before { opacity: 0; }
+  .prog-more.none button { display: none; }
+  .prog-more button {
+    display: inline-flex; align-items: center; gap: 8px; cursor: pointer; padding: 14px 24px; border: 0; border-radius: 999px;
+    background: var(--navy); color: var(--paper); font: 700 15px/1 var(--sans);
+    box-shadow: 0 12px 26px rgba(16, 20, 61, .25); transition: background .2s, translate .25s var(--ease);
+  }
+  .prog-more button:hover { background: var(--red); translate: 0 -2px; }
+  .prog[hidden] { display: none; }
+  .prog-grid:not(.dealt) .prog { opacity: 0; }
+  .prog.coal { background: var(--red); }
+  .prog.coal .abbr::after { background: var(--paper); }
+  .prog.coal p b { color: #ffd6d9; }
+
+  /* ====== 07 Already done: a ledger of roles ====== */
+  .done-sec { background: var(--paper-2); }
+  .done { position: relative; display: grid; max-width: 920px; }
+  .done::before { content: ""; position: absolute; left: 150px; top: 14px; bottom: 14px; width: 2px; background: var(--line); }
+  .done-item { position: relative; display: grid; grid-template-columns: 130px 40px minmax(0, 1fr); align-items: start; padding: 0 0 34px; }
+  .done-item:last-child { padding-bottom: 0; }
+  .done-when { padding-top: 6px; text-align: right; color: var(--muted); }
+  .done-dot { justify-self: center; margin-top: 4px; width: 20px; height: 20px; border-radius: 50%; background: var(--paper-2); border: 3px solid var(--navy); }
+  .done-body { display: grid; gap: 6px; padding-left: 10px; }
+  .done-tag { font-family: var(--display); font-weight: 900; font-size: 40px; line-height: .85; text-transform: uppercase; color: var(--navy); }
+  .done-body h3 { font-family: var(--serif); font-weight: 400; font-style: italic; font-size: 26px; line-height: 1.1; }
+  .done-body p { max-width: 58ch; font-size: 16.5px; line-height: 1.45; color: var(--muted); }
+  .done-item.next .done-dot { background: var(--red); border-color: var(--red); box-shadow: 0 0 0 7px rgba(215, 16, 27, .15); }
+  .done-item.next .done-tag, .done-item.next .done-when { color: var(--red); }
+  @media (max-width: 640px) {
+    .done::before { left: 9px; }
+    .done-item { grid-template-columns: 20px minmax(0, 1fr); column-gap: 16px; row-gap: 4px; }
+    .done-when { grid-column: 2; grid-row: 1; text-align: left; padding-top: 2px; }
+    .done-dot { grid-column: 1; grid-row: 1; margin-top: 2px; }
+    .done-body { grid-column: 2; padding-left: 0; }
+  }
+
+  /* ====== 04 First 90 days ====== */
+  .road { position: relative; }
+  .road-cols { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; }
+  .road-line { position: absolute; z-index: 1; background: var(--line); border-radius: 2px; overflow: hidden; }
+  .road-fill { position: absolute; inset: 0; background: var(--red); transform-origin: left top; will-change: transform; }
+  .runner {
+    position: absolute; z-index: 3; left: 0; top: 0; display: inline-flex; align-items: center; gap: 7px; white-space: nowrap;
+    padding: 8px 13px; border-radius: 999px; background: var(--navy); color: var(--paper);
+    font: 500 12px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase;
+    box-shadow: 0 10px 24px rgba(16, 20, 61, .3); pointer-events: none; will-change: transform;
+  }
+  .runner b { font-family: var(--display); font-weight: 900; font-size: 22px; letter-spacing: 0; }
+  .runner::after { content: ""; position: absolute; left: 50%; bottom: -6px; translate: -50% 0; border: 6px solid transparent; border-bottom: 0; border-top-color: var(--navy); }
+  .runner.done { background: var(--red); }
+  .runner.done::after { border-top-color: var(--red); }
+  .stop { position: relative; padding-top: 52px; }
+  .stop-dot { position: absolute; z-index: 2; top: 0; left: 0; width: 24px; height: 24px; border-radius: 50%; background: var(--paper); border: 3px solid var(--navy); transition: background .3s, border-color .3s, scale .5s cubic-bezier(.3, 1.8, .5, 1), box-shadow .3s; }
+  .stop.on .stop-dot { background: var(--red); border-color: var(--red); scale: 1.2; box-shadow: 0 0 0 7px rgba(215, 16, 27, .15); }
+  .stop .label { color: var(--muted); }
+  .stop h3 { font-family: var(--serif); font-weight: 400; font-style: italic; font-size: clamp(48px, 4.6vw, 74px); line-height: .95; color: var(--navy); margin: 8px 0 10px; }
+  .stop .theme { display: inline-block; padding: 5px 11px; border-radius: 999px; background: var(--navy); color: var(--paper); font: 500 11px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; transition: background .3s; }
+  .stop.on .theme { background: var(--red); }
+  .stop .goal { margin: 14px 0 14px; font-family: var(--serif); font-size: 21px; line-height: 1.2; }
+  .stop li { position: relative; padding: 11px 0 11px 32px; border-top: 1px solid var(--line); font-size: 16.5px; line-height: 1.4; opacity: .4; transition: opacity .4s; }
+  .stop li::before { content: ""; position: absolute; left: 0; top: 12px; width: 18px; height: 18px; border: 2px solid var(--navy); border-radius: 4px; transition: background .3s, border-color .3s; }
+  .stop li::after {
+    content: ""; position: absolute; left: 0; top: 12px; width: 18px; height: 18px; scale: 0; transition: scale .4s var(--ease);
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18'%3E%3Cpath d='M4.5 9.3l3 3 6-6.3' fill='none' stroke='%23fff' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 18px no-repeat;
+  }
+  .stop.on li { opacity: 1; }
+  .stop.on li::before { background: var(--red); border-color: var(--red); }
+  .stop.on li::after { scale: 1; }
+  .stop li:nth-child(2), .stop li:nth-child(2)::before, .stop li:nth-child(2)::after { transition-delay: .15s; }
+  .stop li:nth-child(3), .stop li:nth-child(3)::before, .stop li:nth-child(3)::after { transition-delay: .3s; }
+  .stop li:nth-child(4), .stop li:nth-child(4)::before, .stop li:nth-child(4)::after { transition-delay: .45s; }
+  .stop .notice { margin-top: 16px; padding: 12px 14px; background: var(--paper-2); border-left: 4px solid var(--navy); font-size: 15.5px; line-height: 1.4; transition: border-color .3s; }
+  .stop.on .notice { border-left-color: var(--red); }
+  .stop .notice b { display: block; font: 500 10.5px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+  .stop.finish h3 { color: var(--red); }
+
+  /* ====== 05 Membership ====== */
+  .mem { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-top: 1px solid var(--line); }
+  .mem-col { padding: 36px 40px 40px 0; }
+  .mem-col + .mem-col { padding: 36px 0 40px 40px; border-left: 1px solid var(--line); }
+  .mem-col h3 { font-size: clamp(56px, 6.4vw, 100px); color: var(--navy); margin-bottom: 26px; }
+  .mem-col.ret h3 { color: var(--red); }
+  .mem-col ol { counter-reset: m; display: grid; gap: 16px; }
+  .mem-col li { counter-increment: m; display: grid; grid-template-columns: 48px minmax(0, 1fr); font-size: 18px; line-height: 1.4; }
+  .mem-col li::before { content: "0" counter(m); font-family: var(--mono); font-size: 13px; color: var(--muted); padding-top: 4px; }
+
+  /* ====== 06 Work ====== */
+  .work { background: var(--paper-2); }
+  .work-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)) minmax(0, .9fr); gap: 28px; align-items: start; }
+  .work-grid figure { display: grid; gap: 12px; position: relative; rotate: var(--t, 0deg); transition: rotate .4s var(--ease); }
+  .work-grid figure:nth-child(1) { --t: -2deg; }
+  .work-grid figure:nth-child(2) { --t: 1.5deg; }
+  .work-grid figure:nth-child(3) { --t: -1deg; }
+  .work-grid figure:hover { rotate: 0deg; }
+  .work-grid figure::before { content: ""; position: absolute; z-index: 2; top: -11px; left: 50%; width: 84px; height: 24px; translate: -50% 0; rotate: -4deg; background: rgba(244, 241, 234, .75); box-shadow: 0 1px 3px rgba(16, 20, 61, .15); }
+  .work-grid figure:nth-child(2) { margin-top: 48px; }
+  .work-grid figure:nth-child(3) { margin-top: 96px; }
+  .work-grid img { width: 100%; aspect-ratio: 284 / 154; object-fit: cover; box-shadow: 0 18px 40px rgba(16, 20, 61, .18); transition: transform .5s var(--ease); }
+  .work-grid figure:hover img { transform: translateY(-6px) rotate(-1deg); }
+  .work-grid figcaption { font-size: 15px; line-height: 1.35; }
+  .work-grid figcaption .label { display: block; color: var(--red); margin-bottom: 4px; }
+  .lens h3 { font-family: var(--serif); font-weight: 400; font-style: italic; font-size: 40px; line-height: 1; color: var(--navy); margin-bottom: 14px; }
+  .lens li { padding: 12px 0; border-top: 1px solid var(--line); font-weight: 600; }
+  .lens li:last-child { border-bottom: 1px solid var(--line); }
+
+  /* ====== 07 Questions ====== */
+  .faq { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 48px; align-items: start; }
+  .faq details { border-top: 1px solid var(--line); }
+  .faq details:nth-last-child(-n+2) { border-bottom: 1px solid var(--line); }
+  .faq summary {
+    list-style: none; cursor: pointer; position: relative; padding: 22px 48px 22px 0;
+    font-size: 21px; font-weight: 700; line-height: 1.25; color: var(--navy); transition: color .2s;
+  }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq p a { color: var(--red); font-weight: 700; text-decoration: none; }
+  .faq p a:hover { color: var(--navy); }
+  .faq summary:hover { color: var(--red); }
+  .faq summary::after {
+    content: "+"; position: absolute; right: 4px; top: 50%; translate: 0 -50%;
+    font-family: var(--serif); font-size: 38px; line-height: 1; color: var(--red); transition: rotate .35s var(--ease);
+  }
+  .faq details[open] summary::after { rotate: 45deg; }
+  .faq details p { padding: 0 48px 24px 0; color: var(--muted); font-size: 17px; }
+
+  /* ====== Countdown to election day ====== */
+  .countdown { background: var(--paper); border-bottom: 1px solid var(--line); }
+  .countdown .wrap { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px 26px; padding-block: 18px; }
+  .countdown .label { color: var(--muted); }
+  .cd-units { display: flex; gap: 8px; }
+  .cd-units span { display: grid; justify-items: center; min-width: 62px; padding: 8px 10px; border-radius: 6px; background: var(--navy); color: var(--paper); }
+  .cd-units b { font-family: var(--display); font-weight: 900; font-size: 34px; line-height: 1; font-variant-numeric: tabular-nums; }
+  .cd-units small { font-family: var(--mono); font-size: 9.5px; letter-spacing: .14em; text-transform: uppercase; opacity: .7; margin-top: 3px; }
+  .countdown .cd-cta { font-family: var(--serif); font-style: italic; font-size: 20px; color: var(--navy); }
+
+  /* ====== Why I'm running ====== */
+  .story { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: clamp(28px, 6vw, 90px); margin-top: clamp(56px, 7vw, 96px); padding-top: clamp(40px, 5vw, 60px); border-top: 1px solid var(--line); }
+  .story .label { color: var(--red); display: block; margin-bottom: 14px; }
+  .story-lead { font-family: var(--serif); font-style: italic; font-size: clamp(30px, 3.4vw, 48px); line-height: 1.12; color: var(--navy); text-wrap: balance; }
+  .story-body { display: grid; gap: 16px; font-size: 18px; line-height: 1.65; max-width: 60ch; }
+  .story-body .sig-dark { width: 200px; filter: invert(1); opacity: .8; margin-top: 6px; }
+
+  /* ====== Work viewer ====== */
+  .work-grid figure { cursor: zoom-in; }
+  .work-grid figure:focus-visible { outline: 3px solid var(--red); outline-offset: 6px; }
+  .work-hint { margin-top: 26px; color: var(--muted); }
+  .viewer, .share-modal {
+    position: fixed; inset: 0; z-index: 120; display: grid; place-items: center; padding: max(20px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) max(20px, env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
+    background: rgba(10, 13, 46, .78); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    animation: fade-in .3s ease;
+  }
+  .viewer[hidden], .share-modal[hidden] { display: none; }
+  .viewer figure { display: grid; gap: 14px; justify-items: center; max-width: min(92vw, 760px); animation: lift .45s cubic-bezier(.16, 1, .3, 1); }
+  @keyframes lift { from { opacity: 0; transform: translateY(16px) scale(.98); } }
+  .viewer img { width: min(92vw, 760px); max-height: 74vh; object-fit: contain; background: var(--paper); box-shadow: 0 30px 80px rgba(0, 0, 0, .45); }
+  .viewer figcaption { color: var(--paper); text-align: center; }
+  .viewer figcaption .label { display: block; color: #ff8a90; margin-bottom: 4px; }
+  .v-btn { position: absolute; display: grid; place-items: center; width: 48px; height: 48px; border-radius: 50%; border: 0; cursor: pointer; background: rgba(244, 241, 234, .14); color: var(--paper); font-size: 22px; transition: background .2s; }
+  .v-btn:hover { background: var(--red); }
+  .v-close { top: max(18px, env(safe-area-inset-top, 0px)); right: max(18px, env(safe-area-inset-right, 0px)); }
+  .v-prev { left: max(14px, env(safe-area-inset-left, 0px)); top: 50%; translate: 0 -50%; }
+  .v-next { right: max(14px, env(safe-area-inset-right, 0px)); top: 50%; translate: 0 -50%; }
+
+  /* ====== 3D tilt: cards lean toward the pointer and lift off the page ====== */
+  .tilt:not(.reveal), .tilt.reveal.in {
+    transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateZ(var(--tz, 0px));
+  }
+  .tilt { will-change: transform; }
+  .flip.tilt.settled { transition: opacity .9s var(--ease); }
+  /* Text and marks inside sit a little above the card, so the tilt reads as depth */
+
+  /* Stat numbers swing up into place */
+  .stat .n { transform-origin: 50% 100%; transition: transform 1.1s cubic-bezier(.16, 1, .3, 1) .1s; }
+  .stat.reveal:not(.in) .n { transform: perspective(600px) rotateX(-75deg); }
+
+  /* ====== Program plan drawer ====== */
+  .pd { position: fixed; inset: 0; z-index: 120; display: flex; justify-content: flex-end; background: rgba(10, 13, 46, .6); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); animation: fade-in .3s ease; }
+  .pd[hidden] { display: none; }
+  .pd-panel {
+    position: relative; width: min(600px, 100%); height: 100%; overflow-y: auto; overscroll-behavior: contain;
+    background: var(--paper); color: var(--ink); box-shadow: -30px 0 80px rgba(6, 9, 48, .35);
+    transform-origin: right center; animation: pd-in .6s cubic-bezier(.16, 1, .3, 1);
+  }
+  @keyframes pd-in { from { transform: perspective(1600px) rotateY(-14deg) translateX(60px); opacity: 0; } }
+  .pd-head {
+    position: relative; display: grid; gap: 10px; background: var(--navy); color: var(--paper);
+    padding-block: max(30px, env(safe-area-inset-top, 0px)) 30px; padding-left: 34px; padding-right: max(34px, env(safe-area-inset-right, 0px));
+  }
+  .pd-head.coal { background: var(--red); }
+  .pd-head .v-close { position: absolute; top: max(16px, env(safe-area-inset-top, 0px)); right: max(16px, env(safe-area-inset-right, 0px)); }
+  .pd-cat { color: rgba(244, 241, 234, .65); }
+  .pd-abbr { font-family: var(--display); font-weight: 900; font-size: clamp(64px, 12vw, 104px); line-height: .82; text-transform: uppercase; }
+  .pd-abbr::after { content: ""; display: block; width: 48px; height: 5px; margin-top: 14px; background: var(--red); }
+  .pd-head.coal .pd-abbr::after { background: var(--paper); }
+  .pd-name { font-size: 18px; font-weight: 700; }
+  .pd-vision { font-family: var(--serif); font-style: italic; font-size: clamp(26px, 4vw, 34px); line-height: 1.1; margin-top: 8px; text-wrap: balance; }
+  .pd-body { display: grid; gap: 34px; padding-block: 32px max(32px, env(safe-area-inset-bottom, 0px)); padding-left: 34px; padding-right: max(34px, env(safe-area-inset-right, 0px)); }
+  .pd-body h4 { font-family: var(--mono); font-weight: 500; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--red); margin-bottom: 12px; }
+  .pd-build { display: grid; counter-reset: b; }
+  .pd-build li { counter-increment: b; display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 8px; padding: 13px 0; border-top: 1px solid var(--line); font-size: 16.5px; line-height: 1.4; }
+  .pd-build li::before { content: "0" counter(b); font-family: var(--display); font-weight: 900; font-size: 22px; line-height: 1; color: var(--navy); }
+  .pd-rhythm { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+  .pd-rhythm div { display: grid; align-content: start; gap: 6px; padding: 14px; background: var(--paper-2); border-top: 4px solid var(--navy); font-size: 14.5px; line-height: 1.35; }
+  .pd-rhythm div:nth-child(2) { border-top-color: var(--red); }
+  .pd-rhythm b { font-family: var(--display); font-weight: 900; font-size: 22px; text-transform: uppercase; color: var(--navy); line-height: 1; }
+  .pd-measure { display: grid; gap: 8px; }
+  .pd-measure li { position: relative; padding-left: 30px; font-size: 16px; line-height: 1.4; }
+  .pd-measure li::before {
+    content: ""; position: absolute; left: 0; top: 2px; width: 18px; height: 18px; border-radius: 4px;
+    background: var(--red) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18'%3E%3Cpath d='M4.5 9.3l3 3 6-6.3' fill='none' stroke='%23fff' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 18px no-repeat;
+  }
+  .pd-base { padding: 18px 20px; border: 1.5px solid var(--navy); border-radius: 6px; font-size: 15px; line-height: 1.45; color: var(--muted); }
+  .pd-base strong { color: var(--ink); }
+  .pd-foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding-top: 6px; }
+  .pd-cta { display: inline-flex; align-items: center; padding: 14px 20px; border-radius: 999px; background: var(--navy); color: var(--paper); font-weight: 700; font-size: 15px; text-decoration: none; transition: background .2s; }
+  .pd-cta:hover { background: var(--red); }
+  .pd-nav { display: flex; gap: 8px; }
+  .pd-nav button { font: 500 11.5px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; padding: 12px 14px; border-radius: 999px; border: 1.5px solid var(--line); background: none; color: var(--ink); cursor: pointer; transition: border-color .2s; }
+  .pd-nav button:hover { border-color: var(--navy); }
+  @media (max-width: 560px) {
+    .pd-head, .pd-body { padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-right: max(20px, env(safe-area-inset-right, 0px)); }
+    .pd-rhythm { grid-template-columns: minmax(0, 1fr); }
+  }
+
+  /* ====== Share card ====== */
+  .sm-inner { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 30px; align-items: center; width: min(820px, 100%); max-height: 100%; overflow: auto; padding: 30px; border-radius: 6px; background: var(--paper); color: var(--ink); animation: lift .45s cubic-bezier(.16, 1, .3, 1); }
+  .sm-inner .v-close { position: absolute; z-index: 3; top: 12px; right: 12px; background: var(--paper-2); color: var(--ink); box-shadow: 0 4px 12px rgba(16, 20, 61, .2); }
+  .sm-form { display: grid; gap: 14px; }
+  .sm-form h3 { font-size: 54px; color: var(--navy); }
+  .sm-form label { display: grid; gap: 6px; font-family: var(--mono); font-size: 11.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+  .sm-form input, .sm-form select { font: 500 16px/1.2 var(--sans); color: var(--ink); padding: 12px 14px; border: 1.5px solid var(--line); border-radius: 6px; background: #fff; letter-spacing: 0; text-transform: none; }
+  .sm-form input:focus, .sm-form select:focus { outline: 2px solid var(--navy); outline-offset: 1px; }
+  .sc-themes { display: flex; gap: 8px; }
+  .sc-themes button { width: 34px; height: 34px; border-radius: 50%; border: 2px solid var(--paper); box-shadow: 0 0 0 1.5px var(--line); cursor: pointer; }
+  .sc-themes button[aria-pressed="true"] { box-shadow: 0 0 0 2.5px var(--ink); }
+  .sm-hint { color: var(--muted); }
+  .story-card {
+    --c-bg: var(--navy); --c-fg: var(--paper); --c-ac: var(--red);
+    position: relative; overflow: hidden; isolation: isolate; width: min(300px, 72vw); aspect-ratio: 9 / 16; border-radius: 14px; padding: 26px 22px;
+    display: flex; flex-direction: column; background: var(--c-bg); color: var(--c-fg); box-shadow: 0 24px 50px rgba(16, 20, 61, .3);
+  }
+  .story-card[data-theme="red"] { --c-bg: var(--red); --c-fg: var(--paper); --c-ac: var(--navy); }
+  .story-card[data-theme="cream"] { --c-bg: var(--paper); --c-fg: var(--navy); --c-ac: var(--red); box-shadow: 0 24px 50px rgba(16, 20, 61, .18), inset 0 0 0 1px var(--line); }
+  .story-card .sc-star { position: absolute; z-index: -1; width: 150%; left: -25%; top: 22%; rotate: -10deg; fill: var(--c-ac); opacity: .95; }
+  .story-card .label { font-size: 10px; opacity: .8; }
+  .story-card h4 { font-family: var(--display); font-weight: 900; text-transform: uppercase; font-size: 76px; line-height: .84; margin-top: auto; }
+  .story-card .sc-for { font-family: var(--serif); font-style: italic; font-size: 20px; margin-top: 10px; }
+  .story-card .sc-from { margin-top: 14px; font-weight: 700; font-size: 15px; min-height: 1.2em; }
+  .story-card .sc-url { margin-top: 16px; padding-top: 12px; border-top: 1px solid currentColor; font-family: var(--mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; opacity: .85; }
+
+  /* ====== Close-section actions ====== */
+  .close-ctas { display: flex; flex-wrap: wrap; gap: 12px 14px; margin-top: 44px; }
+  .cta-light, .cta-ghost { display: inline-flex; align-items: center; gap: 10px; padding: 16px 24px; border-radius: 999px; font: 700 15.5px/1 var(--sans); text-decoration: none; cursor: pointer; transition: background .2s, color .2s, translate .25s var(--ease); }
+  .cta-light { background: var(--paper); color: var(--red); border: 0; }
+  .cta-light:hover { background: var(--navy); color: var(--paper); translate: 0 -2px; }
+  .cta-ghost { background: none; color: var(--paper); border: 1.5px solid rgba(244, 241, 234, .6); }
+  .cta-ghost:hover { background: rgba(244, 241, 234, .12); translate: 0 -2px; }
+  .cta-light.pending { opacity: .7; cursor: default; }
+  .cta-light.pending:hover { background: var(--paper); color: var(--red); translate: none; }
+
+  /* ====== 08 Close ====== */
+  .close { background: var(--red); color: var(--paper); overflow: hidden; }
+  .close .wrap { position: relative; }
+  .close .sec-head { grid-template-columns: 140px minmax(0, 1fr); margin-bottom: 28px; }
+  .close-hl { font-size: clamp(120px, 21vw, 330px); line-height: .8; }
+  .close-hl em { display: block; font-family: var(--serif); font-weight: 400; font-style: italic; text-transform: none; font-size: .36em; line-height: 1; margin-bottom: .05em; }
+  .close-sig { width: min(380px, 60%); margin: -2% 0 0 auto; rotate: -6deg; }
+  .close-grid { display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 32px; margin-top: 56px; border-top: 1px solid rgba(244, 241, 234, .4); padding-top: 26px; }
+  .close-grid .label { display: block; opacity: .75; margin-bottom: 10px; }
+  .close-grid a, .close-grid .val { font-size: clamp(19px, 1.7vw, 24px); font-weight: 700; text-decoration: none; overflow-wrap: anywhere; }
+  .close-grid a:hover { opacity: .75; }
+  .share-row { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 16px; }
+  .copy { background: var(--paper); color: var(--red); border: 0; cursor: pointer; padding: 10px 16px; font: 700 14px/1 var(--sans); transition: background .2s, color .2s; }
+  .copy:hover { background: var(--navy); color: var(--paper); }
+
+  .foot { background: var(--ink); color: rgba(244, 241, 234, .7); }
+  .foot .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px 24px; padding-block: 18px calc(18px + env(safe-area-inset-bottom, 0px)); }
+  .foot a { text-decoration: none; }
+  .foot a:hover { color: var(--paper); }
+
+  :focus-visible { outline: 3px solid var(--red); outline-offset: 3px; }
+  .hero :focus-visible, .ba :focus-visible { outline-color: var(--paper); }
+  .close :focus-visible { outline-color: var(--navy); }
+
+  /* ====== Responsive ====== */
+  @media (max-width: 1100px) {
+    .hero-side { display: none; }
+    .sec-head { grid-template-columns: 110px minmax(0, 1fr); }
+    .sec-head p { grid-column: 2; }
+    .pillar { grid-template-columns: 110px minmax(0, 1fr); }
+    .pillar ul { grid-column: 2; }
+    .work-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .road-cols { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 48px; }
+    .flip-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .lens { grid-column: 1 / -1; }
+    .ballot { left: 0; }
+  }
+  @media (max-width: 820px) {
+    .hero-grid { grid-template-columns: minmax(0, 1fr); min-height: 0; gap: 0; }
+    .hero-copy { padding-bottom: 24px; }
+    .hero-art { min-height: 0; height: clamp(470px, 128vw, 640px); }
+    .star { left: 0; top: 4%; width: 100%; }
+    .portrait { width: min(92%, 440px); left: 56%; }
+    .ballot { width: 176px; left: 0; bottom: 3%; padding: 9px 11px; }
+    .ballot .b-office { font-size: 17px; }
+    .ballot .b-note { font-size: 13px; }
+    .ballot .b-row { font-size: 14px; gap: 9px; margin-top: 7px; padding-top: 7px; }
+    .ballot svg { width: 24px; }
+    .sig { width: 42%; right: 0; bottom: 6%; }
+    .meet-grid, .faq, .mem { grid-template-columns: minmax(0, 1fr); }
+    .faq details:nth-last-child(2) { border-bottom: 0; }
+    .mem-col, .mem-col + .mem-col { padding: 30px 0; border-left: 0; }
+    .mem-col + .mem-col { border-top: 1px solid var(--line); }
+    .stats .wrap { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .stat { padding: 26px 0 24px 20px; }
+    .stat:nth-child(odd) { border-left: 0; padding-left: 0; }
+    .stat:nth-child(n+3) { border-top: 1px solid var(--line); }
+    .road-cols { grid-template-columns: minmax(0, 1fr); gap: 44px; }
+    .stop { padding-top: 0; padding-left: 50px; }
+    .stop-dot { top: 6px; }
+    .runner { padding: 0; width: 44px; height: 44px; justify-content: center; border-radius: 50%; }
+    .runner span { display: none; }
+    .runner b { font-size: 18px; }
+    .runner::after { display: none; }
+    .flip-grid { grid-template-columns: minmax(0, 1fr); }
+    .face { min-height: 190px; }
+    .vid-ph h3 { font-size: 40px; }
+    .play { width: 76px; }
+    .work-grid { grid-template-columns: minmax(0, 1fr); }
+    .work-grid figure:nth-child(n) { margin-top: 0; }
+    .close-grid { grid-template-columns: minmax(0, 1fr); gap: 22px; }
+    .close-sig { width: 70%; margin-top: 10px; }
+  }
+  @media (max-width: 560px) {
+    .wrap { padding-left: max(18px, env(safe-area-inset-left, 0px)); padding-right: max(18px, env(safe-area-inset-right, 0px)); }
+    .top .wrap { gap: 12px; }
+    .pill { padding: 8px 11px; font-size: 10px; letter-spacing: .08em; }
+    .mark b { font-size: 24px; }
+    .mark i { font-size: 18px; }
+    .hl { font-size: clamp(76px, 25vw, 120px); }
+    .sec-head, .close .sec-head { grid-template-columns: minmax(0, 1fr); gap: 10px; }
+    .sec-head p { grid-column: 1; }
+    .pillar { grid-template-columns: minmax(0, 1fr); gap: 10px; }
+    .pillar ul { grid-column: 1; }
+    .pillar::before { inset: 0 -18px; }
+    .spec > div { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+    .story { grid-template-columns: minmax(0, 1fr); }
+    .sm-inner { grid-template-columns: minmax(0, 1fr); justify-items: center; padding: 22px 18px; }
+    .sm-form { order: 2; width: 100%; }
+    .sm-form h3 { font-size: 40px; }
+    .cd-units span { min-width: 52px; }
+    .cd-units b { font-size: 28px; }
+    .close-ctas a, .close-ctas button { flex: 1 1 100%; justify-content: center; }
+    .prog { min-height: 0; }
+    .prog .abbr { font-size: 44px; }
+    .prog .abbr.long { font-size: 33px; }
+    .vid-ph { gap: 10px; }
+    .vid-ph h3 { font-size: 30px; }
+    .vid-ph .label { display: none; }
+    .play { width: 58px; }
+    .vid-frame::before, .vid-frame::after { width: 70px; height: 20px; }
+  }
+
+  /* ====== Page loader: a quiet wordmark, a filling line, then a fade ====== */
+  .loading, .loading body { overflow: hidden; }
+  .loader {
+    position: fixed; inset: 0; z-index: 200; display: none; place-content: center; justify-items: center; gap: 22px;
+    background: var(--navy); color: var(--paper); transition: opacity .7s ease, visibility 0s linear .7s;
+  }
+  .loading .loader, .loader.out { display: grid; }
+  .loader.out { opacity: 0; visibility: hidden; }
+  .loading .hero *, .loading .hero *::before, .loading .hero *::after { animation-play-state: paused !important; }
+  .ld-mark { display: flex; align-items: center; gap: 14px; opacity: 0; translate: 0 10px; animation: ld-in .9s var(--ease) .1s forwards; }
+  .ld-mark svg { width: 44px; fill: var(--red); }
+  .ld-mark b { font-family: var(--display); font-weight: 900; font-size: clamp(54px, 9vw, 96px); line-height: .85; text-transform: uppercase; letter-spacing: .01em; }
+  .ld-mark i { font-family: var(--serif); font-style: italic; font-size: clamp(28px, 4.4vw, 46px); color: rgba(244, 241, 234, .8); }
+  .ld-bar { width: min(240px, 60vw); height: 2px; background: rgba(244, 241, 234, .18); border-radius: 2px; overflow: hidden; opacity: 0; animation: ld-in .6s ease .3s forwards; }
+  .ld-bar i { display: block; height: 100%; background: var(--red); transform-origin: left; transform: scaleX(0); transition: transform .5s var(--ease); }
+  .ld-sub { color: rgba(244, 241, 234, .6); opacity: 0; animation: ld-in .6s ease .45s forwards; }
+  @keyframes ld-in { to { opacity: 1; translate: 0 0; } }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+    .squig path { stroke-dashoffset: 0; }
+    .hl .line > span, .reveal { transform: none; opacity: 1; filter: none; }
+    .hl .dot { opacity: 1; }
+    .sig { clip-path: none; }
+    .ballot .tick { stroke-dashoffset: 0; }
+    .ul-line path { stroke-dashoffset: 0; }
+    .prog-grid .prog { opacity: 1 !important; }
+    .stat .n { transform: none !important; }
+    html { scroll-behavior: auto; }
+  }
+</style>
+</head>
+<body>
+<script>
+  // Always open at the top, and hold the page behind the loader (with a failsafe)
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+  if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.documentElement.classList.add('loading');
+    setTimeout(() => document.documentElement.classList.remove('loading'), 5000);
+  }
+</script>
+<div class="loader" aria-hidden="true">
+  <div class="ld-mark">
+    <svg viewBox="0 0 100 96"><polygon points="50,3 61.5,37 97,37 68.5,58 79.5,92 50,71 20.5,92 31.5,58 3,37 38.5,37"/></svg>
+    <b>Aidan</b><i>for Comms</i>
+  </div>
+  <div class="ld-bar"><i></i></div>
+  <p class="label ld-sub">IOP Communications Director</p>
+</div>
+
+<div class="masthead">
+<a class="announce" href="oneiop.html">
+  <span class="wrap"><span class="label">New</span><span>The OneIOP demo is live<span class="more">: see what your IOP week could look like</span>.</span><b>Try it <span aria-hidden="true">→</span></b></span>
+</a>
+
+<header class="top">
+  <div class="wrap">
+    <a href="#top" class="mark" aria-label="Aidan for Comms, back to top">
+      <svg viewBox="0 0 100 96" aria-hidden="true"><polygon points="50,3 61.5,37 97,37 68.5,58 79.5,92 50,71 20.5,92 31.5,58 3,37 38.5,37"/></svg>
+      <b>Aidan</b><i>for Comms</i>
+    </a>
+    <button type="button" class="menu-btn label" aria-expanded="false" aria-controls="site-nav"><i aria-hidden="true"></i>Menu</button>
+    <nav class="nav label" id="site-nav" aria-label="Sections">
+      <a href="#video">Video</a>
+      <a href="#platform">Platform</a>
+      <a href="#programs">Programs</a>
+      <a href="#plan">90 Days</a>
+      <a href="#done">Track record</a>
+      <a href="#work">Work</a>
+      <a href="#faq">Questions</a>
+    </nav>
+  </div>
+  <div class="progress" aria-hidden="true"></div>
+</header>
+</div>
+
+<main>
+<section class="hero panel" id="top">
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <p class="label kicker">Candidate · IOP Communications Director</p>
+      <h1 class="hl disp" aria-label="Let's shine, IOP.">
+        <span class="line l1"><span><em>Let's</em></span></span>
+        <span class="line l2"><span>Shine,</span></span>
+        <span class="line l3"><span>IOP<span class="dot">.</span></span></span>
+      </h1>
+      <p class="lede">The IOP is one of a kind. It's time our comms matched that. I'm in this race to make information easier to find when you need it, make collaboration between programs effortless, and make members feel celebrated for the work they do. <strong>Let's take the IOP further, together.</strong></p>
+      <div class="ctas">
+        <a href="#platform" class="btn">See the platform <span class="arr">→</span></a>
+        <a href="#contact" class="text-link">Questions? Let's talk →</a>
+      </div>
+    </div>
+
+    <div class="hero-art">
+      <div class="rings" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+      <svg class="star s2" viewBox="0 0 100 96" aria-hidden="true"><polygon class="ghost" points="50,3 61.5,37 97,37 68.5,58 79.5,92 50,71 20.5,92 31.5,58 3,37 38.5,37"/></svg>
+      <svg class="star s1" viewBox="0 0 100 96" aria-hidden="true"><polygon class="fill" points="50,3 61.5,37 97,37 68.5,58 79.5,92 50,71 20.5,92 31.5,58 3,37 38.5,37"/></svg>
+      <img class="portrait" src="assets/aidan.png" alt="Aidan Zagel" width="829" height="1000">
+      <img class="sig" src="assets/signature.png" alt="Aidan Zagel's signature" width="900" height="270">
+      <div class="ballot tilt" data-tilt="10" role="button" tabindex="0" aria-label="Cast a vote for Aidan Zagel">
+        <div class="b-top label"><span>Ballot</span><span>IOP</span></div>
+        <p class="b-office">Communications Director</p>
+        <p class="b-note">Vote for one</p>
+        <div class="b-row">
+          <svg viewBox="0 0 28 28" aria-hidden="true"><rect class="box" x="1" y="1" width="26" height="26"/><path class="tick" d="M7.5 14.5l4.5 4.5L20.5 9"/></svg>
+          Aidan Zagel
+        </div>
+        <span class="b-hint label">Click to vote again ↺</span>
+      </div>
+    </div>
+  </div>
+  <p class="hero-side label" aria-hidden="true">Aidan Zagel — Programs First · OneIOP · Comms Playbook · Member Perks</p>
+</section>
+
+<!-- Countdown: set data-election to the election start, e.g. 2026-12-02T09:00:00-05:00 -->
+<div class="countdown" id="countdown" data-election="2026-11-15T00:01:00-05:00" hidden>
+  <div class="wrap">
+    <span class="label">Election day</span>
+    <div class="cd-units" aria-live="off"><span><b data-u="d">0</b><small>days</small></span><span><b data-u="h">0</b><small>hrs</small></span><span><b data-u="m">0</b><small>min</small></span><span><b data-u="s">0</b><small>sec</small></span></div>
+    <span class="cd-cta">Vote Aidan for Comms.</span>
+  </div>
+</div>
+
+<div class="tape" aria-hidden="true">
+  <div class="marquee m2"><div class="mq-track" id="mq2"></div></div>
+  <div class="marquee"><div class="mq-track" id="mq"></div></div>
+</div>
+
+<section class="sec video-sec" id="video">
+  <div class="wrap">
+    <header class="sec-head">
+      <span class="label">§ 00</span>
+      <h2 class="disp">Watch the Pitch</h2>
+      <p>The whole campaign in about a minute.</p>
+    </header>
+    <div class="vid-frame reveal">
+      <video id="campaign-video" controls playsinline preload="metadata" poster="assets/video-poster.jpg">
+        <source src="assets/campaign-video.mp4" type="video/mp4">
+      </video>
+      <div class="vid-ph" id="vid-ph">
+        <svg class="ghost-star" viewBox="0 0 100 96" aria-hidden="true"><polygon points="50,3 61.5,37 97,37 68.5,58 79.5,92 50,71 20.5,92 31.5,58 3,37 38.5,37"/></svg>
+        <span class="play" aria-hidden="true"><svg viewBox="0 0 10 12"><path d="M0 0l10 6-10 6z"/></svg></span>
+        <h3 class="disp">Video coming soon</h3>
+        <p class="label">Aidan Zagel · IOP Communications Director</p>
+      </div>
+    </div>
+    <div class="vid-caption label"><span>Programs First · OneIOP · Comms Playbook · Member Perks</span><span>Runtime 1:05</span></div>
+  </div>
+</section>
+
+<section class="sec" id="meet">
+  <div class="wrap">
+    <header class="sec-head">
+      <span class="label">§ 01</span>
+      <h2 class="disp">Meet Aidan</h2>
+      <p>A sophomore already running comms for one of Harvard's biggest student orgs.</p>
+    </header>
+    <div class="meet-grid">
+      <div class="reveal">
+        <blockquote class="pull">“The IOP is one of a kind. It's time our comms <em>matched that.<svg class="squig" viewBox="0 0 200 12" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M2 8 Q12 1 22 7 T42 7 T62 7 T82 7 T102 7 T122 7 T142 7 T162 7 T182 7 T198 6"/></svg></em>”</blockquote>
+        <span class="label">— Aidan Zagel</span>
+        <p class="why-run">At HPR I run marketing and the comp. Behind the camera, I shoot for HPU and other student orgs. Both taught me the same lesson: great work only counts if people see it. The IOP does more great work than anywhere on campus, and our comms should make sure everyone knows about it.</p>
+        <div class="chips label" aria-label="Skills"><span>Design</span><span>Photography</span><span>Marketing</span><span>Branding</span><span>Recruiting</span></div>
+      </div>
+      <dl class="spec reveal">
+        <div><dt class="label">Year</dt><dd>Sophomore, Quincy House</dd></div>
+        <div><dt class="label">Studies</dt><dd>Government + Economics</dd></div>
+        <div><dt class="label">Now</dt><dd>Marketing + Comp Director<span>Harvard Political Review</span></dd></div>
+        <div><dt class="label">Also</dt><dd>External Affairs<span>Harvard Political Union</span></dd></div>
+        <div><dt class="label">Behind the lens</dt><dd>Photographer<span>HPU, the HMC Boston 2027 board, and other student orgs</span></dd></div>
+      </dl>
+    </div>
+    <div class="story reveal" id="why">
+      <div>
+        <span class="label">Why I'm running</span>
+        <p class="story-lead">Every week, the IOP does something worth talking about. Too often, nobody hears about it.</p>
+      </div>
+      <div class="story-body">
+        <p>I've seen that from both sides. As Marketing + Comp Director at HPR, my job is getting great work in front of people. Behind the camera, for HPU and other student orgs, I've seen how much a good photo, shared fast, changes who shows up next time.</p>
+        <p>Comms is how a first-year finds their program, how a speaker event fills the room, and how a member's work gets noticed. I want IOP comms to do that for every program, not just the biggest ones.</p>
+        <p>That's why I'm running: to make the IOP impossible to miss, and to make every member feel celebrated for the work they do.</p>
+        <img class="sig-dark" src="assets/signature.png" alt="Aidan Zagel's signature" width="900" height="270">
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="stats" aria-label="The promises in numbers">
+  <div class="wrap">
+    <div class="stat reveal"><div class="n"><b data-count="24">24</b><small>hours</small></div><p>Turnaround on photos and videos for every program</p></div>
+    <div class="stat reveal"><div class="n"><b data-count="1">1</b><small>site</small></div><p>Home for every announcement, event, and contact: OneIOP</p></div>
+    <div class="stat reveal"><div class="n"><b data-count="90">90</b><small>days</small></div><p>To templates, comms training, and a launched OneIOP</p></div>
+    <div class="stat reveal"><div class="n"><b>All</b><small>programs</small></div><p>Spotlighted and supported equally</p></div>
+  </div>
+</section>
+
+<section class="sec" id="platform">
+  <div class="wrap">
+    <header class="sec-head">
+      <span class="label">§ 02</span>
+      <h2 class="disp">The Platform</h2>
+      <p>Four commitments, one goal: comms that work for every program.</p>
+    </header>
+    <div class="platform">
+      <article class="pillar reveal">
+        <span class="label">2.1</span>
+        <div>
+          <h3 class="disp">Programs First</h3>
+          <p class="why">Every program does great work. Every program should be seen doing it.</p>
+        </div>
+        <ul>
+          <li>Spotlighting and providing comms for <strong>all programs equally</strong></li>
+          <li>Highlighting <strong>individual members</strong> of the IOP</li>
+          <li>Creating a <strong>Media Center</strong> open to every program</li>
+        </ul>
+      </article>
+      <article class="pillar reveal">
+        <span class="label">2.2</span>
+        <div>
+          <h3 class="disp">OneIOP</h3>
+          <p class="why">Find anything in one click, and get fewer emails while you're at it.</p>
+          <a class="demo-link" href="oneiop.html">Try the OneIOP demo →</a>
+        </div>
+        <ul>
+          <li>One <strong>internal website</strong> with announcements, events, and contact information in one place</li>
+          <li><strong>Reducing email volume</strong> while improving comms</li>
+        </ul>
+      </article>
+      <article class="pillar reveal">
+        <span class="label">2.3</span>
+        <div>
+          <h3 class="disp">Comms Playbook</h3>
+          <p class="why">One shared look makes the IOP recognizable and saves every program from starting at zero.</p>
+        </div>
+        <ul>
+          <li>Creating a <strong>brand template</strong> with colors, fonts, and logos</li>
+          <li><strong>Comms training</strong> for all program comms teams + office hours</li>
+          <li><strong>Custom templates</strong> for programs</li>
+        </ul>
+      </article>
+      <article class="pillar reveal">
+        <span class="label">2.4</span>
+        <div>
+          <h3 class="disp">Member Perks</h3>
+          <p class="why">Being an IOP member should feel like something.</p>
+        </div>
+        <ul>
+          <li><strong>Program-specific merch</strong> supported by comms</li>
+          <li><strong>New member welcome kits</strong>/door drops</li>
+          <li><strong>24-hour turnaround</strong> on photos and videos</li>
+        </ul>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="programs" style="padding-top:0">
+  <div class="wrap">
+    <header class="sec-head">
+      <span class="label">§ 03</span>
+      <h2 class="disp">Every Program</h2>
+      <p>Programs First means all of them, coalitions included. Click any one to see the full plan.</p>
+    </header>
+    <div class="filters reveal" role="group" aria-label="Filter programs">
+      <button type="button" data-f="all" aria-pressed="true">All</button>
+      <button type="button" data-f="events" aria-pressed="false">Events + discussion</button>
+      <button type="button" data-f="research" aria-pressed="false">Research + policy</button>
+      <button type="button" data-f="service" aria-pressed="false">Service + civic</button>
+      <button type="button" data-f="media" aria-pressed="false">Media + campaigns</button>
+      <button type="button" data-f="coalition" aria-pressed="false">Coalitions</button>
+    </div>
+    <div class="prog-grid">
+      <article class="prog tilt" data-cat="events" data-id="Forum" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Events</span><span class="abbr">Forum</span><h3>John F. Kennedy Jr. Forum</h3><p><b>What comms does</b>Forum promo that fills the room, and event photos back within 24 hours</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
+      <article class="prog tilt" data-cat="events" data-id="FSG" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Events</span><span class="abbr">FSG</span><h3>Fellows and Study Groups</h3><p><b>What comms does</b>Weekly study group graphics from ready-made templates, done fast</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
+      <article class="prog tilt" data-cat="events" data-id="Conferences" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Events</span><span class="abbr long">Conferences</span><h3>Conferences Committee</h3><p><b>What comms does</b>One look for every conference, from save-the-date to recap</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
+      <article class="prog tilt" data-cat="events" data-id="HPU" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Events</span><span class="abbr">HPU</span><h3>Harvard Political Union</h3><p><b>What comms does</b>Debate promo and photos from every debate</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
+      <article class="prog tilt" data-cat="events" data-id="WIL" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Events</span><span class="abbr">WIL</span><h3>Women's Initiative in Leadership</h3><p><b>What comms does</b>Speaker promo and photos from every event</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
+      <article class="prog tilt" data-cat="events" data-id="PRE" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Events</span><span class="abbr">PRE</span><h3>Politics of Race and Ethnicity</h3><p><b>What comms does</b>Event promo plus spotlights on the members leading the conversation</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
+      <article class="prog tilt" data-cat="events" data-id="GAP" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Events</span><span class="abbr">GAP</span><h3>Global Affairs Program</h3><p><b>What comms does</b>Event promo and spotlights on members' global work</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
+      <article class="prog tilt" data-cat="events" data-id="Environment" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Events</span><span class="abbr long">Environment</span><h3>Program for Environmental Politics</h3><p><b>What comms does</b>Speaker promo and a consistent look for every discussion</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
+      <article class="prog tilt" data-cat="research" data-id="Policy" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Research</span><span class="abbr">Policy</span><h3>Policy Program</h3><p><b>What comms does</b>Spotlights that put members' policy proposals in front of the whole IOP</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
+      <article class="prog tilt" data-cat="research" data-id="HPOP" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Research</span><span class="abbr">HPOP</span><h3>Harvard Public Opinion Project</h3><p><b>What comms does</b>Graphics that make Harvard Youth Poll results easy to share</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
+      <article class="prog tilt" data-cat="research" data-id="RSG" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Research</span><span class="abbr">RSG</span><h3>Research & Strategy Group</h3><p><b>What comms does</b>Recruiting graphics and spotlights on the teams' work</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
+      <article class="prog tilt" data-cat="research" data-id="GovLab" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Research</span><span class="abbr">GovLab</span><h3>Governance Lab</h3><p><b>What comms does</b>Spotlights on the student founders and the startups they launch</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
+      <article class="prog tilt" data-cat="service" data-id="CIVICS" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Service</span><span class="abbr">CIVICS</span><h3>CIVICS</h3><p><b>What comms does</b>Recruiting posts for new teachers and spotlights on the people in the classroom</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
+      <article class="prog tilt" data-cat="service" data-id="Cit Tut" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Service</span><span class="abbr">Cit Tut</span><h3>Citizenship Tutoring</h3><p><b>What comms does</b>Recruiting posts for new tutors and stories from the program</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
+      <article class="prog tilt" data-cat="service" data-id="HVC" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Service</span><span class="abbr">HVC</span><h3>Harvard Votes Challenge</h3><p><b>What comms does</b>Turnout campaigns that reach every IOP member at once</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
+      <article class="prog tilt" data-cat="media" data-id="HPR" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Media</span><span class="abbr">HPR</span><h3>Harvard Political Review</h3><p><b>What comms does</b>New issues cross-promoted across every IOP channel</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
+      <article class="prog tilt" data-cat="media" data-id="CAP" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Media</span><span class="abbr">CAP</span><h3>Campaigns and Advocacy Program</h3><p><b>What comms does</b>Workshop promo plus templates for campaign-style graphics</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
+      <article class="prog coal tilt" data-cat="coalition" data-id="Arts" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Coalition</span><span class="abbr">Arts</span><h3>Coalition for the Arts</h3><p><b>What comms does</b>Event promo with a look as creative as the artists you bring in</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
+      <article class="prog coal tilt" data-cat="coalition" data-id="Conservative" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Coalition</span><span class="abbr long">Conservative</span><h3>Conservative Coalition</h3><p><b>What comms does</b>Event promo and an equal place in IOP comms</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
+      <article class="prog coal tilt" data-cat="coalition" data-id="GSC" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Coalition</span><span class="abbr">GSC</span><h3>Gender & Sexuality Coalition</h3><p><b>What comms does</b>Event promo and spotlights on the conversations you lead</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
+      <article class="prog coal tilt" data-cat="coalition" data-id="Service" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Coalition</span><span class="abbr">Service</span><h3>Service Coalition</h3><p><b>What comms does</b>Event promo and spotlights on members' service</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
+    </div>
+    <div class="prog-more"><button type="button" id="prog-more" aria-expanded="false">Show all <span>21</span> ↓</button></div>
+    <p class="prog-source label">Program and coalition list from iop.harvard.edu</p>
+  </div>
+</section>
+
+<section class="sec ba panel" id="difference">
+  <div class="wrap">
+    <header class="sec-head">
+      <span class="label">§ 04</span>
+      <h2 class="disp">Before / After</h2>
+      <p>Six things that change with Aidan as Comms Director.</p>
+    </header>
+    <div class="ba-controls">
+      <div class="toggle" data-mode="now" role="group" aria-label="Show">
+        <button type="button" data-mode="now" aria-pressed="true">Right now</button>
+        <button type="button" data-mode="aidan" aria-pressed="false">With Aidan</button>
+      </div>
+      <span class="hint label">Flip the switch, or tap any card</span>
+    </div>
+    <div class="flip-grid">
+      <article class="flip reveal tilt" data-tilt="5" tabindex="0" role="button" aria-pressed="false" aria-label="Finding info: flip card">
+        <div class="flip-inner">
+          <div class="face front"><span class="label">Right now</span><h3 class="disp">Finding info</h3><p>Spread across emails, group chats, and Instagram</p><span class="flip-icon" aria-hidden="true">↻</span></div>
+          <div class="face back"><span class="label">With Aidan</span><h3 class="disp">Finding info</h3><p><strong>OneIOP</strong>: one internal site for announcements, events, and contacts</p><span class="flip-icon" aria-hidden="true">↻</span></div>
+        </div>
+      </article>
+      <article class="flip reveal tilt" data-tilt="5" tabindex="0" role="button" aria-pressed="false" aria-label="Your inbox: flip card">
+        <div class="flip-inner">
+          <div class="face front"><span class="label">Right now</span><h3 class="disp">Your inbox</h3><p>Long emails that are easy to skip</p><span class="flip-icon" aria-hidden="true">↻</span></div>
+          <div class="face back"><span class="label">With Aidan</span><h3 class="disp">Your inbox</h3><p><strong>Fewer emails</strong>, and clearer ones, with the details on OneIOP</p><span class="flip-icon" aria-hidden="true">↻</span></div>
+        </div>
+      </article>
+      <article class="flip reveal tilt" data-tilt="5" tabindex="0" role="button" aria-pressed="false" aria-label="Program branding: flip card">
+        <div class="flip-inner">
+          <div class="face front"><span class="label">Right now</span><h3 class="disp">Program branding</h3><p>Every program designs from scratch</p><span class="flip-icon" aria-hidden="true">↻</span></div>
+          <div class="face back"><span class="label">With Aidan</span><h3 class="disp">Program branding</h3><p>A shared <strong>brand template</strong> plus custom templates for each program</p><span class="flip-icon" aria-hidden="true">↻</span></div>
+        </div>
+      </article>
+      <article class="flip reveal tilt" data-tilt="5" tabindex="0" role="button" aria-pressed="false" aria-label="Photos + video: flip card">
+        <div class="flip-inner">
+          <div class="face front"><span class="label">Right now</span><h3 class="disp">Photos + video</h3><p>Waiting on content long after the event</p><span class="flip-icon" aria-hidden="true">↻</span></div>
+          <div class="face back"><span class="label">With Aidan</span><h3 class="disp">Photos + video</h3><p><strong>24-hour turnaround</strong>, plus a Media Center open to every program</p><span class="flip-icon" aria-hidden="true">↻</span></div>
+        </div>
+      </article>
+      <article class="flip reveal tilt" data-tilt="5" tabindex="0" role="button" aria-pressed="false" aria-label="Member recognition: flip card">
+        <div class="flip-inner">
+          <div class="face front"><span class="label">Right now</span><h3 class="disp">Member recognition</h3><p>Great work happens and nobody hears about it</p><span class="flip-icon" aria-hidden="true">↻</span></div>
+          <div class="face back"><span class="label">With Aidan</span><h3 class="disp">Member recognition</h3><p><strong>Member spotlights</strong> and a mid-semester all-program presentation</p><span class="flip-icon" aria-hidden="true">↻</span></div>
+        </div>
+      </article>
+      <article class="flip reveal tilt" data-tilt="5" tabindex="0" role="button" aria-pressed="false" aria-label="Joining the IOP: flip card">
+        <div class="flip-inner">
+          <div class="face front"><span class="label">Right now</span><h3 class="disp">Joining the IOP</h3><p>Hard to know where to start</p><span class="flip-icon" aria-hidden="true">↻</span></div>
+          <div class="face back"><span class="label">With Aidan</span><h3 class="disp">Joining the IOP</h3><p><strong>Welcome kits</strong>, door drops, and opening-day info out early</p><span class="flip-icon" aria-hidden="true">↻</span></div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="plan">
+  <div class="wrap">
+    <header class="sec-head">
+      <span class="label">§ 05</span>
+      <h2 class="disp">First 90 Days</h2>
+      <p>From audit to launch, month by month. Scroll to run the clock.</p>
+    </header>
+    <div class="road" id="road">
+      <div class="road-line" aria-hidden="true"><div class="road-fill"></div></div>
+      <div class="runner" aria-hidden="true"><span>Day</span><b>0</b></div>
+      <div class="road-cols">
+      <article class="stop">
+        <span class="stop-dot" aria-hidden="true"></span>
+        <span class="label">Month 01 · Days 1–30</span>
+        <h3>December</h3>
+        <span class="theme">Listen</span>
+        <p class="goal">Learn what every program needs before changing anything.</p>
+        <ul>
+          <li>Meet with <strong>outgoing program chairs</strong></li>
+          <li><strong>Design templates</strong> for each program</li>
+          <li><strong>Audit IOP comms</strong> + fix the gaps</li>
+        </ul>
+        <p class="notice"><b>What you'll notice</b>Comms reaching out to your program first, asking what you need.</p>
+      </article>
+      <article class="stop">
+        <span class="stop-dot" aria-hidden="true"></span>
+        <span class="label">Month 02 · Days 31–60</span>
+        <h3>January</h3>
+        <span class="theme">Build</span>
+        <p class="goal">Build the tools programs will use all semester.</p>
+        <ul>
+          <li>Create <strong>OneIOP + pilot with programs</strong></li>
+          <li>Design <strong>custom merch</strong> with programs</li>
+          <li><strong>Comms trainings</strong> + office hours begin</li>
+        </ul>
+        <p class="notice"><b>What you'll notice</b>Templates in your hands and trainings on the calendar.</p>
+      </article>
+      <article class="stop">
+        <span class="stop-dot" aria-hidden="true"></span>
+        <span class="label">Month 03 · Days 61–90</span>
+        <h3>February</h3>
+        <span class="theme">Launch</span>
+        <p class="goal">Put it all in front of members.</p>
+        <ul>
+          <li>Launch OneIOP + <strong>program collabs</strong></li>
+          <li><strong>Launch new spotlights</strong> + brand identity</li>
+          <li>Begin working on the <strong>IOP Media Center</strong></li>
+        </ul>
+        <p class="notice"><b>What you'll notice</b>One place to find everything, and your program in the spotlight.</p>
+      </article>
+      <article class="stop finish">
+        <span class="stop-dot" aria-hidden="true"></span>
+        <span class="label">The finish line</span>
+        <h3>Day 90</h3>
+        <span class="theme">Done</span>
+        <p class="goal">What's true by the end of February.</p>
+        <ul>
+          <li><strong>OneIOP</strong> live for every member</li>
+          <li><strong>Templates</strong> in every program's hands</li>
+          <li><strong>Trainings + office hours</strong> running</li>
+          <li><strong>Media Center</strong> underway</li>
+        </ul>
+        <p class="notice"><b>What you'll notice</b>Fewer emails, faster photos, and comms that feel like the IOP.</p>
+      </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="membership">
+  <div class="wrap">
+    <header class="sec-head">
+      <span class="label">§ 06</span>
+      <h2 class="disp">Membership</h2>
+      <p>Bring more people in, and give them reasons to stay.</p>
+    </header>
+    <div class="mem">
+      <div class="mem-col reveal">
+        <h3 class="disp">Recruitment</h3>
+        <ol>
+          <li><span>Make the <strong>IOP impossible to miss</strong></span></li>
+          <li><span><strong>More postering</strong>/alternative marketing, especially for first-years</span></li>
+          <li><span><strong>Revamp opening days</strong> to get information out earlier (through OneIOP)</span></li>
+          <li><span>Partnerships with <strong>other Harvard student orgs</strong></span></li>
+        </ol>
+      </div>
+      <div class="mem-col ret reveal">
+        <h3 class="disp">Retention</h3>
+        <ol>
+          <li><span><strong>Member spotlights</strong></span></li>
+          <li><span>Mid-semester <strong>all-program presentation</strong> so members can share their work</span></li>
+          <li><span><strong>Door drops and/or handwritten notes</strong> to build IOP community</span></li>
+          <li><span><strong>Mid-semester check-ins</strong> with members</span></li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec done-sec" id="done">
+  <div class="wrap">
+    <header class="sec-head">
+      <span class="label">§ 07</span>
+      <h2 class="disp">Already Done</h2>
+      <p>What I've built so far, and where it's headed.</p>
+    </header>
+    <ol class="done">
+      <li class="done-item reveal">
+        <span class="label done-when">Fall 2025</span>
+        <span class="done-dot" aria-hidden="true"></span>
+        <div class="done-body"><span class="done-tag">Harvard</span><h3>Arrived on campus</h3><p>Now a sophomore in Quincy House, concentrating in Government and Economics.</p></div>
+      </li>
+      <li class="done-item reveal">
+        <span class="label done-when">Now</span>
+        <span class="done-dot" aria-hidden="true"></span>
+        <div class="done-body"><span class="done-tag">HPR</span><h3>Marketing + Comp Director, Harvard Political Review</h3><p>I run marketing and the comp for the largest political publication at Harvard College, including campaigns like Battle for the Senate and Fall Comp '26.</p></div>
+      </li>
+      <li class="done-item reveal">
+        <span class="label done-when">Now</span>
+        <span class="done-dot" aria-hidden="true"></span>
+        <div class="done-body"><span class="done-tag">HPU</span><h3>External Affairs, Harvard Political Union</h3><p>Working on how the Political Union shows up to the rest of campus, and photographing its debates.</p></div>
+      </li>
+      <li class="done-item reveal">
+        <span class="label done-when">Ongoing</span>
+        <span class="done-dot" aria-hidden="true"></span>
+        <div class="done-body"><span class="done-tag">Photo</span><h3>Photographer for student orgs</h3><p>Shooting for HPU, the HMC Boston 2027 board and other student organizations, and getting photos back fast.</p></div>
+      </li>
+      <li class="done-item reveal">
+        <span class="label done-when">Fall 2026</span>
+        <span class="done-dot" aria-hidden="true"></span>
+        <div class="done-body"><span class="done-tag">IOP</span><h3>Running for Communications Director</h3><p>Bringing all of it to the IOP: Programs First, OneIOP, the Comms Playbook and Member Perks.</p></div>
+      </li>
+      <li class="done-item reveal next">
+        <span class="label done-when">Nov 15</span>
+        <span class="done-dot" aria-hidden="true"></span>
+        <div class="done-body"><span class="done-tag">Next</span><h3>Election day</h3><p>Voting opens at 12:01am. This is where you come in.</p></div>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<section class="sec work" id="work">
+  <div class="wrap">
+    <header class="sec-head">
+      <span class="label">§ 08</span>
+      <h2 class="disp">The Work</h2>
+      <p>Design and photography already out in the world.</p>
+    </header>
+    <div class="work-grid" id="work-grid">
+      <figure class="reveal tilt" data-tilt="7" tabindex="0" role="button" aria-label="View larger">
+        <img src="assets/work-senate.jpg" alt="Harvard Political Review 'Battle for the Senate' U.S. Midterms 2026 graphic" width="284" height="154">
+        <figcaption><span class="label">Fig. 1 · HPR</span>Battle for the Senate, U.S. Midterms 2026</figcaption>
+      </figure>
+      <figure class="reveal tilt" data-tilt="7" tabindex="0" role="button" aria-label="View larger">
+        <img src="assets/work-hpr.jpg" alt="Harvard Political Review graphic: the largest political publication at Harvard College" width="284" height="154">
+        <figcaption><span class="label">Fig. 2 · HPR</span>The largest political publication at Harvard College</figcaption>
+      </figure>
+      <figure class="reveal tilt" data-tilt="7" tabindex="0" role="button" aria-label="View larger">
+        <img src="assets/work-fallcomp.jpg" alt="Harvard Political Review Fall Comp '26 graphic" width="284" height="154">
+        <figcaption><span class="label">Fig. 3 · HPR</span>Fall Comp '26</figcaption>
+      </figure>
+      <div class="lens reveal">
+        <h3>Behind the lens</h3>
+        <ul>
+          <li>HMC Boston 2027 Board headshots</li>
+          <li>Photographer, HPU</li>
+          <li>Headshots for other student orgs</li>
+        </ul>
+      </div>
+    </div>
+    <p class="work-hint label">Click any piece to see it larger</p>
+  </div>
+</section>
+
+<div class="pd" id="prog-drawer" hidden role="dialog" aria-modal="true" aria-labelledby="pd-name">
+  <div class="pd-panel">
+    <header class="pd-head">
+      <button type="button" class="v-btn v-close" aria-label="Close">×</button>
+      <span class="label pd-cat" id="pd-cat"></span>
+      <span class="pd-abbr" id="pd-abbr"></span>
+      <h3 class="pd-name" id="pd-name"></h3>
+      <p class="pd-vision" id="pd-vision"></p>
+    </header>
+    <div class="pd-body">
+      <section><h4>What I'll build for you</h4><ol class="pd-build" id="pd-build"></ol></section>
+      <section><h4>The rhythm of every event</h4><div class="pd-rhythm" id="pd-rhythm"></div></section>
+      <section><h4>How we'll know it worked</h4><ul class="pd-measure" id="pd-measure"></ul></section>
+      <p class="pd-base"><strong>Plus what every program gets:</strong> Comms Playbook templates, comms training, one request form on OneIOP, and event photos back within 24 hours.</p>
+      <div class="pd-foot">
+        <a class="pd-cta" id="pd-cta" href="#contact">Talk to me about this →</a>
+        <div class="pd-nav"><button type="button" id="pd-prev">← Prev</button><button type="button" id="pd-next">Next →</button></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="viewer" id="viewer" hidden role="dialog" aria-modal="true" aria-label="Work viewer">
+  <button type="button" class="v-btn v-close" aria-label="Close">×</button>
+  <button type="button" class="v-btn v-prev" aria-label="Previous">←</button>
+  <figure><img alt="" id="v-img"><figcaption id="v-cap"></figcaption></figure>
+  <button type="button" class="v-btn v-next" aria-label="Next">→</button>
+</div>
+
+<section class="sec" id="faq">
+  <div class="wrap">
+    <header class="sec-head">
+      <span class="label">§ 09</span>
+      <h2 class="disp">Questions</h2>
+      <p>The short answers. Ask me for the long ones.</p>
+    </header>
+    <div class="faq">
+      <details>
+        <summary>What is OneIOP?</summary>
+        <p>One internal website where every announcement, event, and contact lives in one place. It gets piloted with programs in January and launches in February. <a href="oneiop.html">Try the demo</a> to see how it would work.</p>
+      </details>
+      <details>
+        <summary>Will this mean more emails?</summary>
+        <p>No, fewer. OneIOP holds the details, so emails can be short and only go out when they matter.</p>
+      </details>
+      <details>
+        <summary>How will my program get comms help?</summary>
+        <p>Every program gets its own templates built on a shared brand, comms training for its comms team, and office hours. The Media Center will be open to every program.</p>
+      </details>
+      <details>
+        <summary>What is the Media Center?</summary>
+        <p>A shared photo, video, and design resource that any program can use, so good content doesn't depend on which program you're in. Work on it starts in February.</p>
+      </details>
+      <details>
+        <summary>What do members get out of this?</summary>
+        <p>Program-specific merch, welcome kits and door drops for new members, member spotlights, and photos and videos back within 24 hours.</p>
+      </details>
+      <details>
+        <summary>Why should I trust you with comms?</summary>
+        <p>I already do this work. At HPR I run marketing and the comp, and I shoot photos for HPU, the HMC Boston 2027 board, and other student orgs. Some of it is in The Work above.</p>
+      </details>
+      <details>
+        <summary>Is OneIOP replacing Instagram?</summary>
+        <p>No. Instagram stays the IOP's public face. OneIOP is for members: the one place to find what's happening and who to ask.</p>
+      </details>
+      <details>
+        <summary>How will we know it's working?</summary>
+        <p>Fewer emails, faster photos and video, and programs telling me comms got easier. Mid-semester check-ins are built into the plan so I hear it directly.</p>
+      </details>
+      <details>
+        <summary>Which programs does this cover?</summary>
+        <p>All of them, plus the four IOP coalitions. Every program, from the JFK Jr. Forum to Citizenship Tutoring, gets the same templates, training, and 24-hour photo turnaround. The full list is in Every Program above.</p>
+      </details>
+      <details>
+        <summary>How can I share an idea?</summary>
+        <p>Email or text me anytime, book 15 minutes on my calendar, or come to comms office hours once they start in January. The first thing I'll do in December is audit IOP comms, so tell me what's broken.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<section class="sec close panel" id="contact">
+  <div class="wrap">
+    <header class="sec-head">
+      <span class="label">§ 10</span>
+      <span class="label">Let's talk</span>
+    </header>
+    <h2 class="close-hl disp reveal"><em>Let's</em>Shine.</h2>
+    <img class="close-sig reveal" src="assets/signature.png" alt="" width="900" height="270">
+    <div class="close-ctas">
+      <!-- Calendly: set data-calendly to your booking link, e.g. https://calendly.com/your-name/15min -->
+      <a class="cta-light" id="calendly-link" data-calendly="" href="#contact">Book 15 minutes with me →</a>
+      <button type="button" class="cta-ghost" id="open-share">Make your share card</button>
+    </div>
+    <div class="close-grid">
+      <div>
+        <span class="label">Share the campaign</span>
+        <div class="share-row">
+          <span class="val" id="share-url">aidanforcomms.com</span>
+          <button type="button" class="copy" id="copy-link">Copy link</button>
+        </div>
+      </div>
+      <div>
+        <span class="label">Email</span>
+        <a href="mailto:aidanzagel@college.harvard.edu">aidanzagel@college.harvard.edu</a>
+      </div>
+      <div>
+        <span class="label">Call or text</span>
+        <a href="tel:+19082168035">908-216-8035</a>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<div class="share-modal" id="share-modal" hidden role="dialog" aria-modal="true" aria-labelledby="sc-title">
+  <div class="sm-inner">
+    <button type="button" class="v-btn v-close" id="close-share" aria-label="Close">×</button>
+    <div class="sm-form">
+      <span class="label">Share card</span>
+      <h3 class="disp" id="sc-title">Show you're in.</h3>
+      <label>First name <input id="sc-name" maxlength="24" placeholder="Optional" autocomplete="given-name"></label>
+      <label>Your program <select id="sc-prog"><option value="">Optional</option><option>John F. Kennedy Jr. Forum</option><option>Fellows and Study Groups</option><option>Conferences Committee</option><option>Harvard Political Union</option><option>Women's Initiative in Leadership</option><option>Politics of Race and Ethnicity</option><option>Global Affairs Program</option><option>Program for Environmental Politics</option><option>Policy Program</option><option>Harvard Public Opinion Project</option><option>Research & Strategy Group</option><option>Governance Lab</option><option>CIVICS</option><option>Citizenship Tutoring</option><option>Harvard Votes Challenge</option><option>Harvard Political Review</option><option>Campaigns and Advocacy Program</option><option>Coalition for the Arts</option><option>Conservative Coalition</option><option>Gender & Sexuality Coalition</option><option>Service Coalition</option></select></label>
+      <div class="sc-themes" role="group" aria-label="Card color">
+        <button type="button" data-t="navy" aria-pressed="true" aria-label="Navy" style="background:var(--navy)"></button>
+        <button type="button" data-t="red" aria-pressed="false" aria-label="Red" style="background:var(--red)"></button>
+        <button type="button" data-t="cream" aria-pressed="false" aria-label="Cream" style="background:var(--paper)"></button>
+      </div>
+      <p class="sm-hint label">Screenshot the card and post it to your story.</p>
+    </div>
+    <div class="story-card" id="story-card" data-theme="navy">
+      <svg class="sc-star" viewBox="0 0 100 96" aria-hidden="true"><polygon points="50,3 61.5,37 97,37 68.5,58 79.5,92 50,71 20.5,92 31.5,58 3,37 38.5,37"/></svg>
+      <span class="label">IOP Elections</span>
+      <h4>I'm with Aidan</h4>
+      <p class="sc-for">for IOP Communications Director</p>
+      <p class="sc-from" id="sc-from"></p>
+      <span class="sc-url">aidanforcomms.com</span>
+    </div>
+  </div>
+</div>
+
+<footer class="foot label">
+  <div class="wrap">
+    <span>Paid for by Aidan for Comms</span>
+    <span>Programs First · OneIOP · Comms Playbook · Member Perks</span>
+    <a href="#top">Back to top ↑</a>
+  </div>
+</footer>
+
+<script>
+  const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Start at the top even if the link carried a section anchor or the browser remembered a scroll spot
+  if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+  scrollTo({ top: 0, behavior: 'instant' });
+
+  // Loader: the line fills as fonts and the portrait arrive, then the screen fades away
+  const root = document.documentElement;
+  const loader = document.querySelector('.loader');
+  const ldBar = loader.querySelector('.ld-bar i');
+  const loaderDone = new Promise((resolve) => {
+    if (!root.classList.contains('loading')) { loader.remove(); resolve(); return; }
+    const img = document.querySelector('.portrait');
+    const imgReady = img.complete ? Promise.resolve() : new Promise((r) => { img.onload = img.onerror = r; });
+    const steps = [document.fonts ? document.fonts.ready : Promise.resolve(), imgReady, new Promise((r) => setTimeout(r, 1200))];
+    let n = 0;
+    steps.forEach((st) => st.then(() => { ldBar.style.transform = `scaleX(${++n / steps.length})`; }));
+    const finish = () => {
+      if (!loader.isConnected) return;
+      ldBar.style.transform = 'scaleX(1)';
+      setTimeout(() => {
+        scrollTo({ top: 0, behavior: 'instant' });
+        loader.classList.add('out');
+        root.classList.remove('loading');
+        setTimeout(() => loader.remove(), 800);
+        resolve();
+      }, 350);
+    };
+    Promise.race([Promise.all(steps), new Promise((r) => setTimeout(r, 4200))]).then(finish);
+  });
+
+  // Marquee, duplicated so the loop is seamless
+  const unit = ['More Reach', 'More Energy', 'More IOP'].map((w) => `<span>${w}</span><i>/</i>`).join('');
+  document.getElementById('mq').innerHTML = unit.repeat(4) + unit.repeat(4);
+  const unit2 = ['Programs First', 'OneIOP', 'Comms Playbook', 'Member Perks'].map((w) => `<span>${w}</span><i>·</i>`).join('');
+  document.getElementById('mq2').innerHTML = unit2.repeat(4) + unit2.repeat(4);
+
+  // Reveal on scroll (rect checks rather than IntersectionObserver, which the preview pane drops)
+  const reveals = [...document.querySelectorAll('.reveal')];
+
+  document.querySelectorAll('.pillar, .flip, .stat, .done-item, .work-grid > *').forEach((el) => {
+    const sibs = [...el.parentElement.children].filter((c) => c.classList.contains('reveal'));
+    el.style.transitionDelay = sibs.indexOf(el) * 0.08 + 's';
+  });
+  const counted = new WeakSet();
+  const runCount = (el) => {
+    if (counted.has(el)) return;
+    counted.add(el);
+    const end = +el.dataset.count;
+    if (calm) { el.textContent = end; return; }
+    const t0 = performance.now();
+    const step = (t) => {
+      const p = Math.min(1, (t - t0) / 1200);
+      el.textContent = Math.round(end * (1 - Math.pow(1 - p, 3)));
+      if (p < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  };
+  const check = () => {
+    const h = innerHeight;
+    reveals.forEach((el) => {
+      if (!el.classList.contains('in') && el.getBoundingClientRect().top < h * 0.9) {
+        el.classList.add('in');
+        el.querySelectorAll('[data-count]').forEach(runCount);
+      }
+    });
+  };
+
+  // Header progress line
+  const bar = document.querySelector('.progress');
+  const progress = () => {
+    const max = document.documentElement.scrollHeight - innerHeight;
+    bar.style.transform = `scaleX(${max > 0 ? scrollY / max : 0})`;
+  };
+  const onScroll = () => { check(); progress(); maybeDeal(); };
+  addEventListener('scroll', onScroll, { passive: true });
+  addEventListener('resize', onScroll);
+  requestAnimationFrame(onScroll);
+  setTimeout(onScroll, 300);
+
+  // Confetti in campaign colors
+  const confetti = (x, y, n = 36) => {
+    if (calm) return;
+    const colors = ['#d7101b', '#1b2384', '#f4f1ea', '#ffffff'];
+    for (let i = 0; i < n; i++) {
+      const c = document.createElement('i');
+      c.className = 'confetti';
+      c.style.left = x + 'px';
+      c.style.top = y + 'px';
+      c.style.background = colors[i % colors.length];
+      document.body.appendChild(c);
+      const a = -Math.PI / 2 + (Math.random() - 0.5) * Math.PI * 1.2;
+      const v = 120 + Math.random() * 200;
+      const dx = Math.cos(a) * v;
+      const dy = Math.sin(a) * v;
+      c.animate([
+        { transform: 'translate(-50%,-50%) rotate(0deg)', opacity: 1 },
+        { transform: `translate(calc(-50% + ${dx * 0.6}px), calc(-50% + ${dy * 0.6}px)) rotate(${Math.random() * 360}deg)`, opacity: 1, offset: 0.45 },
+        { transform: `translate(calc(-50% + ${dx}px), calc(-50% + ${dy + 280}px)) rotate(${Math.random() * 720}deg)`, opacity: 0 }
+      ], { duration: 1300 + Math.random() * 500, easing: 'cubic-bezier(.2,.6,.4,1)' }).onfinish = () => c.remove();
+    }
+  };
+
+  // The ballot: the check lands with confetti, and clicking it votes again
+  const ballot = document.querySelector('.ballot');
+  const tick = ballot.querySelector('.tick');
+  const boxCenter = () => {
+    const r = ballot.querySelector('svg').getBoundingClientRect();
+    return [r.left + r.width / 2, r.top + r.height / 2];
+  };
+  // Draw the check; a click redraws it with a little confetti
+  const castBallot = (withConfetti) => {
+    if (calm) return;
+    tick.style.animation = 'none';
+    void tick.getBoundingClientRect();
+    tick.style.animation = 'tick .7s cubic-bezier(.65,0,.35,1) both';
+    if (withConfetti) setTimeout(() => confetti(...boxCenter(), 18), 500);
+  };
+  const vote = () => castBallot(true);
+  ballot.addEventListener('click', vote);
+  ballot.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); vote(); }
+  });
+
+  // Hero parallax: on scroll the star, rings, photo and ballot move at different speeds,
+  // and the two stars drift apart with the cursor like a misregistered print
+  const hero = document.querySelector('.hero');
+  const s1 = document.querySelector('.star.s1');
+  const s2 = document.querySelector('.star.s2');
+  const rings = document.querySelector('.rings');
+  const portrait = document.querySelector('.portrait');
+  const sig = document.querySelector('.hero-art .sig');
+  let mx = 0;
+  let my = 0;
+  let sy = 0;
+  const paintHero = () => {
+    s1.style.translate = `${mx * -8}px ${my * -6 + sy * 0.16}px`;
+    s2.style.translate = `calc(2.4% + ${mx * 12}px) calc(1.8% + ${my * 9 + sy * 0.2}px)`;
+    rings.style.translate = `-50% calc(-50% + ${sy * 0.24}px)`;
+    portrait.style.translate = `-50% ${sy * 0.06}px`;
+    ballot.style.translate = `0 ${sy * -0.07}px`;
+    sig.style.translate = `0 ${sy * -0.03}px`;
+  };
+  // Phones and tablets skip the parallax: momentum scrolling makes the layers jitter
+  if (!calm && matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    addEventListener('scroll', () => {
+      if (scrollY > innerHeight * 1.3 && sy > innerHeight * 1.3) return;
+      sy = Math.min(scrollY, innerHeight * 1.3);
+      paintHero();
+    }, { passive: true });
+    {
+      hero.addEventListener('mousemove', (e) => {
+        const r = hero.getBoundingClientRect();
+        mx = (e.clientX - r.left) / r.width - 0.5;
+        my = (e.clientY - r.top) / r.height - 0.5;
+        paintHero();
+      });
+      hero.addEventListener('mouseleave', () => { mx = 0; my = 0; paintHero(); });
+    }
+  }
+
+  // Before / after: the switch flips every card; tapping a card flips just that one
+  const toggle = document.querySelector('.toggle');
+  const flips = [...document.querySelectorAll('.flip')];
+  const setFlip = (card, on) => {
+    card.classList.toggle('flipped', on);
+    card.setAttribute('aria-pressed', on);
+  };
+  toggle.querySelectorAll('button').forEach((b) => b.addEventListener('click', () => {
+    const on = b.dataset.mode === 'aidan';
+    toggle.dataset.mode = b.dataset.mode;
+    toggle.querySelectorAll('button').forEach((x) => x.setAttribute('aria-pressed', x === b));
+    flips.forEach((c, i) => {
+      c.style.setProperty('--d', calm ? '0s' : i * 0.07 + 's');
+      setFlip(c, on);
+    });
+  }));
+  flips.forEach((c) => {
+    const flipOne = () => { c.style.setProperty('--d', '0s'); setFlip(c, !c.classList.contains('flipped')); };
+    c.addEventListener('click', flipOne);
+    c.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); flipOne(); }
+    });
+  });
+
+  // Video: show the player once a file loads, otherwise keep the "coming soon" card
+  const video = document.getElementById('campaign-video');
+  const showVideo = () => document.getElementById('vid-ph')?.remove();
+  if (video.readyState >= 1) showVideo();
+  else video.addEventListener('loadedmetadata', showVideo);
+
+  // Once the headline has settled, the ballot gets checked
+  loaderDone.then(() => setTimeout(() => castBallot(false), 1500));
+
+  // First 90 days: a runner counts the days and checks off each month as you scroll
+  const road = document.getElementById('road');
+  const stops = [...road.querySelectorAll('.stop')];
+  const dots = stops.map((st) => st.querySelector('.stop-dot'));
+  const rLine = road.querySelector('.road-line');
+  const rFill = road.querySelector('.road-fill');
+  const runner = road.querySelector('.runner');
+  const dayEl = runner.querySelector('b');
+  let geo = null;
+  let target = 0;
+  let cur = 0;
+  let raf = 0;
+  const layoutRoad = () => {
+    const r = road.getBoundingClientRect();
+    const c = dots.map((d) => {
+      const b = d.getBoundingClientRect();
+      return [b.left + b.width / 2 - r.left, b.top + b.height / 2 - r.top];
+    });
+    const first = c[0];
+    const last = c[c.length - 1];
+    const vertical = Math.abs(last[0] - first[0]) < 10;
+    const twoRows = !vertical && Math.abs(last[1] - first[1]) > 10;
+    geo = { first, last, vertical, twoRows };
+    if (vertical) rLine.style.cssText = `left:${first[0] - 2}px;top:${first[1]}px;width:4px;height:${last[1] - first[1]}px`;
+    else rLine.style.cssText = `left:${first[0]}px;top:${first[1] - 2}px;height:4px;width:${(twoRows ? c[1][0] : last[0]) - first[0]}px`;
+    rLine.style.display = twoRows ? 'none' : '';
+  };
+  const paintRoad = () => {
+    const r = road.getBoundingClientRect();
+    const p = cur;
+    const x = geo.vertical || geo.twoRows ? geo.first[0] : geo.first[0] + p * (geo.last[0] - geo.first[0]);
+    const y = geo.vertical ? geo.first[1] + p * (geo.last[1] - geo.first[1]) : geo.first[1];
+    runner.style.transform = geo.vertical
+      ? `translate(${x}px, ${y}px) translate(-50%, -50%)`
+      : `translate(${x}px, ${y}px) translate(-50%, calc(-100% - 22px))`;
+    runner.style.visibility = geo.twoRows ? 'hidden' : '';
+    rFill.style.transform = geo.vertical ? `scaleY(${p})` : `scaleX(${p})`;
+    dayEl.textContent = Math.round(p * 90);
+    const onCount = p >= 0.995 ? stops.length : Math.floor(p * (stops.length - 1) + 0.005) + 1;
+    stops.forEach((st, i) => st.classList.toggle('on', geo.twoRows ? r.top < innerHeight * 0.7 : i < onCount));
+    runner.classList.toggle('done', p >= 0.995);
+  };
+  // Each frame the runner covers a share of the remaining distance, so it glides and settles
+  const tickRoad = () => {
+    cur += (target - cur) * 0.1;
+    if (Math.abs(target - cur) < 0.0005) cur = target;
+    paintRoad();
+    raf = cur === target ? 0 : requestAnimationFrame(tickRoad);
+  };
+  const updateRoad = () => {
+    if (!geo) layoutRoad();
+    const r = road.getBoundingClientRect();
+    const anchor = r.top + geo.first[1];
+    const span = geo.vertical ? geo.last[1] - geo.first[1] : innerHeight * 0.55;
+    target = calm ? 1 : Math.max(0, Math.min(1, (innerHeight * 0.8 - anchor) / span));
+    if (calm) { cur = target; paintRoad(); return; }
+    if (!raf) raf = requestAnimationFrame(tickRoad);
+  };
+  addEventListener('scroll', updateRoad, { passive: true });
+  addEventListener('resize', () => { geo = null; updateRoad(); });
+  document.fonts?.ready.then(() => { geo = null; updateRoad(); });
+  requestAnimationFrame(updateRoad);
+
+  // Every Program cards rise in one after another
+  function dealCards(cards) {
+    if (calm || !cards.length) return;
+    cards.forEach((c, i) => {
+      const rot = (Math.random() - 0.5) * 4;
+      c.animate([
+        { transform: `translateY(26px) rotate(${rot}deg) scale(.97)`, opacity: 0 },
+        { transform: 'none', opacity: 1 }
+      ], { duration: 800, delay: i * 60, easing: 'cubic-bezier(.16,1,.3,1)', fill: 'backwards' });
+    });
+  }
+  function maybeDeal() {
+    if (progGrid.classList.contains('dealt') || progGrid.getBoundingClientRect().top > innerHeight * 0.82) return;
+    progGrid.classList.add('dealt');
+    dealCards(progs.filter((p) => !p.hidden));
+  }
+
+  // Every Program: filter by type, and show one row until "Show all" is pressed
+  const filterBtns = [...document.querySelectorAll('.filters button')];
+  const progs = [...document.querySelectorAll('.prog')];
+  const progGrid = document.querySelector('.prog-grid');
+  const moreWrap = document.querySelector('.prog-more');
+  const moreBtn = document.getElementById('prog-more');
+  let filter = 'all';
+  let expanded = false;
+  const showProgs = () => {
+    const cols = getComputedStyle(progGrid).gridTemplateColumns.split(' ').length;
+    const limit = expanded ? Infinity : cols === 1 ? 3 : cols;
+    let matched = 0;
+    const fresh = [];
+    progs.forEach((p) => {
+      const match = filter === 'all' || p.dataset.cat === filter;
+      const show = match && matched < limit;
+      if (match) matched++;
+      const wasHidden = p.hidden;
+      p.hidden = !show;
+      if (show && wasHidden) fresh.push(p);
+    });
+    moreWrap.classList.toggle('none', matched <= limit && !expanded);
+    moreWrap.classList.toggle('open', expanded);
+    moreBtn.setAttribute('aria-expanded', expanded);
+    moreBtn.innerHTML = expanded ? 'Show fewer ↑' : `Show all <span>${matched}</span> ↓`;
+    if (progGrid.classList.contains('dealt')) dealCards(fresh);
+  };
+  filterBtns.forEach((b) => b.addEventListener('click', () => {
+    filterBtns.forEach((x) => x.setAttribute('aria-pressed', x === b));
+    filter = b.dataset.f;
+    expanded = false;
+    progs.forEach((p) => { p.hidden = true; });
+    showProgs();
+  }));
+  moreBtn.addEventListener('click', () => {
+    expanded = !expanded;
+    showProgs();
+    if (!expanded) document.getElementById('programs').scrollIntoView({ behavior: calm ? 'auto' : 'smooth' });
+  });
+  addEventListener('resize', showProgs);
+  showProgs();
+
+  // Countdown to election day (shows once data-election holds a date)
+  const cd = document.getElementById('countdown');
+  const electionAt = Date.parse(cd.dataset.election || '');
+  if (!Number.isNaN(electionAt)) {
+    cd.hidden = false;
+    const units = Object.fromEntries([...cd.querySelectorAll('[data-u]')].map((b) => [b.dataset.u, b]));
+    const paintCountdown = () => {
+      let left = Math.max(0, electionAt - Date.now());
+      if (left === 0) { cd.querySelector('.cd-cta').textContent = "It's election day. Vote Aidan for Comms."; }
+      const d = Math.floor(left / 864e5); left -= d * 864e5;
+      const h = Math.floor(left / 36e5); left -= h * 36e5;
+      const m = Math.floor(left / 6e4); left -= m * 6e4;
+      units.d.textContent = d;
+      units.h.textContent = String(h).padStart(2, '0');
+      units.m.textContent = String(m).padStart(2, '0');
+      units.s.textContent = String(Math.floor(left / 1000)).padStart(2, '0');
+    };
+    paintCountdown();
+    setInterval(paintCountdown, 1000);
+  }
+
+  // Calendly booking link (button reads "coming soon" until data-calendly is set)
+  const cal = document.getElementById('calendly-link');
+  if (cal.dataset.calendly) {
+    cal.href = cal.dataset.calendly;
+    cal.target = '_blank';
+    cal.rel = 'noopener';
+  } else {
+    cal.classList.add('pending');
+    cal.textContent = 'Booking link coming soon';
+    cal.addEventListener('click', (e) => e.preventDefault());
+  }
+
+  // 3D tilt: on a mouse or trackpad, cards lean toward the pointer, ease back when it leaves
+  if (!calm && matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    document.querySelectorAll('.tilt').forEach((el) => {
+      const max = +(el.dataset.tilt || 6);
+      const cur = { x: 0, y: 0, z: 0 };
+      const tgt = { x: 0, y: 0, z: 0 };
+      let raf = 0;
+      const step = () => {
+        cur.x += (tgt.x - cur.x) * 0.12;
+        cur.y += (tgt.y - cur.y) * 0.12;
+        cur.z += (tgt.z - cur.z) * 0.12;
+        el.style.setProperty('--rx', `${cur.x.toFixed(2)}deg`);
+        el.style.setProperty('--ry', `${cur.y.toFixed(2)}deg`);
+        el.style.setProperty('--tz', `${cur.z.toFixed(1)}px`);
+        const still = Math.abs(tgt.x - cur.x) + Math.abs(tgt.y - cur.y) + Math.abs(tgt.z - cur.z) < 0.02;
+        raf = still ? 0 : requestAnimationFrame(step);
+      };
+      const go = () => { if (!raf) raf = requestAnimationFrame(step); };
+      el.addEventListener('pointerenter', () => { if (el.classList.contains('in')) el.classList.add('settled'); });
+      el.addEventListener('pointermove', (e) => {
+        const r = el.getBoundingClientRect();
+        const px = (e.clientX - r.left) / r.width - 0.5;
+        const py = (e.clientY - r.top) / r.height - 0.5;
+        tgt.x = -py * max * 2;
+        tgt.y = px * max * 2;
+        tgt.z = 12;
+        go();
+      });
+      el.addEventListener('pointerleave', () => { tgt.x = 0; tgt.y = 0; tgt.z = 0; go(); });
+    });
+  }
+
+  // Shared open/close for the work viewer, share card and program plans
+  let lastFocus = null;
+  const openLayer = (el) => {
+    lastFocus = document.activeElement;
+    el.hidden = false;
+    document.documentElement.style.overflow = 'hidden';
+    el.querySelector('.v-close').focus();
+  };
+  const closeLayer = (el) => {
+    el.hidden = true;
+    document.documentElement.style.overflow = '';
+    lastFocus?.focus();
+  };
+
+  // Work viewer: click a piece to see it larger, arrow through the rest
+  const viewer = document.getElementById('viewer');
+  const vImg = document.getElementById('v-img');
+  const vCap = document.getElementById('v-cap');
+  const pieces = [...document.querySelectorAll('#work-grid figure')];
+  let vIndex = 0;
+  const showPiece = (i) => {
+    vIndex = (i + pieces.length) % pieces.length;
+    const img = pieces[vIndex].querySelector('img');
+    vImg.src = img.src;
+    vImg.alt = img.alt;
+    vCap.innerHTML = pieces[vIndex].querySelector('figcaption').innerHTML;
+  };
+  pieces.forEach((f, i) => {
+    const open = () => { showPiece(i); openLayer(viewer); };
+    f.addEventListener('click', open);
+    f.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); } });
+  });
+  viewer.querySelector('.v-prev').addEventListener('click', () => showPiece(vIndex - 1));
+  viewer.querySelector('.v-next').addEventListener('click', () => showPiece(vIndex + 1));
+  viewer.querySelector('.v-close').addEventListener('click', () => closeLayer(viewer));
+  viewer.addEventListener('click', (e) => { if (e.target === viewer) closeLayer(viewer); });
+
+  // Program plans: click a card for the full vision for that program
+  const PLANS = {"Forum": {"v": "A packed Forum every night, and a recap people actually see.", "b": ["A speaker promo kit live a week out: poster, feed post and a story countdown", "A standing photographer schedule, with photos back within 24 hours", "A 30-second clip of the best moment for Reels and TikTok", "The full Forum calendar on OneIOP, so members can plan their week around it"], "r": ["Announcement plus countdown stories", "Live stories and line updates", "Photo album and highlight clip within 24 hours"], "m": ["Every Forum promoted at least a week out", "Photos delivered within 24 hours, every time", "More story views and fuller rooms"]}, "FSG": {"v": "Every study group looks as good as the Fellow leading it.", "b": ["Study group templates: fill in the Fellow, topic and time, and it's done", "A Fellows intro series so the whole IOP meets this semester's Fellows in week one", "Every study group's weekly schedule in one place on OneIOP", "Photos and quote cards from the biggest sessions"], "r": ["Fellow intro posts at the start of the semester", "Same-day graphic from the template", "Quote cards from the best sessions"], "m": ["Graphics ready within one day of a request", "Every Fellow introduced in the first two weeks", "Higher study group attendance"]}, "Conferences": {"v": "One look for every conference, from save-the-date to the final recap.", "b": ["A full visual kit for each conference: logo lockup, slides, name badges and signage", "A promo calendar counting back from the date, with speaker reveals", "A photo and video team on site all day", "A recap post and short video, plus thank-you graphics for speakers"], "r": ["Save-the-date, speaker reveals and registration pushes", "Live coverage across stories", "Recap within 24 hours"], "m": ["Visual kit delivered six weeks out", "Registration goals met", "Recap live within 24 hours"]}, "HPU": {"v": "Debates people want to watch, even the ones they missed.", "b": ["A weekly graphic announcing each debate's resolution", "Photos from every debate", "Quote cards of the sharpest arguments, with the speakers' OK", "The semester's debate schedule on OneIOP"], "r": ["Resolution reveal", "Story coverage from the room", "Photos and quote cards"], "m": ["Every debate announced with its resolution", "Photos within 24 hours", "Growing turnout across the semester"]}, "WIL": {"v": "Every speaker, and every member leader, gets the spotlight.", "b": ["A speaker promo kit for every event", "A spotlight series on women leading programs across the IOP", "Photos from every event, back within 24 hours", "WIL events featured in the weekly roundup"], "r": ["Speaker announcement", "Event coverage", "Photos and a member spotlight"], "m": ["Every event promoted at least a week out", "A member spotlight every month", "More first-time attendees"]}, "PRE": {"v": "The conversations PRE leads, seen across the whole IOP.", "b": ["Event promo built from PRE's own look, not a generic template", "Spotlights on the members leading these conversations", "Photos and takeaways from every event", "Co-promotion with other programs on related events"], "r": ["Event promo and co-promotion", "Coverage from the room", "Takeaways post and photos"], "m": ["Every event in the weekly roundup", "At least one co-promoted event a semester", "Wider attendance beyond regulars"]}, "GAP": {"v": "The IOP's window on the world.", "b": ["Event promo for every speaker and discussion", "Spotlights on members' internships and research abroad", "A summer recap series on where members went and what they did", "Photos and takeaways from every event"], "r": ["Speaker promo", "Event coverage", "Recap plus member spotlights"], "m": ["Every event promoted at least a week out", "A spotlight series each semester", "More members applying to GAP opportunities"]}, "Environment": {"v": "Every environmental discussion, instantly recognizable.", "b": ["A discussion series template with one consistent look", "Speaker promo for every event", "Recap posts with the key takeaways", "Cross-promotion with Policy and HPOP on climate topics"], "r": ["Series promo", "Coverage from the discussion", "Takeaways post"], "m": ["Series graphics ready a week out", "A recap after every discussion", "Higher turnout across the series"]}, "Policy": {"v": "Members' policy ideas, in front of the whole IOP and beyond.", "b": ["Proposal spotlights that turn a policy paper into a three-slide carousel", "Author spotlights on the members behind the work", "Promo for policy competitions and presentations", "A searchable archive of proposals on OneIOP"], "r": ["Competition and presentation promo", "Presentation coverage", "Proposal spotlights"], "m": ["Every finished proposal spotlighted", "Archive live on OneIOP", "More members joining policy teams"]}, "HPOP": {"v": "Youth Poll results everyone wants to share.", "b": ["Chart templates in the IOP look, ready for every poll", "A release-day package: carousel, stories and stat cards", "A one-page graphic summary that's easy to pass along", "Recruiting graphics for new HPOP members"], "r": ["Teaser posts before release", "Release-day package across every channel", "Follow-up deep dives on key findings"], "m": ["Release package ready before results go public", "More shares and reach on poll posts", "A stronger HPOP recruiting class"]}, "RSG": {"v": "Recruiting that brings in the right people, and spotlights on the work they do.", "b": ["A recruiting campaign at the start of each semester", "Team and project spotlights", "Coverage of final presentations", "A how-to-join page on OneIOP"], "r": ["Recruiting push", "Presentation coverage", "Project spotlights"], "m": ["Recruiting campaign live in week one", "Every team spotlighted once a semester", "More strong applicants"]}, "GovLab": {"v": "Student founders and their startups, front and center.", "b": ["Founder spotlights on the people building something new", "Demo day promo and full coverage", "An application recruiting campaign", "A GovLab page on OneIOP with past and current ventures"], "r": ["Applications and demo day promo", "Demo day coverage", "Founder spotlights"], "m": ["Every founding team spotlighted", "Demo day recap within 24 hours", "More applications"]}, "CIVICS": {"v": "More teachers in the classroom, and the stories of what they do there.", "b": ["A recruiting campaign for new teachers at the start of each semester", "Volunteer spotlights on the people in the classroom", "Photos from classroom visits, where schools allow it", "An end-of-semester impact recap"], "r": ["Recruiting push", "Classroom coverage (with permission)", "Impact recap"], "m": ["Recruiting goals met", "A volunteer spotlight every month", "An impact recap every semester"]}, "Cit Tut": {"v": "More tutors, and the stories that show why it matters.", "b": ["A recruiting campaign for new tutors", "Stories from tutors, and from learners who want to share theirs", "Celebration posts for citizenship milestones, with consent", "The tutoring schedule on OneIOP"], "r": ["Recruiting push", "Session stories", "Milestone celebrations"], "m": ["Recruiting goals met", "A story every month", "Every milestone celebrated, with consent"]}, "HVC": {"v": "Turnout campaigns that reach every IOP member at once.", "b": ["Registration and turnout pushes coordinated across every IOP channel", "Deadline countdown graphics", "Share-ready templates for houses, dorms and student groups", "A results recap after every election"], "r": ["Registration and deadline countdowns", "Election day push", "Results recap"], "m": ["Every deadline promoted across all channels", "Templates used beyond the IOP", "Higher student registration and turnout"]}, "HPR": {"v": "Every new issue, seen by every member.", "b": ["An issue launch package across every IOP channel", "Author spotlights on HPR writers", "Pull-quote cards for the strongest pieces", "HPR featured in the weekly roundup"], "r": ["Issue teaser", "Launch day package", "Pull quotes and author spotlights"], "m": ["Every issue promoted on launch day", "More readers from IOP channels", "More members pitching pieces"]}, "CAP": {"v": "Campaign-quality graphics, taught and shared.", "b": ["Workshop promo for every session", "Campaign-style graphic templates for students running for office", "A comms training session co-run with CAP", "Photos and takeaways from workshops"], "r": ["Workshop promo", "Workshop coverage", "Takeaways and templates shared"], "m": ["Every workshop promoted a week out", "Templates used by student campaigns", "Higher workshop turnout"]}, "Arts": {"v": "A look as creative as the artists you bring in.", "b": ["Custom promo design for every event, not a template", "Artist spotlights", "Photo and video coverage built for the art itself", "Content on where art and politics meet"], "r": ["Artist reveal", "Event coverage", "Photos and video recap"], "m": ["Every event with its own design", "A recap after every event", "New faces at arts events"]}, "Conservative": {"v": "An equal place in IOP comms.", "b": ["Event promo with the same quality and turnaround as every program", "Speaker spotlights", "Photos from every event", "Events in the weekly roundup and on the OneIOP calendar"], "r": ["Speaker promo", "Event coverage", "Photos and recap"], "m": ["Same templates, timelines and reach as everyone", "Every event promoted a week out", "Photos within 24 hours"]}, "GSC": {"v": "The conversations you lead, seen and supported.", "b": ["Event promo for every discussion", "Spotlights on the conversations and people leading them", "Photos from every event, with consent", "A calendar of key dates, planned with the coalition's lead"], "r": ["Event promo", "Event coverage (with consent)", "Spotlight and recap"], "m": ["Every event promoted a week out", "Key dates planned a semester ahead", "Wider attendance"]}, "Service": {"v": "Members' service, made visible.", "b": ["Event promo for every service project", "Spotlights on members' service", "A volunteer opportunities board on OneIOP", "An impact recap every semester"], "r": ["Volunteer call", "Service day coverage", "Impact recap"], "m": ["Every project promoted a week out", "Opportunities board live on OneIOP", "More members volunteering"]}};
+  const drawer = document.getElementById('prog-drawer');
+  const pdHead = drawer.querySelector('.pd-head');
+  const pdPanel = drawer.querySelector('.pd-panel');
+  let pdIndex = 0;
+  const planList = () => progs.filter((p) => filter === 'all' || p.dataset.cat === filter);
+  const pdEl = (id) => document.getElementById(id);
+  const listOf = (items) => items.map((t) => { const li = document.createElement('li'); li.textContent = t; return li; });
+  const showPlan = (i) => {
+    // Prev/next walks every program in the current filter, including ones behind "Show all"
+    const list = planList();
+    pdIndex = (i + list.length) % list.length;
+    const card = list[pdIndex];
+    const plan = PLANS[card.dataset.id];
+    pdHead.classList.toggle('coal', card.classList.contains('coal'));
+    pdEl('pd-cat').textContent = card.querySelector('.cat').textContent;
+    pdEl('pd-abbr').textContent = card.dataset.id;
+    pdEl('pd-name').textContent = card.querySelector('h3').textContent;
+    pdEl('pd-vision').textContent = plan.v;
+    pdEl('pd-build').replaceChildren(...listOf(plan.b));
+    pdEl('pd-measure').replaceChildren(...listOf(plan.m));
+    pdEl('pd-rhythm').replaceChildren(...['Before', 'Day of', 'After'].map((h, k) => {
+      const d = document.createElement('div');
+      const b = document.createElement('b');
+      b.textContent = h;
+      d.append(b, plan.r[k]);
+      return d;
+    }));
+    pdPanel.scrollTop = 0;
+  };
+  const openPlan = (card) => {
+    showPlan(Math.max(0, planList().indexOf(card)));
+    openLayer(drawer);
+  };
+  progs.forEach((c) => {
+    c.addEventListener('click', () => openPlan(c));
+    c.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openPlan(c); } });
+  });
+  pdEl('pd-prev').addEventListener('click', () => showPlan(pdIndex - 1));
+  pdEl('pd-next').addEventListener('click', () => showPlan(pdIndex + 1));
+  drawer.querySelector('.v-close').addEventListener('click', () => closeLayer(drawer));
+  drawer.addEventListener('click', (e) => { if (e.target === drawer) closeLayer(drawer); });
+  // The talk button books a call once Calendly is linked, otherwise it jumps to the contact section
+  pdEl('pd-cta').addEventListener('click', (e) => {
+    const cal = document.getElementById('calendly-link').dataset.calendly;
+    if (cal) { e.currentTarget.href = cal; e.currentTarget.target = '_blank'; e.currentTarget.rel = 'noopener'; closeLayer(drawer); return; }
+    e.preventDefault();
+    closeLayer(drawer);
+    document.getElementById('contact').scrollIntoView({ behavior: calm ? 'auto' : 'smooth' });
+  });
+
+  // Share card: name, program and color update the card live
+  const shareModal = document.getElementById('share-modal');
+  const scName = document.getElementById('sc-name');
+  const scProg = document.getElementById('sc-prog');
+  const scFrom = document.getElementById('sc-from');
+  const card = document.getElementById('story-card');
+  const paintCard = () => {
+    const parts = [scName.value.trim(), scProg.value].filter(Boolean);
+    scFrom.textContent = parts.length ? '— ' + parts.join(', ') : '';
+  };
+  scName.addEventListener('input', paintCard);
+  scProg.addEventListener('change', paintCard);
+  shareModal.querySelectorAll('.sc-themes button').forEach((b) => b.addEventListener('click', () => {
+    card.dataset.theme = b.dataset.t;
+    shareModal.querySelectorAll('.sc-themes button').forEach((x) => x.setAttribute('aria-pressed', x === b));
+  }));
+  document.getElementById('open-share').addEventListener('click', () => openLayer(shareModal));
+  document.getElementById('close-share').addEventListener('click', () => closeLayer(shareModal));
+  shareModal.addEventListener('click', (e) => { if (e.target === shareModal) closeLayer(shareModal); });
+
+  addEventListener('keydown', (e) => {
+    if (!viewer.hidden) {
+      if (e.key === 'Escape') closeLayer(viewer);
+      if (e.key === 'ArrowLeft') showPiece(vIndex - 1);
+      if (e.key === 'ArrowRight') showPiece(vIndex + 1);
+    } else if (!shareModal.hidden && e.key === 'Escape') {
+      closeLayer(shareModal);
+    } else if (!drawer.hidden) {
+      if (e.key === 'Escape') closeLayer(drawer);
+      if (e.key === 'ArrowLeft') showPlan(pdIndex - 1);
+      if (e.key === 'ArrowRight') showPlan(pdIndex + 1);
+    }
+  });
+
+  // Copy the campaign link
+  const copyBtn = document.getElementById('copy-link');
+  copyBtn.addEventListener('click', async () => {
+    const url = 'https://aidanforcomms.com';
+    try {
+      await navigator.clipboard.writeText(url);
+      copyBtn.textContent = 'Copied ✓';
+      const r = copyBtn.getBoundingClientRect();
+      confetti(r.left + r.width / 2, r.top, 24);
+    } catch {
+      const range = document.createRange();
+      range.selectNodeContents(document.getElementById('share-url'));
+      const sel = getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+      copyBtn.textContent = 'Selected, press copy';
+    }
+    setTimeout(() => { copyBtn.textContent = 'Copy link'; }, 2200);
+  });
+</script>
+<script>
+  // Small screens: the section links open from a Menu button
+  (() => {
+    const top = document.querySelector('.top'), btn = top.querySelector('.menu-btn');
+    const set = (open) => { top.classList.toggle('open', open); btn.setAttribute('aria-expanded', open); };
+    btn.addEventListener('click', () => set(!top.classList.contains('open')));
+    top.querySelectorAll('.nav a').forEach((a) => a.addEventListener('click', () => set(false)));
+    addEventListener('keydown', (e) => { if (e.key === 'Escape') set(false); });
+    addEventListener('click', (e) => { if (!top.contains(e.target)) set(false); });
+  })();
+</script>
+</body>
+</html>

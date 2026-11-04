@@ -1,0 +1,75 @@
+{
+ "_note": "Optional rewording for IOP events, keyed by URL slug. Any of: title, host, desc, where, e (end time).",
+ "election-night-forum": {
+  "title": "Election Night in the Forum",
+  "host": "Moderated by Eugene Scott",
+  "desc": "A conversation on what to watch for at 7, then a watch party on the big screen until 11. Pizza and drinks all night.",
+  "where": "JFK Jr. Forum"
+ },
+ "study-group-ambassador-nathalie-rayes-behind-scenes-power-leadership-diplomacy-and-white": {
+  "title": "Behind the Scenes of Power: Leadership, Diplomacy, and the White House",
+  "host": "Study group with Ambassador Nathalie Rayes",
+  "desc": "With Ambassador Capricia Marshall and Opal Vadhan, on leading at the highest levels of government.",
+  "where": "L-166"
+ },
+ "study-group-ambassador-kelly-craft-governor-doug-ducey-and-honorable-alejandro-mayorkas": {
+  "title": "Politics in an Age of Discontent: Civil Discourse and the Future of Democracy",
+  "host": "Study group with Ambassador Kelly Craft, Gov. Doug Ducey and Sec. Alejandro Mayorkas",
+  "desc": "Can we still see each other as legitimate opponents? A conversation on civil discourse in a fragmented media world.",
+  "where": "B-400 (Land Hall)"
+ },
+ "2026-midterms-what-happened-and-why": {
+  "title": "The 2026 Midterms: What Happened and Why?",
+  "host": "David Plouffe and Alex Meyer, moderated by Jonathan Martin",
+  "desc": "Two top strategists from opposite sides of the aisle go inside the races that mattered most.",
+  "where": "JFK Jr. Forum"
+ },
+ "study-group-ambassador-nathalie-rayes-front-lines-european-security-nato-ukraine-and-future": {
+  "title": "At the Front Lines of European Security: NATO, Ukraine, and the Future of the West",
+  "host": "Study group with Ambassador Nathalie Rayes",
+  "desc": "With Croatia’s Deputy Prime Minister and Minister of Defense, Ivan Anušić.",
+  "where": "L-166"
+ },
+ "study-group-ambassador-chris-lu-finding-your-voice-how-leaders-communicate-sarah-hurwitz": {
+  "title": "Finding Your Voice: How Leaders Communicate",
+  "host": "Study group with Ambassador Chris Lu",
+  "desc": "Former head speechwriter Sarah Hurwitz on how leaders use words to build trust and inspire action.",
+  "where": "L-166"
+ },
+ "study-group-honorable-alejandro-mayorkas-policymaking-and-governance-homeland-security": {
+  "title": "Policymaking and Governance in Homeland Security",
+  "host": "Study group with Secretary Alejandro Mayorkas",
+  "desc": "Case studies on the choices and tradeoffs behind homeland security policy.",
+  "where": "L-163"
+ },
+ "afghanistan-america-war-refuge-and-power-welcome": {
+  "title": "From Afghanistan to America: War, Refuge, and the Power of Welcome",
+  "host": "Rebecca Blumenstein and Diana Kapp, with Mursal Rahim",
+  "desc": "The authors of The Last Free Women in conversation with journalist Ellen Nakashima.",
+  "where": "Nye ABC, Taubman Building"
+ },
+ "study-group-ambassador-nathalie-rayes-power-opportunity-education-philanthropy-and-american": {
+  "title": "The Power of Opportunity: Education, Philanthropy, and the American Dream",
+  "host": "Study group with Ambassador Nathalie Rayes",
+  "desc": "With Mike Bezos, co-founder and chair of the Bezos Family Foundation.",
+  "where": "L-130"
+ },
+ "study-group-chris-whipple-diplomacy-and-spycraft-william-j-burns": {
+  "title": "Diplomacy and Spycraft",
+  "host": "Study group with Chris Whipple",
+  "desc": "Former CIA Director William J. Burns on leading the world’s most powerful spy agency.",
+  "where": "L-163"
+ },
+ "beyond-ballot-latino-voters-and-new-political-landscape": {
+  "title": "Beyond the Ballot: Latino Voters and the New Political Landscape",
+  "host": "Sen. Rubén Gallego and panel, moderated by Ambassador Nathalie Rayes",
+  "desc": "What the midterms revealed about Latino voters, and what to watch next.",
+  "where": "JFK Jr. Forum"
+ },
+ "study-group-ambassador-kelly-craft-trumps-foreign-policy-final-two-years-marc-thiessen": {
+  "title": "Trump’s Foreign Policy: The Final Two Years",
+  "host": "Study group with Ambassador Kelly Craft",
+  "desc": "With former White House chief speechwriter Marc Thiessen.",
+  "where": "L-166"
+ }
+}

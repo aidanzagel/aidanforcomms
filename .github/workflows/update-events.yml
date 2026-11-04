@@ -1,0 +1,26 @@
+# Refreshes OneIOP's events from iop.harvard.edu every morning and commits the result.
+# Works for any host that deploys from this repo (GitHub Pages, Netlify, Vercel, Cloudflare Pages).
+name: Update OneIOP events
+on:
+  schedule:
+    - cron: '0 11 * * *'   # 6am Eastern (7am during daylight time)
+  workflow_dispatch: {}      # lets you run it by hand from the Actions tab
+permissions:
+  contents: write
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python3 tools/update_events.py
+      - name: Commit if anything changed
+        run: |
+          git add events.json oneiop.html assets/iop
+          if git diff --cached --quiet; then echo "No changes"; exit 0; fi
+          git config user.name "OneIOP updater"
+          git config user.email "actions@users.noreply.github.com"
+          git commit -m "Update OneIOP events from iop.harvard.edu"
+          git push
