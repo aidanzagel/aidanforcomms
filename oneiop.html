@@ -248,6 +248,7 @@
   .ib-tools { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 14px; border-bottom: 1px solid var(--line); }
   .ib-tools .chips { margin: 0; }
   .ib-tools .unread { font-size: 12.5px; color: var(--muted); white-space: nowrap; }
+  .ib-count { font-size: 13px; font-weight: 650; }
   .ib-tools .unread b { color: var(--red); }
   .chips button .n { margin-left: 6px; font: 600 10.5px var(--mono); color: var(--faint); }
   .chips button[aria-pressed="true"] .n { color: var(--accent); }
@@ -542,6 +543,17 @@
   .pick label:has(input:checked) { background: var(--navy); border-color: var(--accent); color: #fff; }
   .pick label.coal:has(input:checked) { background: var(--red); border-color: var(--red); }
   .pick label:has(input:checked) svg { display: block; }
+  .pick-wrap { position: relative; }
+  .pick-off { display: none; }
+  .pick-wrap.demo-off .pick { opacity: .35; filter: grayscale(1); pointer-events: none; user-select: none; }
+  .pick-wrap.demo-off .pick-off { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: 6px; padding: 20px; text-align: center; border-radius: 14px; background: color-mix(in srgb, var(--card) 90%, transparent); }
+  .pick-off svg { width: 22px; height: 22px; color: var(--muted); }
+  .pick-off b { font-size: 15px; }
+  .pick-off span { max-width: 36ch; font-size: 13.5px; line-height: 1.45; color: var(--muted); }
+  .demo-off-box { position: relative; padding: 12px 14px; border: 1px dashed var(--line-2); border-radius: 12px; background: var(--well); }
+  .demo-off-box .tags { opacity: .45; filter: grayscale(1); }
+  .demo-off-box p { margin: 8px 0 0; font-size: 13px; color: var(--muted); }
+  .btn[disabled] { opacity: .5; cursor: not-allowed; }
   .pick label:has(input:focus-visible) { outline: 2px solid var(--red); outline-offset: 2px; }
   .login-foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; }
   .login-foot .btn.primary { padding: 11px 18px; font-size: 14px; }
@@ -599,7 +611,6 @@
 
 <div class="demo-bar">
   <a href="index.html">← Back to Aidan for Comms</a>
-  <span class="label"><b>Demo</b> · Events and student leaders from iop.harvard.edu · Announcements are samples</span>
 </div>
 
 <section class="login" id="login" hidden>
@@ -613,11 +624,7 @@
         <li><svg class="i" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/></svg>Every student leader and program chair, in one directory</li>
       </ul>
     </div>
-    <div class="peek" aria-hidden="true">
-      <div><img src="assets/iop/midterms.jpg" alt=""></div>
-      <div><img src="assets/iop/latino.jpg" alt=""></div>
-      <div><img src="assets/iop/lu.jpg" alt=""></div>
-    </div>
+    <div class="peek" id="peek" aria-hidden="true"></div>
   </div>
   <div class="login-form">
     <form class="login-card" id="login-form" novalidate>
@@ -636,8 +643,8 @@
       </div>
       <div class="step" id="step-2" hidden>
         <h2 id="pick-title">Pick your programs</h2>
-        <p>OneIOP puts their events, announcements and contacts first. You can change these any time.</p>
-        <div class="pick" id="pick"></div>
+        <p id="pick-sub">OneIOP puts their events, announcements and contacts first. You can change these any time.</p>
+        <div class="pick-wrap" id="pick-wrap"><div class="pick" id="pick"></div><div class="pick-off" role="note"><svg class="i" viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg><b>Not available during the demo</b><span>You’re a member of every program, so you get the full experience, members-only posts included.</span></div></div>
         <div class="login-foot"><button type="button" class="linkish" id="back-1">← Back</button><span class="picked" id="picked"></span><button type="submit" class="btn primary">Enter OneIOP →</button></div>
       </div>
     </form>
@@ -648,7 +655,6 @@
   <aside class="side">
     <div class="brand"><span class="brand-mark"><svg viewBox="0 0 100 95" aria-hidden="true"><polygon points="50,0 61.5,37 97,37 68.5,58 79.5,92 50,71 20.5,92 31.5,58 3,37 38.5,37"/></svg></span><div><b>OneIOP</b><small>Institute of Politics</small></div></div>
     <nav class="views" aria-label="OneIOP sections">
-      <span class="label">Menu</span>
       <button type="button" data-view="home" aria-current="page"><svg class="i" viewBox="0 0 24 24"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg>This week</button>
       <button type="button" data-view="events"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Events</button>
       <button type="button" data-view="news"><svg class="i" viewBox="0 0 24 24"><path d="M4 5h16v14H4zM8 9h8M8 13h8M8 17h5"/></svg>Announcements<span class="count" id="news-count"></span></button>
@@ -778,7 +784,7 @@
       forum && { id: 1, p: 'Forum', pin: true, when: 'Today', title: `Next in the Forum: ${forum.title}`, body: `${dayName(forum.day)} at ${fmt(forum.s)}. ${forum.host}. Tickets, if needed, and full details are on the event page.`, link: URL_BASE + forum.url, act: 'Event details' },
       { id: 2, p: null, pin: true, when: 'Today', title: 'Welcome to OneIOP', body: 'Every announcement, event and contact now lives here. Emails get shorter: one digest every Sunday, with the details one click away.' },
       sg && { id: 3, p: 'FSG', when: 'Yesterday', title: 'Study groups this week', body: `${plural(sg, 'study group')} in the next eight days, each led by a Resident Fellow. Times and RSVP details are on each event.`, act: 'See study groups', go: 'FSG' },
-      { id: 9, p: 'CIVICS', aud: 'members', when: 'Yesterday', title: `Teachers’ social on ${dayInfo(2).d}`, body: 'Dinner in the IOP Conference Room for everyone teaching with CIVICS this fall, 6 PM. It’s on your Events calendar.', act: 'See it in Events', goto: 'events' },
+      { id: 9, p: 'CIVICS', aud: 'members', when: 'Yesterday', title: `Teachers’ social: ${dayInfo(2).d}, ${dayInfo(2).m} ${dayInfo(2).n}`, body: 'Dinner in the IOP Conference Room for everyone teaching with CIVICS this fall, 6 PM. It’s on your Events calendar.', act: 'See it in Events', goto: 'events' },
       { id: 4, p: 'HPOP', when: 'Yesterday', title: 'Join the next Youth Poll team', body: 'No experience needed. Info session details coming soon.' },
       { id: 5, p: 'HPR', when: '2 days ago', title: 'Pitch a piece for the next issue', body: 'Takes on the midterm results welcome. Pitches go to the HPR editors through the request form.' },
       { id: 6, p: 'HVC', when: '3 days ago', title: 'Thanks, turnout captains', body: 'Thank you to everyone who ran a registration push this fall. A recap of Harvard’s turnout is coming soon.' },
@@ -843,7 +849,12 @@
   };
   const saved = new Set(store.get('saved', []));
   let profile = store.get('profile', null);
-  const following = new Set(profile ? profile.programs : []);
+  // During the demo everyone is a member of every program, so nobody misses members-only posts and events.
+  // Set DEMO_ALL_PROGRAMS to false to bring back picking your own programs.
+  const DEMO_ALL_PROGRAMS = true;
+  const following = new Set(DEMO_ALL_PROGRAMS ? PROGRAMS.map((p) => p.id) : profile ? profile.programs : []);
+  const syncFollowing = () => { following.clear(); (DEMO_ALL_PROGRAMS ? PROGRAMS.map((p) => p.id) : profile ? profile.programs : []).forEach((id) => following.add(id)); };
+  const DEMO_NOTE = 'Picking programs isn’t available during the demo. You’re a member of every program, so you get the full experience, members-only posts included.';
   const read = new Set(store.get('read', []));
 
   // ====== Members only ======
@@ -1073,7 +1084,7 @@
       const h = new Date().getHours();
       const hi = h < 12 ? 'Good morning' : h < 18 ? 'Good afternoon' : 'Good evening';
       return `
-        <header class="hello"><div><h1>${hi}${profile.guest ? '' : ', ' + esc(profile.name)}.</h1><p>${following.size ? `${plural(yours, 'event')} from your programs this week.` : 'Pick a few programs and OneIOP will put them first.'}</p></div></header>
+        <header class="hello"><div><h1>${hi}${profile.guest ? '' : ', ' + esc(profile.name)}.</h1><p>${DEMO_ALL_PROGRAMS ? `${plural(yours, 'event')} at the IOP this week.` : following.size ? `${plural(yours, 'event')} from your programs this week.` : 'Pick a few programs and OneIOP will put them first.'}</p></div></header>
         ${banner()}
         <div class="card week" role="group" aria-label="Pick a day">
           ${DAYS.map((d) => { const l = EVENTS.filter((e) => e.day === d.i).sort((a, b) => following.has(b.p) - following.has(a.p)).slice(0, 3); return `<button type="button" data-day="${d.i}" aria-pressed="${state.day === d.i}"><span class="label">${d.i === TODAY ? 'Today' : d.d}</span><b>${d.n}</b><small>${l.map((e) => `<i${following.has(e.p) ? '' : ' class="other"'}></i>`).join('')}</small></button>`; }).join('')}
@@ -1093,7 +1104,7 @@
         </div>`;
     },
     events() {
-      const cats = [['all', 'All'], ['foryou', 'Your programs'], ['saved', 'Saved'], ['Forum', 'Forum'], ['FSG', 'Study groups']];
+      const cats = [['all', 'All'], ...(DEMO_ALL_PROGRAMS ? [] : [['foryou', 'Your programs']]), ['saved', 'Saved'], ['Forum', 'Forum'], ['FSG', 'Study groups']];
       const list = EVENTS.filter((e) => state.evFilter === 'all' || (state.evFilter === 'foryou' ? following.has(e.p) : state.evFilter === 'saved' ? saved.has(e.id) : e.p === state.evFilter)).sort(byTime);
       const mode = state.evMode || (matchMedia('(max-width: 820px)').matches ? 'list' : 'week');
       const later = list.filter((e) => e.day >= DAYS.length).length;
@@ -1108,7 +1119,7 @@
     },
     news() {
       const all = newsFor();
-      const list = all.filter((n) => state.newsFilter === 'all' || forYou(n));
+      const list = DEMO_ALL_PROGRAMS ? all : all.filter((n) => state.newsFilter === 'all' || forYou(n));
       const wide = !matchMedia('(max-width: 820px)').matches;
       let sel = list.find((n) => String(n.id) === String(state.newsSel)) || null;
       if (!sel && wide) sel = list[0] || null;
@@ -1132,7 +1143,7 @@
           <p class="ib-body">${esc(sel.body)}</p>
           ${actBtn(sel) ? `<div class="ib-acts">${actBtn(sel)}</div>` : ''}
           <p class="ib-aud">${sel.aud === 'members' ? ICON.lock : '<svg class="i" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5M16 4.8a3.5 3.5 0 0 1 0 6.4M18.5 14.8c1.6.8 2.6 2.5 3 5.2"/></svg>'}<span>${sel.aud === 'members'
-            ? `Sent to ${esc(prog(sel.p).name)} members only. You can see it because ${esc(sel.p)} is one of your programs.`
+            ? DEMO_ALL_PROGRAMS ? `Sent to ${esc(prog(sel.p).name)} members only. You can see it because you’re in every program for the demo.` : `Sent to ${esc(prog(sel.p).name)} members only. You can see it because ${esc(sel.p)} is one of your programs.`
             : 'Sent to all IOP members.'}</span></p>
           ${chairs.length ? `<p class="ib-ask">Questions? Ask ${chairs.map((c) => esc(c.name)).join(' or ')}, ${chairs.length > 1 ? 'the chairs' : 'the chair'}. <button type="button" data-prog="${esc(sel.p)}">${esc(sel.p)} page →</button></p>` : ''}
         </article>` : '<article class="ib-read"><p class="ib-empty">Pick an announcement to read it.</p></article>';
@@ -1141,7 +1152,7 @@
         <div class="card inbox${sel && !wide ? ' reading' : ''}">
           <div class="ib-list">
             <div class="ib-tools">
-              <div class="chips" role="group" aria-label="Filter announcements">${[['following', 'For you', all.filter(forYou).length], ['all', 'Everything', all.length]].map(([k, l, c]) => `<button type="button" data-nf="${k}" aria-pressed="${state.newsFilter === k}">${l}<span class="n">${c}</span></button>`).join('')}</div>
+              ${DEMO_ALL_PROGRAMS ? `<span class="ib-count">${plural(all.length, 'announcement')}</span>` : `<div class="chips" role="group" aria-label="Filter announcements">${[['following', 'For you', all.filter(forYou).length], ['all', 'Everything', all.length]].map(([k, l, c]) => `<button type="button" data-nf="${k}" aria-pressed="${state.newsFilter === k}">${l}<span class="n">${c}</span></button>`).join('')}</div>`}
               <span class="unread">${unread ? `<b>${unread}</b> unread` : 'All read'}</span>
             </div>
             <div class="ib-rows" role="list">${list.map((n) => `
@@ -1162,7 +1173,7 @@
     },
     programs() {
       if (state.program) return views.program(prog(state.program));
-      const cats = [['all', 'All'], ['following', 'Your programs'], ['events', 'Events'], ['research', 'Research'], ['service', 'Service'], ['media', 'Media'], ['coalition', 'Coalitions']];
+      const cats = [['all', 'All'], ...(DEMO_ALL_PROGRAMS ? [] : [['following', 'Your programs']]), ['events', 'Events'], ['research', 'Research'], ['service', 'Service'], ['media', 'Media'], ['coalition', 'Coalitions']];
       const list = PROGRAMS.filter((p) => state.progFilter === 'all' || (state.progFilter === 'following' ? following.has(p.id) : p.cat === state.progFilter));
       return `
         <header class="v-head"><h1>Programs</h1><p>All ${PROGRAMS.length} programs and coalitions, each with its own page.</p></header>
@@ -1178,7 +1189,8 @@
         <button type="button" class="back" data-back>← All programs</button>
         <section class="card pp-hero${coal ? ' coal' : ''}">
           <div><span class="abbr">${esc(p.id)}</span><h2>${esc(p.name)}</h2><p>${esc(p.about)}</p></div>
-          <button type="button" class="btn ${following.has(p.id) ? '' : 'primary'}" data-follow="${esc(p.id)}" aria-pressed="${following.has(p.id)}">${following.has(p.id) ? ICON.check + 'In my programs' : '+ Add to my programs'}</button>
+          ${DEMO_ALL_PROGRAMS ? `<button type="button" class="btn" disabled title="${esc(DEMO_NOTE)}">${ICON.check}Member (demo)</button>`
+            : `<button type="button" class="btn ${following.has(p.id) ? '' : 'primary'}" data-follow="${esc(p.id)}" aria-pressed="${following.has(p.id)}">${following.has(p.id) ? ICON.check + 'In my programs' : '+ Add to my programs'}</button>`}
         </section>
         ${secTitle('Coming up', plural(evs.length, 'event'))}${evs.length ? evGrid(evs) : '<div class="card empty">No events on the calendar this week.</div>'}
         <div class="grid-2">
@@ -1352,8 +1364,9 @@
           <p style="margin-top:0">Automatic shows the week calendar on bigger screens and the list on phones.</p>
         </section>
         <section class="set-group"><h3>Your programs</h3>
-          <div class="set-row"><span class="tags">${[...following].map((id) => tag(id)).join('') || 'None yet'}</span><button type="button" class="linkish" data-set="edit">Edit →</button></div>
-          <p style="margin-top:0">Members-only posts and events from these programs show up for you.</p>
+          ${DEMO_ALL_PROGRAMS ? `<div class="demo-off-box" aria-disabled="true"><span class="tags">${[...following].slice(0, 8).map((id) => tag(id)).join('')}</span><p><b style="color:var(--ink)">Not available during the demo.</b> You’re a member of all ${PROGRAMS.length} programs, so you see everything, members-only posts included.</p></div>`
+          : `<div class="set-row"><span class="tags">${[...following].map((id) => tag(id)).join('') || 'None yet'}</span><button type="button" class="linkish" data-set="edit">Edit →</button></div>
+          <p style="margin-top:0">Members-only posts and events from these programs show up for you.</p>`}
         </section>
         <div class="set-foot">
           <span style="flex:1;font-size:13px;color:var(--muted)">Signed in as <b style="color:var(--ink)">${profile.guest ? 'a guest' : esc(profile.name)}</b>${profile.guest ? '' : ` · Class of ${esc(profile.year)}`}</span>
@@ -1463,13 +1476,19 @@
   // ====== Member sign-in (demo: nothing leaves the browser) ======
   const loginEl = $('#login'), appEl = $('#app'), form = $('#login-form');
   const CAT_NAMES = { events: 'Events + discussion', research: 'Research + policy', service: 'Service + civic', media: 'Media + campaigns', coalition: 'Coalitions' };
-  const countPicked = () => { const n = form.querySelectorAll('#pick input:checked').length; $('#picked').innerHTML = n ? `<b>${n}</b> picked` : 'Pick at least one'; };
+  const countPicked = () => { const n = form.querySelectorAll('#pick input:checked').length; $('#picked').innerHTML = DEMO_ALL_PROGRAMS ? `All <b>${PROGRAMS.length}</b> included` : n ? `<b>${n}</b> picked` : 'Pick at least one'; };
 
   const showLogin = (step = 1) => {
     $('#me-menu').hidden = true;
+    if (DEMO_ALL_PROGRAMS) syncFollowing();
+    // The sign-in screen previews the next few event graphics, so it never points at an image the daily refresh removed
+    $('#peek').innerHTML = [...BASE].filter((e) => e.img).sort(byTime).slice(0, 3).map((e) => `<div><img src="${esc(imgSrc(e))}" alt=""></div>`).join('');
     $('#pick').innerHTML = Object.entries(CAT_NAMES).map(([c, label]) => `
       <div><h3>${label}</h3><div class="opts">${PROGRAMS.filter((p) => p.cat === c).map((p) => `
-        <label class="${c === 'coalition' ? 'coal' : ''}" title="${esc(p.name)}"><input type="checkbox" name="prog" value="${esc(p.id)}"${following.has(p.id) ? ' checked' : ''}>${ICON.check}${esc(p.id)}</label>`).join('')}</div></div>`).join('');
+        <label class="${c === 'coalition' ? 'coal' : ''}" title="${esc(p.name)}"><input type="checkbox" name="prog" value="${esc(p.id)}"${following.has(p.id) ? ' checked' : ''}${DEMO_ALL_PROGRAMS ? ' disabled' : ''}>${ICON.check}${esc(p.id)}</label>`).join('')}</div></div>`).join('');
+    $('#pick-wrap').classList.toggle('demo-off', DEMO_ALL_PROGRAMS);
+    if (DEMO_ALL_PROGRAMS) $('#pick-sub').textContent = 'For the demo, everyone is a member of all ' + PROGRAMS.length + ' programs and coalitions.';
+    $('#pick-wrap').setAttribute('aria-disabled', DEMO_ALL_PROGRAMS);
     if (profile) { form.name.value = profile.guest ? '' : profile.name; form.year.value = profile.year; }
     setStep(step);
     countPicked();
@@ -1480,7 +1499,7 @@
     $('#step-1').hidden = n !== 1; $('#step-2').hidden = n !== 2;
     $('#bar-2').classList.toggle('on', n === 2);
     const nm = form.name.value.trim();
-    $('#pick-title').textContent = nm ? `${nm}, pick your programs` : 'Pick your programs';
+    $('#pick-title').textContent = DEMO_ALL_PROGRAMS ? (nm ? `${nm}, you’re in every program` : 'You’re in every program') : nm ? `${nm}, pick your programs` : 'Pick your programs';
   };
   const enter = () => {
     loginEl.hidden = true; appEl.hidden = false;
@@ -1502,20 +1521,20 @@
   $('#pick').addEventListener('change', countPicked);
   $('#guest').addEventListener('click', () => {
     profile = { name: 'Guest', year: form.year.value, guest: true, programs: ['Forum', 'FSG', 'HPR'] };
-    following.clear(); profile.programs.forEach((id) => following.add(id));
+    syncFollowing();
     store.set('profile', profile);
     enter();
   });
   form.addEventListener('submit', (ev) => {
     ev.preventDefault();
-    const picks = [...form.querySelectorAll('#pick input:checked')].map((i) => i.value);
+    const picks = DEMO_ALL_PROGRAMS ? PROGRAMS.map((p) => p.id) : [...form.querySelectorAll('#pick input:checked')].map((i) => i.value);
     if (!picks.length) { toast('Pick at least one program.'); return; }
     const nm = form.name.value.trim();
     profile = { name: nm || 'Guest', year: form.year.value, guest: !nm, programs: picks };
-    following.clear(); picks.forEach((id) => following.add(id));
+    syncFollowing();
     store.set('profile', profile);
     enter();
-    toast(`Welcome${profile.guest ? '' : ', ' + profile.name}. OneIOP is set up for your ${plural(picks.length, 'program')}.`);
+    toast(DEMO_ALL_PROGRAMS ? `Welcome${profile.guest ? '' : ', ' + profile.name}. You’re in every program for the demo.` : `Welcome${profile.guest ? '' : ', ' + profile.name}. OneIOP is set up for your ${plural(picks.length, 'program')}.`);
   });
 
   // Account menu
