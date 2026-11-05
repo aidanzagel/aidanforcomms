@@ -146,6 +146,11 @@
   .lede { max-width: 46ch; font-size: 18px; line-height: 1.55; color: rgba(244, 241, 234, .86); }
   .lede strong { color: var(--paper); }
   .ctas { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 26px; margin-top: 34px; }
+  .first3 { display: grid; gap: 8px; margin-top: 22px; max-width: 46ch; }
+  .first3 li { position: relative; padding-left: 28px; font-size: 16px; line-height: 1.4; }
+  .first3 li::before { content: ""; position: absolute; left: 0; top: .2em; width: 16px; height: 16px; border-radius: 50%; background: var(--red) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4.5 8.3l2.3 2.3 4.7-4.9' fill='none' stroke='%23fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 16px no-repeat; }
+  .first3 a { color: var(--paper); font-weight: 600; text-decoration: none; border-bottom: 1px solid rgba(244, 241, 234, .3); transition: border-color .2s; }
+  .first3 a:hover { border-color: var(--paper); }
   .btn {
     display: inline-flex; align-items: center; gap: 12px; padding: 16px 26px;
     background: var(--red); color: #fff; text-decoration: none; border: 0; cursor: pointer;
@@ -472,8 +477,11 @@
   .stop.on .notice { border-left-color: var(--red); }
   /* Desktop: line up label, month, theme, goal, list and notice across all four columns */
   @media (min-width: 1101px) {
-    .road-cols { grid-template-rows: repeat(6, auto); row-gap: 0; }
-    .stop { display: grid; grid-row: span 6; grid-template-rows: subgrid; align-content: start; }
+    /* 4 header rows, up to 4 checklist rows, then the notice: every row lines up across the months */
+    .road-cols { grid-template-rows: repeat(9, auto); row-gap: 0; }
+    .stop { display: grid; grid-row: span 9; grid-template-rows: subgrid; align-content: start; }
+    .stop ul { display: grid; grid-row: span 4; grid-template-rows: subgrid; }
+    .stop .notice { grid-row: 9; }
     .stop .theme { justify-self: start; align-self: start; }
     .stop .notice { align-self: start; }
   }
@@ -502,22 +510,23 @@
 
   /* ====== 06 Work ====== */
   .work { background: var(--paper-2); }
-  .work-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)) minmax(0, .9fr); gap: 28px; align-items: start; }
-  .work-grid figure { display: grid; gap: 12px; position: relative; rotate: var(--t, 0deg); transition: rotate .4s var(--ease); }
-  .work-grid figure:nth-child(1) { --t: -2deg; }
-  .work-grid figure:nth-child(2) { --t: 1.5deg; }
-  .work-grid figure:nth-child(3) { --t: -1deg; }
-  .work-grid figure:hover { rotate: 0deg; }
-  .work-grid figure::before { content: ""; position: absolute; z-index: 2; top: -11px; left: 50%; width: 84px; height: 24px; translate: -50% 0; rotate: -4deg; background: rgba(244, 241, 234, .75); box-shadow: 0 1px 3px rgba(16, 20, 61, .15); }
-  .work-grid figure:nth-child(2) { margin-top: 48px; }
-  .work-grid figure:nth-child(3) { margin-top: 96px; }
-  .work-grid img { width: 100%; aspect-ratio: 284 / 154; object-fit: cover; box-shadow: 0 18px 40px rgba(16, 20, 61, .18); transition: transform .5s var(--ease); }
-  .work-grid figure:hover img { transform: translateY(-6px) rotate(-1deg); }
-  .work-grid figcaption { font-size: 15px; line-height: 1.35; }
-  .work-grid figcaption .label { display: block; color: var(--red); margin-bottom: 4px; }
-  .lens h3 { font-family: var(--serif); font-weight: 400; font-style: italic; font-size: 40px; line-height: 1; color: var(--navy); margin-bottom: 14px; }
-  .lens li { padding: 12px 0; border-top: 1px solid var(--line); font-weight: 600; }
-  .lens li:last-child { border-bottom: 1px solid var(--line); }
+  /* The Work: a featured piece, then a plain grid that new pieces flow into */
+  .work-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(20px, 2.4vw, 32px); }
+  .work-item { display: grid; align-content: start; gap: 14px; margin: 0; cursor: zoom-in; }
+  .work-item.feature { grid-column: 1 / -1; }
+  .work-frame { aspect-ratio: 16 / 9; border-radius: 10px; overflow: hidden; background: var(--paper); box-shadow: 0 0 0 1px var(--line); transition: box-shadow .3s; }
+  .work-item.feature .work-frame { aspect-ratio: 2000 / 889; }
+  .work-frame img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform .5s var(--ease); }
+  .work-item:hover .work-frame img { transform: scale(1.02); }
+  .work-item:hover .work-frame, .work-item:focus-visible .work-frame { box-shadow: 0 0 0 2px var(--navy), 0 14px 34px rgba(16, 20, 61, .14); }
+  .work-item:focus-visible { outline: none; }
+  .work-item figcaption { display: grid; gap: 3px; font-size: 15px; line-height: 1.35; }
+  .work-item figcaption b { font-size: 17px; color: var(--ink); }
+  .work-item figcaption span { color: var(--muted); }
+  .lens { display: grid; grid-template-columns: minmax(0, 240px) minmax(0, 1fr); gap: 24px; align-items: baseline; margin-top: clamp(36px, 4vw, 56px); padding-top: 24px; border-top: 1px solid var(--line); }
+  .lens h3 { font-family: var(--serif); font-weight: 400; font-style: italic; font-size: 34px; line-height: 1; color: var(--navy); }
+  .lens ul { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 24px; }
+  .lens li { padding: 10px 0; border-bottom: 1px solid var(--line); font-weight: 600; }
 
   /* ====== 07 Questions ====== */
   .faq { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 48px; align-items: start; }
@@ -556,9 +565,7 @@
   .story-body .sig-dark { width: 200px; filter: invert(1); opacity: .8; margin-top: 6px; }
 
   /* ====== Work viewer ====== */
-  .work-grid figure { cursor: zoom-in; }
-  .work-grid figure:focus-visible { outline: 3px solid var(--red); outline-offset: 6px; }
-  .work-hint { margin-top: 26px; color: var(--muted); }
+  .work-hint { margin-top: 18px; color: var(--muted); font-weight: 500; }
   .viewer, .share-modal {
     position: fixed; inset: 0; z-index: 120; display: grid; place-items: center; padding: max(20px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) max(20px, env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
     background: rgba(10, 13, 46, .78); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
@@ -569,7 +576,8 @@
   @keyframes lift { from { opacity: 0; transform: translateY(16px) scale(.98); } }
   .viewer img { width: min(92vw, 760px); max-height: 74vh; object-fit: contain; background: var(--paper); box-shadow: 0 30px 80px rgba(0, 0, 0, .45); }
   .viewer figcaption { color: var(--paper); text-align: center; }
-  .viewer figcaption .label { display: block; color: #ff8a90; margin-bottom: 4px; }
+  .viewer figcaption b { display: block; font-size: 17px; margin-bottom: 2px; }
+  .viewer figcaption span { opacity: .7; }
   .v-btn { position: absolute; display: grid; place-items: center; width: 48px; height: 48px; border-radius: 50%; border: 0; cursor: pointer; background: rgba(244, 241, 234, .14); color: var(--paper); font-size: 22px; transition: background .2s; }
   .v-btn:hover { background: var(--red); }
   .v-close { top: max(18px, env(safe-area-inset-top, 0px)); right: max(18px, env(safe-area-inset-right, 0px)); }
@@ -656,7 +664,8 @@
   .story-card .sc-url { margin-top: 16px; padding-top: 12px; border-top: 1px solid currentColor; font-family: var(--sans); font-weight: 600; font-size: 12.5px; letter-spacing: 0; opacity: .85; }
 
   /* ====== Close-section actions ====== */
-  .close-ctas { display: flex; flex-wrap: wrap; gap: 12px 14px; margin-top: 44px; }
+  .close-ctas { display: flex; flex-wrap: wrap; gap: 12px 14px; margin-top: 32px; }
+  .close-ctas [hidden] { display: none; }
   .cta-light, .cta-ghost { display: inline-flex; align-items: center; gap: 10px; padding: 16px 24px; border-radius: 999px; font: 700 15.5px/1 var(--sans); text-decoration: none; cursor: pointer; transition: background .2s, color .2s, translate .25s var(--ease); }
   .cta-light { background: var(--paper); color: var(--red); border: 0; }
   .cta-light:hover { background: var(--navy); color: var(--paper); translate: 0 -2px; }
@@ -670,9 +679,11 @@
   .close .wrap { position: relative; }
   .close .sec-head { grid-template-columns: minmax(0, 1fr); margin-bottom: 28px; }
   .close-hl { font-size: clamp(120px, 21vw, 330px); line-height: .8; }
+  .close-ask { margin-top: 28px; max-width: 34ch; font-family: var(--serif); font-size: clamp(24px, 2.6vw, 34px); line-height: 1.2; }
+  .close-ask strong { font-weight: 600; }
   .close-hl em { display: block; font-family: var(--serif); font-weight: 400; font-style: italic; text-transform: none; font-size: .36em; line-height: 1; margin-bottom: .05em; }
   .close-sig { width: min(380px, 60%); margin: -2% 0 0 auto; rotate: -6deg; }
-  .close-grid { display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 32px; margin-top: 56px; border-top: 1px solid rgba(244, 241, 234, .4); padding-top: 26px; }
+  .close-grid { display: grid; grid-template-columns: 1.3fr 1fr 1fr; gap: 32px; margin-top: 40px; border-top: 1px solid rgba(244, 241, 234, .4); padding-top: 26px; }
   .close-grid .label { display: block; opacity: .75; margin-bottom: 10px; }
   .close-grid a, .close-grid .val { font-size: clamp(19px, 1.7vw, 24px); font-weight: 700; text-decoration: none; overflow-wrap: anywhere; }
   .close-grid a:hover { opacity: .75; }
@@ -694,9 +705,9 @@
     .hero-side { display: none; }
     .sec-head { grid-template-columns: minmax(0, 1fr); gap: 14px; }
     .pillar { grid-template-columns: minmax(0, 1fr); }
-    .work-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .work-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .lens ul { grid-template-columns: minmax(0, 1fr); }
     .road-cols { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 48px; }
-    .lens { grid-column: 1 / -1; }
     .ballot { left: 0; }
   }
   @media (max-width: 820px) {
@@ -730,7 +741,7 @@
     .vid-ph h3 { font-size: 40px; }
     .play { width: 76px; }
     .work-grid { grid-template-columns: minmax(0, 1fr); }
-    .work-grid figure:nth-child(n) { margin-top: 0; }
+    .lens { grid-template-columns: minmax(0, 1fr); gap: 8px; }
     .close-grid { grid-template-columns: minmax(0, 1fr); gap: 22px; }
     .close-sig { width: 70%; margin-top: 10px; }
   }
@@ -851,6 +862,11 @@
         <span class="line l3"><span>IOP<span class="dot">.</span></span></span>
       </h1>
       <p class="lede">The IOP is one of a kind. It's time our comms matched that. I'm in this race to make information easier to find when you need it, make collaboration between programs effortless, and make members feel celebrated for the work they do. <strong>Let's take the IOP further, together.</strong></p>
+      <ul class="first3" aria-label="What I'll do first">
+        <li><a href="#platform">OneIOP: every announcement, event, and contact in one place</a></li>
+        <li><a href="#platform">Photos and video back within 24 hours</a></li>
+        <li><a href="#programs">Templates and comms training for every program</a></li>
+      </ul>
       <div class="ctas">
         <a href="#platform" class="btn">See the platform <span class="arr">→</span></a>
         <a href="#contact" class="text-link">Questions? Let's talk →</a>
@@ -880,7 +896,7 @@
 <!-- Countdown: set data-election to the election start, e.g. 2026-12-02T09:00:00-05:00 -->
 <div class="countdown" id="countdown" data-election="2026-11-15T00:01:00-05:00" hidden>
   <div class="wrap">
-    <span class="label">Election day</span>
+    <span class="label">Election day · Sun, Nov 15</span>
     <div class="cd-units" aria-live="off"><span><b data-u="d">0</b><small>days</small></span><span><b data-u="h">0</b><small>hrs</small></span><span><b data-u="m">0</b><small>min</small></span><span><b data-u="s">0</b><small>sec</small></span></div>
     <span class="cd-cta">Vote Aidan for Comms.</span>
   </div>
@@ -1229,31 +1245,33 @@
   <div class="wrap">
     <header class="sec-head">
       <h2 class="disp">The Work</h2>
-      <p>Design and photography already out in the world.</p>
+      <p>Design and photography already out in the world, with more on the way.</p>
     </header>
+    <!-- To add a piece: copy one <figure class="work-item"> block, change the image, title and line under it.
+         The first piece is the big featured one; every piece after it fills the grid in order. -->
     <div class="work-grid" id="work-grid">
-      <figure class="reveal tilt" data-tilt="7" tabindex="0" role="button" aria-label="View larger">
-        <img src="assets/work-senate.jpg" alt="Harvard Political Review 'Battle for the Senate' U.S. Midterms 2026 graphic" width="284" height="154">
-        <figcaption>Battle for the Senate, U.S. Midterms 2026</figcaption>
+      <figure class="work-item feature" tabindex="0" role="button" aria-label="View Battle for the Senate larger">
+        <div class="work-frame"><img src="assets/hpr-battle-for-the-senate.webp" alt="Harvard Political Review 'Battle for the Senate: U.S. Midterms 2026' graphic, with Senate candidates from both parties around a map of the battleground states" width="2000" height="889"></div>
+        <figcaption><b>Battle for the Senate</b><span>Harvard Political Review · 2026 Midterm Initiative</span></figcaption>
       </figure>
-      <figure class="reveal tilt" data-tilt="7" tabindex="0" role="button" aria-label="View larger">
-        <img src="assets/work-hpr.jpg" alt="Harvard Political Review graphic: the largest political publication at Harvard College" width="284" height="154">
-        <figcaption>The largest political publication at Harvard College</figcaption>
+      <figure class="work-item" tabindex="0" role="button" aria-label="View The largest political publication at Harvard College larger">
+        <div class="work-frame"><img src="assets/work-hpr.jpg" alt="Harvard Political Review graphic: the largest political publication at Harvard College" width="284" height="154" loading="lazy"></div>
+        <figcaption><b>The largest political publication at Harvard College</b><span>Harvard Political Review</span></figcaption>
       </figure>
-      <figure class="reveal tilt" data-tilt="7" tabindex="0" role="button" aria-label="View larger">
-        <img src="assets/work-fallcomp.jpg" alt="Harvard Political Review Fall Comp '26 graphic" width="284" height="154">
-        <figcaption>Fall Comp '26</figcaption>
+      <figure class="work-item" tabindex="0" role="button" aria-label="View Fall Comp '26 larger">
+        <div class="work-frame"><img src="assets/work-fallcomp.jpg" alt="Harvard Political Review Fall Comp '26 graphic" width="284" height="154" loading="lazy"></div>
+        <figcaption><b>Fall Comp '26</b><span>Harvard Political Review</span></figcaption>
       </figure>
-      <div class="lens reveal">
-        <h3>Behind the lens</h3>
-        <ul>
-          <li>HMC Boston 2027 Board headshots</li>
-          <li>Photographer, HPU</li>
-          <li>Headshots for other student orgs</li>
-        </ul>
-      </div>
     </div>
-    <p class="work-hint label">Click any piece to see it larger</p>
+    <p class="work-hint">Click any piece to see it larger.</p>
+    <div class="lens">
+      <h3>Behind the lens</h3>
+      <ul>
+        <li>HMC Boston 2027 Board headshots</li>
+        <li>Photographer, HPU</li>
+        <li>Headshots for other student orgs</li>
+      </ul>
+    </div>
   </div>
 </section>
 
@@ -1294,43 +1312,27 @@
     <div class="faq">
       <details>
         <summary>What is OneIOP?</summary>
-        <p>One internal website where every announcement, event, and contact lives in one place. It gets piloted with programs in January and launches in February. <a href="oneiop.html">Try the demo</a> to see how it would work.</p>
+        <p>One members-only site for every announcement, event, and contact, so emails can be fewer and shorter. Instagram stays the IOP's public face. <a href="oneiop.html">Try the demo</a>.</p>
       </details>
       <details>
-        <summary>Will this mean more emails?</summary>
-        <p>No, fewer. OneIOP holds the details, so emails can be short and only go out when they matter.</p>
+        <summary>What does my program get?</summary>
+        <p>Templates built on a shared brand, comms training, office hours, and the Media Center. Your chairs decide what to use, and your program's voice stays yours.</p>
       </details>
       <details>
-        <summary>How will my program get comms help?</summary>
-        <p>Every program gets its own templates built on a shared brand, comms training for its comms team, and office hours. The Media Center will be open to every program.</p>
-      </details>
-      <details>
-        <summary>What is the Media Center?</summary>
-        <p>A shared photo, video, and design resource that any program can use, so good content doesn't depend on which program you're in. Work on it starts in February.</p>
-      </details>
-      <details>
-        <summary>What do members get out of this?</summary>
-        <p>Program-specific merch, welcome kits and door drops for new members, member spotlights, and photos and videos back within 24 hours.</p>
+        <summary>Does HPR get special treatment?</summary>
+        <p>No. HPR gets the same support as every other program, nothing more.</p>
       </details>
       <details>
         <summary>Why should I trust you with comms?</summary>
-        <p>I already do this work. At HPR I run marketing and the comp, and I shoot photos for HPU, the HMC Boston 2027 board, and other student orgs. Some of it is in The Work above.</p>
-      </details>
-      <details>
-        <summary>Is OneIOP replacing Instagram?</summary>
-        <p>No. Instagram stays the IOP's public face. OneIOP is for members: the one place to find what's happening and who to ask.</p>
+        <p>I already do this work: I run marketing and the comp at HPR, and I shoot photos for HPU and other student orgs. Some of it is in The Work above.</p>
       </details>
       <details>
         <summary>How will we know it's working?</summary>
-        <p>Fewer emails, faster photos and video, and programs telling me comms got easier. Mid-semester check-ins are built into the plan so I hear it directly.</p>
-      </details>
-      <details>
-        <summary>Which programs does this cover?</summary>
-        <p>All of them, plus the four IOP coalitions. Every program, from the JFK Jr. Forum to Citizenship Tutoring, gets the same templates, training, and 24-hour photo turnaround. The full list is in Every Program above.</p>
+        <p>Fewer emails, faster photos, and programs telling me comms got easier. Mid-semester check-ins are built in so I hear it directly.</p>
       </details>
       <details>
         <summary>How can I share an idea?</summary>
-        <p>Email or text me anytime, book 15 minutes on my calendar, or come to comms office hours once they start in January. The first thing I'll do in December is audit IOP comms, so tell me what's broken.</p>
+        <p>Email or text me anytime. My first step in December is an audit of IOP comms, so tell me what's broken.</p>
       </details>
     </div>
   </div>
@@ -1338,32 +1340,27 @@
 
 <section class="sec close panel" id="contact">
   <div class="wrap">
-    <header class="sec-head">
-      <span class="label">Let's talk</span>
-    </header>
-    <h2 class="close-hl disp reveal"><em>Let's</em>Shine.</h2>
-    <img class="close-sig reveal" src="assets/signature.png" alt="" width="900" height="270">
-    <div class="close-ctas">
-      <!-- Calendly: set data-calendly to your booking link, e.g. https://calendly.com/your-name/15min -->
-      <a class="cta-light" id="calendly-link" data-calendly="" href="#contact">Book 15 minutes with me →</a>
-      <button type="button" class="cta-ghost" id="open-share">Make your share card</button>
-    </div>
+    <h2 class="close-hl disp"><em>Let's</em>Shine.</h2>
+    <p class="close-ask">Vote Aidan for Comms on <strong>Sunday, Nov 15</strong>. Voting opens at 12:01am.</p>
+    <img class="close-sig" src="assets/signature.png" alt="" width="900" height="270">
     <div class="close-grid">
       <div>
-        <span class="label">Share the campaign</span>
-        <div class="share-row">
-          <span class="val" id="share-url">aidanforcomms.com</span>
-          <button type="button" class="copy" id="copy-link">Copy link</button>
-        </div>
-      </div>
-      <div>
         <span class="label">Email</span>
-        <a href="mailto:aidanzagel@college.harvard.edu">aidanzagel@college.harvard.edu</a>
+        <div class="share-row"><span class="val">aidanzagel@college.harvard.edu</span><button type="button" class="copy" data-copy="aidanzagel@college.harvard.edu">Copy</button></div>
       </div>
       <div>
         <span class="label">Call or text</span>
-        <a href="tel:+19082168035">908-216-8035</a>
+        <div class="share-row"><span class="val">908-216-8035</span><button type="button" class="copy" data-copy="908-216-8035">Copy</button></div>
       </div>
+      <div>
+        <span class="label">Share the campaign</span>
+        <div class="share-row"><span class="val" id="share-url">aidanforcomms.com</span><button type="button" class="copy" id="copy-link" data-copy="https://aidanforcomms.com">Copy link</button></div>
+      </div>
+    </div>
+    <div class="close-ctas">
+      <!-- Calendly: set data-calendly to your booking link, e.g. https://calendly.com/your-name/15min. The button stays hidden until it's set. -->
+      <a class="cta-light" id="calendly-link" data-calendly="" href="#contact" hidden>Book 15 minutes with me →</a>
+      <button type="button" class="cta-ghost" id="open-share">Make your share card</button>
     </div>
   </div>
 </section>
@@ -1704,16 +1701,13 @@
     setInterval(paintCountdown, 1000);
   }
 
-  // Calendly booking link (button reads "coming soon" until data-calendly is set)
+  // Calendly booking link (the button stays hidden until data-calendly is set)
   const cal = document.getElementById('calendly-link');
   if (cal.dataset.calendly) {
     cal.href = cal.dataset.calendly;
     cal.target = '_blank';
     cal.rel = 'noopener';
-  } else {
-    cal.classList.add('pending');
-    cal.textContent = 'Booking link coming soon';
-    cal.addEventListener('click', (e) => e.preventDefault());
+    cal.hidden = false;
   }
 
   // 3D tilt: on a mouse or trackpad, cards lean toward the pointer, ease back when it leaves
@@ -1865,23 +1859,23 @@
   });
 
   // Copy the campaign link
-  const copyBtn = document.getElementById('copy-link');
-  copyBtn.addEventListener('click', async () => {
-    const url = 'https://aidanforcomms.com';
-    try {
-      await navigator.clipboard.writeText(url);
-      copyBtn.textContent = 'Copied ✓';
-      const r = copyBtn.getBoundingClientRect();
-      confetti(r.left + r.width / 2, r.top, 24);
-    } catch {
-      const range = document.createRange();
-      range.selectNodeContents(document.getElementById('share-url'));
-      const sel = getSelection();
-      sel.removeAllRanges();
-      sel.addRange(range);
-      copyBtn.textContent = 'Selected, press copy';
-    }
-    setTimeout(() => { copyBtn.textContent = 'Copy link'; }, 2200);
+  // Copy buttons in the contact section (email, number, campaign link)
+  document.querySelectorAll('[data-copy]').forEach((btn) => {
+    const label = btn.textContent;
+    btn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(btn.dataset.copy);
+        btn.textContent = 'Copied ✓';
+      } catch {
+        const range = document.createRange();
+        range.selectNodeContents(btn.parentElement.querySelector('.val'));
+        const sel = getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+        btn.textContent = 'Selected, press copy';
+      }
+      setTimeout(() => { btn.textContent = label; }, 2200);
+    });
   });
 </script>
 <script>
