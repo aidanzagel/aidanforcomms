@@ -475,6 +475,13 @@
   .stop li:nth-child(4), .stop li:nth-child(4)::before, .stop li:nth-child(4)::after { transition-delay: .45s; }
   .stop .notice { margin-top: 16px; padding: 12px 14px; background: var(--paper-2); border-left: 4px solid var(--navy); font-size: 15.5px; line-height: 1.4; transition: border-color .3s; }
   .stop.on .notice { border-left-color: var(--red); }
+  /* Desktop: line up label, month, theme, goal, list and notice across all four columns */
+  @media (min-width: 1101px) {
+    .road-cols { grid-template-rows: repeat(6, auto); row-gap: 0; }
+    .stop { display: grid; grid-row: span 6; grid-template-rows: subgrid; align-content: start; }
+    .stop .theme { justify-self: start; align-self: start; }
+    .stop .notice { align-self: start; }
+  }
   .stop .notice b { display: block; font: 500 10.5px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
   .stop.finish h3 { color: var(--red); }
 
@@ -919,7 +926,6 @@
     <header class="sec-head">
       <span class="label">§ 01</span>
       <h2 class="disp">Meet Aidan</h2>
-      <p>A sophomore already running comms for one of Harvard's biggest student orgs.</p>
     </header>
     <div class="meet-grid">
       <div class="reveal">
@@ -964,7 +970,7 @@
     <header class="sec-head">
       <span class="label">§ 02</span>
       <h2 class="disp">The Platform</h2>
-      <p>Four commitments, one goal: comms that work for every program.</p>
+      <p>My platform is all about small common-sense changes that make your life easier.</p>
     </header>
     <div class="platform">
       <article class="pillar reveal">
@@ -1035,8 +1041,6 @@
       <button type="button" data-f="coalition" aria-pressed="false">Coalitions</button>
     </div>
     <div class="prog-grid">
-      <article class="prog tilt" data-cat="events" data-id="Forum" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Events</span><span class="abbr">Forum</span><h3>John F. Kennedy Jr. Forum</h3><p><b>What comms does</b>Forum promo that fills the room, and event photos back within 24 hours</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
-      <article class="prog tilt" data-cat="events" data-id="FSG" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Events</span><span class="abbr">FSG</span><h3>Fellows and Study Groups</h3><p><b>What comms does</b>Weekly study group graphics from ready-made templates, done fast</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
       <article class="prog tilt" data-cat="events" data-id="Conferences" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Events</span><span class="abbr long">Conferences</span><h3>Conferences Committee</h3><p><b>What comms does</b>One look for every conference, from save-the-date to recap</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
       <article class="prog tilt" data-cat="events" data-id="HPU" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Events</span><span class="abbr">HPU</span><h3>Harvard Political Union</h3><p><b>What comms does</b>Debate promo and photos from every debate</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
       <article class="prog tilt" data-cat="events" data-id="WIL" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Events</span><span class="abbr">WIL</span><h3>Women's Initiative in Leadership</h3><p><b>What comms does</b>Speaker promo and photos from every event</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
@@ -1046,6 +1050,8 @@
       <article class="prog tilt" data-cat="research" data-id="Policy" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Research</span><span class="abbr">Policy</span><h3>Policy Program</h3><p><b>What comms does</b>Spotlights that put members' policy proposals in front of the whole IOP</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
       <article class="prog tilt" data-cat="research" data-id="HPOP" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Research</span><span class="abbr">HPOP</span><h3>Harvard Public Opinion Project</h3><p><b>What comms does</b>Graphics that make Harvard Youth Poll results easy to share</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
       <article class="prog tilt" data-cat="research" data-id="RSG" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Research</span><span class="abbr">RSG</span><h3>Research & Strategy Group</h3><p><b>What comms does</b>Recruiting graphics and spotlights on the teams' work</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
+      <article class="prog tilt" data-cat="events" data-id="Forum" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Events</span><span class="abbr">Forum</span><h3>John F. Kennedy Jr. Forum</h3><p><b>What comms does</b>Forum promo that fills the room, and event photos back within 24 hours</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
+      <article class="prog tilt" data-cat="events" data-id="FSG" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Events</span><span class="abbr">FSG</span><h3>Fellows and Study Groups</h3><p><b>What comms does</b>Weekly study group graphics from ready-made templates, done fast</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
       <article class="prog tilt" data-cat="research" data-id="GovLab" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Research</span><span class="abbr">GovLab</span><h3>Governance Lab</h3><p><b>What comms does</b>Spotlights on the student founders and the startups they launch</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
       <article class="prog tilt" data-cat="service" data-id="CIVICS" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Service</span><span class="abbr">CIVICS</span><h3>CIVICS</h3><p><b>What comms does</b>Recruiting posts for new teachers and spotlights on the people in the classroom</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
       <article class="prog tilt" data-cat="service" data-id="Cit Tut" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Service</span><span class="abbr">Cit Tut</span><h3>Citizenship Tutoring</h3><p><b>What comms does</b>Recruiting posts for new tutors and stories from the program</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
