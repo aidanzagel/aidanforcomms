@@ -151,6 +151,22 @@
   .banner-media img, .banner-media video { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: contain; border-radius: 8px; background: rgba(0, 0, 0, .2); }
   .banner-sound { position: absolute; right: 22px; bottom: 22px; display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; border: 0; background: rgba(16, 20, 61, .6); color: #fff; }
   .banner-sound:hover { background: rgba(16, 20, 61, .85); }
+  /* Featured gallery: one slide at a time, sliding to the next every few seconds */
+  .gallery { position: relative; overflow: hidden; border-radius: 20px; }
+  .g-track { display: flex; transition: transform .7s cubic-bezier(.65, 0, .35, 1); }
+  .g-track > .banner { flex: 0 0 100%; min-width: 0; border-radius: 0; }
+  .g-nav { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 10px; }
+  .g-dots { display: flex; align-items: center; gap: 6px; }
+  .g-dots button { position: relative; width: 34px; height: 6px; padding: 0; border: 0; border-radius: 99px; background: var(--line-2); overflow: hidden; cursor: pointer; }
+  .g-dots button i { position: absolute; inset: 0; border-radius: inherit; background: var(--accent); transform: scaleX(0); transform-origin: left; }
+  /* The current slide's bar fills over the time it stays up (driven by the gallery clock below) */
+  .g-dots button[aria-current="true"] i { transition: transform .2s linear; }
+  .banner-media img.wide { aspect-ratio: auto; }
+  .banner-text { font-size: 15px; line-height: 1.5; color: rgba(255, 255, 255, .82); max-width: 46ch; }
+  .g-label { font-size: 12.5px; color: var(--muted); }
+  .g-arrows { display: flex; gap: 6px; }
+  .g-arrows button { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--line-2); background: var(--card); color: var(--ink); cursor: pointer; font-size: 15px; line-height: 1; }
+  .g-arrows button:hover { border-color: var(--accent); color: var(--accent); }
 
   /* Buttons */
   .btn { display: inline-flex; align-items: center; justify-content: center; gap: 7px; padding: 9px 14px; border-radius: 9px; border: 1px solid var(--line-2); background: var(--card); color: var(--ink); font-weight: 600; font-size: 13px; line-height: 1.2; text-decoration: none; white-space: nowrap; transition: background .2s, border-color .2s, color .2s; }
@@ -670,6 +686,22 @@
     event: 'auto', // 'auto' features the next event from the member's programs, or set an event's iop.harvard.edu URL slug
   };
 
+  // ====== Featured slides that aren't events ======
+  // Each one joins the gallery at position `at` (0 = first). Any program can have a slot like this.
+  const FEATURES = [
+    {
+      p: 'HPR', at: 1,
+      kicker: 'HPR · 2026 Midterm Initiative',
+      title: 'Battle for the Senate',
+      host: 'Harvard Political Review',
+      text: 'Coverage of the closest Senate races of the 2026 midterms, from the HPR’s Midterm Initiative.',
+      img: 'assets/hpr-battle-for-the-senate.webp',
+      alt: 'The Harvard Political Review presents Battle for the Senate: U.S. Midterms 2026, with Senate candidates from both parties around a map of the battleground states',
+      link: 'https://harvardpolitics.com',
+      act: 'Read on the HPR',
+    },
+  ];
+
   // ====== Programs ======
   const PROGRAMS = [
     ['Forum', 'John F. Kennedy Jr. Forum', 'events', 'Speakers, debates and discussions in the Forum, most weeknights.'],
@@ -743,14 +775,14 @@
     const forum = EVENTS.filter((e) => e.p === 'Forum').sort(byTime)[0];
     const sg = EVENTS.filter((e) => e.p === 'FSG' && e.day < DAYS.length).length;
     NEWS = [
-      forum && { id: 1, p: 'Forum', pin: true, when: 'Today', title: `Next in the Forum: ${forum.title}`, body: `${dayName(forum.day)} at ${fmt(forum.s)}. ${forum.host}. Doors open 30 minutes early; seating is first come, first served.`, link: URL_BASE + forum.url, act: 'Event details' },
+      forum && { id: 1, p: 'Forum', pin: true, when: 'Today', title: `Next in the Forum: ${forum.title}`, body: `${dayName(forum.day)} at ${fmt(forum.s)}. ${forum.host}. Tickets, if needed, and full details are on the event page.`, link: URL_BASE + forum.url, act: 'Event details' },
       { id: 2, p: null, pin: true, when: 'Today', title: 'Welcome to OneIOP', body: 'Every announcement, event and contact now lives here. Emails get shorter: one digest every Sunday, with the details one click away.' },
-      sg && { id: 3, p: 'FSG', when: 'Yesterday', title: 'Study groups this week: RSVP with your Harvard email', body: `${plural(sg, 'study group')} in the next eight days. They’re off the record and fill up fast.`, act: 'See study groups', go: 'FSG' },
+      sg && { id: 3, p: 'FSG', when: 'Yesterday', title: 'Study groups this week', body: `${plural(sg, 'study group')} in the next eight days, each led by a Resident Fellow. Times and RSVP details are on each event.`, act: 'See study groups', go: 'FSG' },
       { id: 9, p: 'CIVICS', aud: 'members', when: 'Yesterday', title: `Teachers’ social on ${dayInfo(2).d}`, body: 'Dinner in the IOP Conference Room for everyone teaching with CIVICS this fall, 6 PM. It’s on your Events calendar.', act: 'See it in Events', goto: 'events' },
       { id: 4, p: 'HPOP', when: 'Yesterday', title: 'Join the next Youth Poll team', body: 'No experience needed. Info session details coming soon.' },
-      { id: 5, p: 'HPR', when: '2 days ago', title: 'Pitch a piece for the next issue', body: 'Midterm takes welcome. Pitches go to the HPR editors through the request form.' },
-      { id: 6, p: 'HVC', when: '3 days ago', title: 'Thanks, turnout captains', body: 'Every house and dorm had a registration push this fall. Results recap coming after the election.' },
-      { id: 7, p: 'Service', when: '4 days ago', title: 'Saturday service day sign-ups', body: 'Twenty spots left for this weekend’s food bank shift.', act: 'Sign up' },
+      { id: 5, p: 'HPR', when: '2 days ago', title: 'Pitch a piece for the next issue', body: 'Takes on the midterm results welcome. Pitches go to the HPR editors through the request form.' },
+      { id: 6, p: 'HVC', when: '3 days ago', title: 'Thanks, turnout captains', body: 'Thank you to everyone who ran a registration push this fall. A recap of Harvard’s turnout is coming soon.' },
+      { id: 7, p: 'Service', when: '4 days ago', title: 'Saturday service day sign-ups', body: 'Sign-ups are open for this weekend’s service shift. Spots are limited.', act: 'Sign up' },
       { id: 8, p: 'CAP', from: 'Communications Director', when: '5 days ago', title: 'New: campaign graphics templates', body: 'Running for office on campus? Grab the templates from the Comms Playbook.', act: 'Get the templates' },
     ].filter(Boolean);
     NEWS.forEach((n) => { n.from = n.from || (n.p ? `${n.p} chair` : 'Communications Director'); });
@@ -833,6 +865,7 @@
   const allNews = () => NEWS;
   const newsFor = () => allNews().filter(canSee);
   const hiddenNews = () => allNews().filter((n) => !canSee(n));
+  const forYou = (n) => !!n.pin || following.has(n.p);
 
   // ====== Helpers ======
   const $ = (s, r = document) => r.querySelector(s);
@@ -920,16 +953,47 @@
 
   const nextMine = () => EVENTS.filter((x) => following.has(x.p)).sort(byTime)[0];
   const featured = () => (BANNER.event === 'auto' ? nextMine() || EVENTS.filter((x) => x.p === 'Forum').sort(byTime)[0] : EVENTS.find((x) => x.url === BANNER.event)) || EVENTS[0];
-  const banner = () => {
-    const mine = nextMine();
-    const e = featured();
-    const media = BANNER.video
-      ? `<video src="${esc(BANNER.video)}"${BANNER.poster ? ` poster="${esc(BANNER.poster)}"` : ''} autoplay muted loop playsinline></video><button type="button" class="banner-sound" data-sound aria-label="Turn sound on">${ICON.sound}</button>`
-      : BANNER.image || e.img ? `<img src="${esc(BANNER.image || imgSrc(e))}" alt="${esc(e.title)} event graphic">` : art(e);
-    return `
-      <section class="banner" aria-label="Featured event">
+  // The featured gallery: the next event from your programs first, then features and a few more events,
+  // one at a time. Each slide stays up for SLIDE_MS while its bar fills, then the gallery slides on.
+  // From the last slide it slides forward onto a copy of the first, so it never rewinds through the deck.
+  const SLIDE_MS = 10000;
+  const slides = () => {
+    const out = [];
+    const add = (e, kick) => { if (e && out.length < 3 && !out.some((x) => x.e === e)) out.push({ e, kick }); };
+    const mine = EVENTS.filter((x) => following.has(x.p)).sort(byTime);
+    add(featured(), BANNER.event !== 'auto' ? BANNER.kicker : nextMine() ? 'Next up in your programs' : BANNER.kicker);
+    add(EVENTS.filter((x) => x.p === 'Forum').sort(byTime)[0], 'Next in the Forum');
+    mine.forEach((e) => add(e, 'Coming up in your programs'));
+    [...EVENTS].sort(byTime).forEach((e) => add(e, 'Coming up at the IOP'));
+    FEATURES.filter(canSee).forEach((f) => out.splice(Math.min(f.at || 0, out.length), 0, { f }));
+    return out;
+  };
+  const slideTitle = (x) => (x.f ? x.f.title : x.e.title);
+  const slideHtml = (x, i, n, on, clone) => {
+    const hide = on ? '' : ' aria-hidden="true" inert';
+    const label = clone ? '' : ` role="group" aria-roledescription="slide" aria-label="${i + 1} of ${n}: ${esc(slideTitle(x))}"`;
+    if (x.f) {
+      const f = x.f;
+      return `
+      <section class="banner${clone ? ' g-clone' : ''}"${label}${hide}>
         <div class="banner-body">
-          <span class="banner-kick label"><i></i>${e.aud === 'members' ? 'Members only · ' : ''}${esc(mine && BANNER.event === 'auto' ? 'Next up in your programs' : BANNER.kicker)}</span>
+          <span class="banner-kick label"><i></i>${esc(f.kicker)}</span>
+          <h2>${esc(f.title)}</h2>
+          <p class="banner-host">${esc(f.host)}</p>
+          <p class="banner-text">${esc(f.text)}</p>
+          <div class="banner-actions">${f.link ? `<a class="btn light" href="${esc(f.link)}" target="_blank" rel="noopener">${esc(f.act || 'Learn more')} ${ICON.out}</a>` : ''}${f.p ? `<button type="button" class="btn glass" data-prog="${esc(f.p)}">${esc(f.p)} page</button>` : ''}</div>
+        </div>
+        <div class="banner-media"><img class="wide" src="${esc(f.img)}" alt="${esc(f.alt || f.title)}"${i ? ' loading="lazy"' : ''}></div>
+      </section>`;
+    }
+    const { e, kick } = x;
+    const media = i === 0 && BANNER.video && !clone
+      ? `<video src="${esc(BANNER.video)}"${BANNER.poster ? ` poster="${esc(BANNER.poster)}"` : ''} autoplay muted loop playsinline></video><button type="button" class="banner-sound" data-sound aria-label="Turn sound on">${ICON.sound}</button>`
+      : (i === 0 && BANNER.image) || e.img ? `<img src="${esc((i === 0 && BANNER.image) || imgSrc(e))}" alt="${esc(e.title)} event graphic"${i ? ' loading="lazy"' : ''}>` : art(e);
+    return `
+      <section class="banner${clone ? ' g-clone' : ''}"${label}${hide}>
+        <div class="banner-body">
+          <span class="banner-kick label"><i></i>${e.aud === 'members' ? 'Members only · ' : ''}${esc(kick)}</span>
           <h2>${esc(e.title)}</h2>
           <p class="banner-host">${esc(e.host)}</p>
           <div class="banner-meta"><span>${ICON.cal}${dayName(e.day)}</span><span>${ICON.clock}${range(e)}</span><span>${ICON.pin}${esc(where(e))}</span></div>
@@ -941,16 +1005,70 @@
         <div class="banner-media">${media}</div>
       </section>`;
   };
+  const banner = () => {
+    const list = slides();
+    if (!list.length) return '';
+    const n = list.length;
+    state.slide = Math.min(state.slide || 0, n - 1);
+    const cur = state.slide;
+    return `
+      <div class="gallery-wrap" data-n="${n}" aria-roledescription="carousel" aria-label="Featured">
+        <div class="gallery"><div class="g-track" style="transform: translateX(-${cur * 100}%)">${list.map((x, i) => slideHtml(x, i, n, i === cur)).join('')}${n > 1 ? slideHtml(list[0], 0, n, false, true) : ''}</div></div>
+        ${n > 1 ? `<div class="g-nav">
+          <div class="g-dots" role="group" aria-label="Choose a featured slide">${list.map((x, i) => `<button type="button" data-slide="${i}" aria-label="Show ${esc(slideTitle(x))}" aria-current="${i === cur}"><i></i></button>`).join('')}<span class="g-label">${cur + 1} of ${n}</span></div>
+          <div class="g-arrows"><button type="button" data-slide-step="-1" aria-label="Previous">←</button><button type="button" data-slide-step="1" aria-label="Next">→</button></div>
+        </div>` : ''}
+      </div>`;
+  };
+  const calmMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let wrapTimer = 0;
+  const jumpTo = (track, pos) => { track.style.transition = 'none'; track.style.transform = `translateX(-${pos * 100}%)`; void track.offsetWidth; track.style.transition = ''; };
+  const setSlide = (i) => {
+    const wrap = $('.gallery-wrap');
+    if (!wrap) return;
+    const n = +wrap.dataset.n;
+    if (n < 2) return;
+    const track = wrap.querySelector('.g-track');
+    // Finish any wrap-around still in flight before moving again
+    if (wrapTimer) { clearTimeout(wrapTimer); wrapTimer = 0; jumpTo(track, 0); }
+    let pos = i;
+    if (pos < 0) { jumpTo(track, n); pos = n - 1; }         // back from the first: start on the copy, slide back to the last
+    if (pos > n) pos = pos % n;
+    state.slide = pos % n;
+    if (pos === n && calmMotion) { pos = 0; }
+    track.style.transform = `translateX(-${pos * 100}%)`;
+    if (pos === n) wrapTimer = setTimeout(() => { wrapTimer = 0; jumpTo(track, 0); }, 750); // landed on the copy: swap to the real first slide
+    const real = [...track.children].filter((el) => !el.classList.contains('g-clone'));
+    real.forEach((el, k) => { const on = k === state.slide; el.toggleAttribute('inert', !on); on ? el.removeAttribute('aria-hidden') : el.setAttribute('aria-hidden', 'true'); });
+    wrap.querySelectorAll('[data-slide]').forEach((b, k) => b.setAttribute('aria-current', k === state.slide));
+    const lab = wrap.querySelector('.g-label'); if (lab) lab.textContent = `${state.slide + 1} of ${n}`;
+    slideClock = 0; fillBar();
+  };
+  // One clock drives both the bar and the move, so they always agree. It pauses while you point at or
+  // tab into the gallery, while a dialog is open, and while the tab is in the background.
+  let slideClock = 0;
+  const fillBar = () => {
+    const bar = $('.g-dots button[aria-current="true"] i');
+    if (bar) bar.style.transform = `scaleX(${calmMotion ? 1 : Math.min(slideClock / SLIDE_MS, 1)})`;
+    document.querySelectorAll('.g-dots button:not([aria-current="true"]) i').forEach((el) => { el.style.transform = ''; });
+  };
+  setInterval(() => {
+    const wrap = $('.gallery-wrap');
+    if (!wrap || calmMotion || +wrap.dataset.n < 2) return;
+    if (document.hidden || wrap.matches(':hover, :focus-within') || $('.veil')) return;
+    slideClock += 200;
+    if (slideClock >= SLIDE_MS) setSlide(state.slide + 1); else fillBar();
+  }, 200);
 
   // ====== Views ======
-  const state = { newsSel: null, evMode: store.get('evMode', null), view: 'home', day: TODAY, evFilter: 'all', newsFilter: 'following', progFilter: 'all', dept: 'all', dq: '', program: null, sent: null, confirmDel: null, gateErr: false, postErr: '' };
+  const state = { slide: 0, newsSel: null, evMode: store.get('evMode', null), view: 'home', day: TODAY, evFilter: 'all', newsFilter: 'following', progFilter: 'all', dept: 'all', dq: '', program: null, sent: null, confirmDel: null, gateErr: false, postErr: '' };
 
   const views = {
     home() {
       const top = featured();
       const dayAll = EVENTS.filter((e) => e.day === state.day);
       const dayEvents = dayAll.filter((e) => e !== top).sort((a, b) => following.has(b.p) - following.has(a.p) || byTime(a, b));
-      const mine = newsFor().filter((n) => n.pin || n.byMe || following.has(n.p)).slice(0, 4);
+      const mine = newsFor().filter(forYou).slice(0, 4);
       const yours = EVENTS.filter((e) => following.has(e.p) && e.day < 7).length;
       const h = new Date().getHours();
       const hi = h < 12 ? 'Good morning' : h < 18 ? 'Good afternoon' : 'Good evening';
@@ -990,7 +1108,6 @@
     },
     news() {
       const all = newsFor();
-      const forYou = (n) => n.pin || following.has(n.p);
       const list = all.filter((n) => state.newsFilter === 'all' || forYou(n));
       const wide = !matchMedia('(max-width: 820px)').matches;
       let sel = list.find((n) => String(n.id) === String(state.newsSel)) || null;
@@ -1271,11 +1388,14 @@
     const term = q.value.trim();
     refreshEvents();
     viewEl.innerHTML = `<div class="view">${term ? views.search(term) : views[state.view]()}</div>`;
+    updateCount();
     document.querySelectorAll('.views button').forEach((b) => { if (!term && b.dataset.view === state.view) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current'); });
     if (scroll) scrollTo({ top: 0, behavior: 'instant' });
   };
   const go = (view, extra = {}) => { q.value = ''; Object.assign(state, { view, program: null }, extra); render(true); };
-  const updateCount = () => { const n = newsFor().filter((x) => !read.has(x.id)).length; const c = $('#news-count'); c.textContent = n; c.hidden = !n; };
+  // The badge counts unread posts meant for you: pinned IOP-wide posts and posts from your programs.
+  // Members-only posts from programs you're not in are never counted (newsFor() leaves them out).
+  const updateCount = () => { const n = newsFor().filter((x) => forYou(x) && !read.has(x.id)).length; const c = $('#news-count'); c.textContent = n; c.hidden = !n; c.setAttribute('aria-label', `${n} unread`); };
   const saveProfile = () => { profile.programs = [...following]; store.set('profile', profile); };
 
   document.querySelectorAll('.views button').forEach((b) => b.addEventListener('click', () => go(b.dataset.view, b.dataset.view === 'request' ? { sent: null } : {})));
@@ -1311,6 +1431,8 @@
     else if (t.dataset.nf) { state.newsFilter = t.dataset.nf; state.newsSel = null; render(); }
     else if (t.dataset.pf) { state.progFilter = t.dataset.pf; render(); }
     else if (t.dataset.dept) { state.dept = t.dataset.dept; render(); }
+    else if (t.dataset.slide) setSlide(+t.dataset.slide);
+    else if (t.dataset.slideStep) setSlide(state.slide + +t.dataset.slideStep);
     else if (t.dataset.prog) go('programs', { program: t.dataset.prog });
     else if (t.hasAttribute('data-back')) { state.program = null; render(true); }
     else if (t.dataset.follow) {
