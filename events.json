@@ -1,46 +1,7 @@
 {
- "updated": "2026-11-04T12:47-05:00",
+ "updated": "2026-11-05T06:18-05:00",
  "source": "https://iop.harvard.edu/events",
  "events": [
-  {
-   "p": "FSG",
-   "date": "2026-11-04",
-   "s": "16:00",
-   "e": "17:15",
-   "where": "L-166",
-   "img": "assets/iop/rayes1.jpg",
-   "url": "study-group-ambassador-nathalie-rayes-behind-scenes-power-leadership-diplomacy-and-white",
-   "title": "Behind the Scenes of Power: Leadership, Diplomacy, and the White House",
-   "host": "Study group with Ambassador Nathalie Rayes",
-   "desc": "With Ambassador Capricia Marshall and Opal Vadhan, on leading at the highest levels of government.",
-   "id": 1
-  },
-  {
-   "p": "FSG",
-   "date": "2026-11-04",
-   "s": "16:30",
-   "e": "17:45",
-   "where": "B-400 (Land Hall)",
-   "img": "assets/iop/craft-ducey.jpg",
-   "url": "study-group-ambassador-kelly-craft-governor-doug-ducey-and-honorable-alejandro-mayorkas",
-   "title": "Politics in an Age of Discontent: Civil Discourse and the Future of Democracy",
-   "host": "Study group with Ambassador Kelly Craft, Gov. Doug Ducey and Sec. Alejandro Mayorkas",
-   "desc": "Can we still see each other as legitimate opponents? A conversation on civil discourse in a fragmented media world.",
-   "id": 2
-  },
-  {
-   "p": "Forum",
-   "date": "2026-11-04",
-   "s": "18:00",
-   "e": "19:15",
-   "where": "JFK Jr. Forum",
-   "img": "assets/iop/new-political-landscape-what-happened-last-night-and-what-co.webp",
-   "url": "new-political-landscape-what-happened-last-night-and-what-comes-next",
-   "title": "The New Political Landscape: What Happened Last Night and What Comes Next",
-   "host": "David Plouffe and Jonathan Martin",
-   "desc": "With Democrats winning big in traditionally red states like Texas, Kansas and South Carolina, what does the new Democratic majority mean for the country's political landscape going forward?",
-   "id": 3
-  },
   {
    "p": "FSG",
    "date": "2026-11-05",
@@ -52,7 +13,7 @@
    "title": "At the Front Lines of European Security: NATO, Ukraine, and the Future of the West",
    "host": "Study group with Ambassador Nathalie Rayes",
    "desc": "With Croatia’s Deputy Prime Minister and Minister of Defense, Ivan Anušić.",
-   "id": 4
+   "id": 1
   },
   {
    "p": "FSG",
@@ -65,7 +26,7 @@
    "title": "Finding Your Voice: How Leaders Communicate",
    "host": "Study group with Ambassador Chris Lu",
    "desc": "Former head speechwriter Sarah Hurwitz on how leaders use words to build trust and inspire action.",
-   "id": 5
+   "id": 2
   },
   {
    "p": "FSG",
@@ -78,7 +39,7 @@
    "title": "Policymaking and Governance in Homeland Security",
    "host": "Study group with Secretary Alejandro Mayorkas",
    "desc": "Case studies on the choices and tradeoffs behind homeland security policy.",
-   "id": 6
+   "id": 3
   },
   {
    "p": "IOP",
@@ -91,7 +52,7 @@
    "title": "From Afghanistan to America: War, Refuge, and the Power of Welcome",
    "host": "Rebecca Blumenstein and Diana Kapp, with Mursal Rahim",
    "desc": "The authors of The Last Free Women in conversation with journalist Ellen Nakashima.",
-   "id": 7
+   "id": 4
   },
   {
    "p": "FSG",
@@ -104,7 +65,7 @@
    "title": "The Power of Opportunity: Education, Philanthropy, and the American Dream",
    "host": "Study group with Ambassador Nathalie Rayes",
    "desc": "With Mike Bezos, co-founder and chair of the Bezos Family Foundation.",
-   "id": 8
+   "id": 5
   },
   {
    "p": "FSG",
@@ -117,7 +78,7 @@
    "title": "Diplomacy and Spycraft",
    "host": "Study group with Chris Whipple",
    "desc": "Former CIA Director William J. Burns on leading the world’s most powerful spy agency.",
-   "id": 9
+   "id": 6
   },
   {
    "p": "Forum",
@@ -130,7 +91,7 @@
    "title": "Beyond the Ballot: Latino Voters and the New Political Landscape",
    "host": "Sen. Rubén Gallego and panel, moderated by Ambassador Nathalie Rayes",
    "desc": "What the midterms revealed about Latino voters, and what to watch next.",
-   "id": 10
+   "id": 7
   },
   {
    "p": "IOP",
@@ -143,7 +104,7 @@
    "title": "From Advocacy to Public Service: Building Coalitions and Driving Change with Laphonza Butler and Ambassador Nathalie Rayes",
    "host": "Laphonza Butler and Ambassador Nathalie Rayes",
    "desc": "How do leaders build coalitions, expand political representation, and turn public service into meaningful change?",
-   "id": 11
+   "id": 8
   },
   {
    "p": "FSG",
@@ -156,7 +117,7 @@
    "title": "Diplomacy on the Front Lines: Leadership, Democracy, and the Future of the Transatlantic Alliance",
    "host": "Study group with Ambassador Nathalie Rayes",
    "desc": "What does it take to lead American diplomacy during a defining moment in European history?",
-   "id": 12
+   "id": 9
   },
   {
    "p": "FSG",
@@ -169,7 +130,7 @@
    "title": "Trump’s Foreign Policy: The Final Two Years",
    "host": "Study group with Ambassador Kelly Craft",
    "desc": "With former White House chief speechwriter Marc Thiessen.",
-   "id": 13
+   "id": 10
   },
   {
    "p": "FSG",
@@ -182,7 +143,7 @@
    "title": "Conclusion: All the President's Men and Women",
    "host": "Study group with Chris Whipple",
    "desc": "In the final Study Group Session, we’ll wrap up our themes. How important are the roles of the White House chiefs, CIA directors, and campaign managers? What makes them effective or not?",
-   "id": 14
+   "id": 11
   },
   {
    "p": "FSG",
@@ -195,7 +156,7 @@
    "title": "Leadership Under Pressure: Lessons from Los Angeles City Hall with Jim Hahn",
    "host": "Study group with Ambassador Nathalie Rayes",
    "desc": "What does it take to lead one of America’s most complex cities?",
-   "id": 15
+   "id": 12
   },
   {
    "p": "Forum",
@@ -208,7 +169,7 @@
    "title": "From Military Service to City Hall with Mayors Patrick Farrell, Beach Pace, & Sly James",
    "host": "Mayor Patrick Farrell, Mayor Beach Pace and Mayor Sly James",
    "desc": "This Forum event will be held in honor of former Director of the Institute of Politics, Setti D. Warren.",
-   "id": 16
+   "id": 13
   },
   {
    "p": "IOP",
@@ -221,7 +182,7 @@
    "title": "Our Narratives | Fall 2026 Showcase",
    "host": "Institute of Politics",
    "desc": "Join us on November 13 at 4:00pm for the Our Narratives Fall 2026 Showcase!",
-   "id": 17
+   "id": 14
   },
   {
    "p": "Forum",
@@ -234,7 +195,7 @@
    "title": "Making the Vision: Venture Capital, Creativity, and the Power of Story with David Fialkow, Oscar-Winning Filmmaker",
    "host": "David Fialkow, Reza R. Satchu and Amogh Ganjikunta",
    "desc": "David Fialkow joins us for a conversation that will explore the intersection of entrepreneurship, investing, and storytelling, drawing on his experience as a successful venture capitalist…",
-   "id": 18
+   "id": 15
   },
   {
    "p": "IOP",
@@ -247,7 +208,7 @@
    "title": "Inside the Alliance: A Conversation with Ambassadors from America's NATO Allies",
    "host": "Ángeles Moreno Bau, Jens Hanefeld and Svanhildur Hólm Valsdóttir",
    "desc": "Join IOP Fellows Ambassador Kelly Craft (former U.S. Ambassador to the United Nations and U.S. Ambassador to Canada) and Ambassador Nathalie Rayes (former U.S. Ambassador to Croatia) for a…",
-   "id": 19
+   "id": 16
   }
  ]
 }
