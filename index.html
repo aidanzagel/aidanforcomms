@@ -54,7 +54,7 @@
   /* Three voices: condensed poster caps, editorial serif, ballot-form mono */
   .disp { font-family: var(--display); font-weight: 900; text-transform: uppercase; line-height: .86; letter-spacing: .005em; }
   .label { font-family: var(--mono); font-size: 12px; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; }
-  .kicker { display: flex; align-items: center; gap: 12px; }
+  .kicker { display: flex; align-items: center; gap: 12px; font-family: var(--serif); font-style: italic; font-size: clamp(19px, 1.6vw, 23px); line-height: 1.2; letter-spacing: 0; }
   .kicker::before { content: ""; width: 30px; height: 2px; background: var(--red); flex: none; }
 
   /* ====== Announcement bar ====== */
@@ -190,7 +190,15 @@
     cursor: pointer; transition: rotate .4s cubic-bezier(.3, 1.6, .5, 1);
     user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: transparent;
   }
-  .ballot:hover { rotate: 1deg; }
+  .ballot:hover { rotate: 1deg; animation: ballot-shake .5s ease-in-out; }
+  @keyframes ballot-shake {
+    0%, 100% { rotate: 1deg; }
+    15% { rotate: -4deg; }
+    30% { rotate: 4deg; }
+    45% { rotate: -3deg; }
+    60% { rotate: 2.5deg; }
+    75% { rotate: -1deg; }
+  }
   .ballot .b-hint { display: block; margin-top: 8px; font-size: 9.5px; color: var(--red); }
   .ballot .b-top { display: flex; justify-content: space-between; border-bottom: 1.5px solid var(--ink); padding-bottom: 7px; font-size: 10.5px; }
   .ballot .b-office { font-family: var(--display); font-weight: 900; text-transform: uppercase; font-size: 23px; line-height: 1; margin: 10px 0 2px; color: var(--navy); }
@@ -270,10 +278,9 @@
   /* ====== Section scaffolding ====== */
   .sec { padding-block: clamp(80px, 10vw, 140px); }
   .sec-head {
-    display: grid; grid-template-columns: 140px minmax(0, 1fr) minmax(0, 340px); align-items: end; gap: 24px;
+    display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 340px); align-items: end; gap: 24px;
     border-top: 2px solid currentColor; padding-top: 18px; margin-bottom: clamp(40px, 5vw, 72px);
   }
-  .sec-head .label { align-self: start; padding-top: 4px; }
   .sec-head h2 { font-size: clamp(60px, 8.4vw, 132px); }
   .sec-head p { font-family: var(--serif); font-size: 22px; line-height: 1.2; color: var(--muted); }
 
@@ -609,10 +616,6 @@
   .pd-build { display: grid; counter-reset: b; }
   .pd-build li { counter-increment: b; display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 8px; padding: 13px 0; border-top: 1px solid var(--line); font-size: 16.5px; line-height: 1.4; }
   .pd-build li::before { content: "0" counter(b); font-family: var(--display); font-weight: 900; font-size: 22px; line-height: 1; color: var(--navy); }
-  .pd-rhythm { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
-  .pd-rhythm div { display: grid; align-content: start; gap: 6px; padding: 14px; background: var(--paper-2); border-top: 4px solid var(--navy); font-size: 14.5px; line-height: 1.35; }
-  .pd-rhythm div:nth-child(2) { border-top-color: var(--red); }
-  .pd-rhythm b { font-family: var(--display); font-weight: 900; font-size: 22px; text-transform: uppercase; color: var(--navy); line-height: 1; }
   .pd-measure { display: grid; gap: 8px; }
   .pd-measure li { position: relative; padding-left: 30px; font-size: 16px; line-height: 1.4; }
   .pd-measure li::before {
@@ -629,7 +632,6 @@
   .pd-nav button:hover { border-color: var(--navy); }
   @media (max-width: 560px) {
     .pd-head, .pd-body { padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-right: max(20px, env(safe-area-inset-right, 0px)); }
-    .pd-rhythm { grid-template-columns: minmax(0, 1fr); }
   }
 
   /* ====== Share card ====== */
@@ -671,7 +673,7 @@
   /* ====== 08 Close ====== */
   .close { background: var(--red); color: var(--paper); overflow: hidden; }
   .close .wrap { position: relative; }
-  .close .sec-head { grid-template-columns: 140px minmax(0, 1fr); margin-bottom: 28px; }
+  .close .sec-head { grid-template-columns: minmax(0, 1fr); margin-bottom: 28px; }
   .close-hl { font-size: clamp(120px, 21vw, 330px); line-height: .8; }
   .close-hl em { display: block; font-family: var(--serif); font-weight: 400; font-style: italic; text-transform: none; font-size: .36em; line-height: 1; margin-bottom: .05em; }
   .close-sig { width: min(380px, 60%); margin: -2% 0 0 auto; rotate: -6deg; }
@@ -695,8 +697,7 @@
   /* ====== Responsive ====== */
   @media (max-width: 1100px) {
     .hero-side { display: none; }
-    .sec-head { grid-template-columns: 110px minmax(0, 1fr); }
-    .sec-head p { grid-column: 2; }
+    .sec-head { grid-template-columns: minmax(0, 1fr); gap: 14px; }
     .pillar { grid-template-columns: 110px minmax(0, 1fr); }
     .pillar ul { grid-column: 2; }
     .work-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
@@ -851,7 +852,7 @@
 <section class="hero panel" id="top">
   <div class="wrap hero-grid">
     <div class="hero-copy">
-      <p class="label kicker">Candidate · IOP Communications Director</p>
+      <p class="kicker">Candidate for IOP Communications Director</p>
       <h1 class="hl disp" aria-label="Let's shine, IOP.">
         <span class="line l1"><span><em>Let's</em></span></span>
         <span class="line l2"><span>Shine,</span></span>
@@ -902,7 +903,6 @@
 <section class="sec video-sec" id="video">
   <div class="wrap">
     <header class="sec-head">
-      <span class="label">§ 00</span>
       <h2 class="disp">Watch the Pitch</h2>
       <p>The whole campaign in about a minute.</p>
     </header>
@@ -924,7 +924,6 @@
 <section class="sec" id="meet">
   <div class="wrap">
     <header class="sec-head">
-      <span class="label">§ 01</span>
       <h2 class="disp">Meet Aidan</h2>
     </header>
     <div class="meet-grid">
@@ -968,7 +967,6 @@
 <section class="sec" id="platform">
   <div class="wrap">
     <header class="sec-head">
-      <span class="label">§ 02</span>
       <h2 class="disp">The Platform</h2>
       <p>My platform is all about small common-sense changes that make your life easier.</p>
     </header>
@@ -1028,7 +1026,6 @@
 <section class="sec" id="programs" style="padding-top:0">
   <div class="wrap">
     <header class="sec-head">
-      <span class="label">§ 03</span>
       <h2 class="disp">Every Program</h2>
       <p>Programs First means all of them, coalitions included. Click any one to see the full plan.</p>
     </header>
@@ -1041,27 +1038,27 @@
       <button type="button" data-f="coalition" aria-pressed="false">Coalitions</button>
     </div>
     <div class="prog-grid">
-      <article class="prog tilt" data-cat="events" data-id="Conferences" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Events</span><span class="abbr long">Conferences</span><h3>Conferences Committee</h3><p><b>What comms does</b>One look for every conference, from save-the-date to recap</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
-      <article class="prog tilt" data-cat="events" data-id="HPU" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Events</span><span class="abbr">HPU</span><h3>Harvard Political Union</h3><p><b>What comms does</b>Debate promo and photos from every debate</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
-      <article class="prog tilt" data-cat="events" data-id="WIL" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Events</span><span class="abbr">WIL</span><h3>Women's Initiative in Leadership</h3><p><b>What comms does</b>Speaker promo and photos from every event</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
-      <article class="prog tilt" data-cat="events" data-id="PRE" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Events</span><span class="abbr">PRE</span><h3>Politics of Race and Ethnicity</h3><p><b>What comms does</b>Event promo plus spotlights on the members leading the conversation</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
-      <article class="prog tilt" data-cat="events" data-id="GAP" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Events</span><span class="abbr">GAP</span><h3>Global Affairs Program</h3><p><b>What comms does</b>Event promo and spotlights on members' global work</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
-      <article class="prog tilt" data-cat="events" data-id="Environment" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Events</span><span class="abbr long">Environment</span><h3>Program for Environmental Politics</h3><p><b>What comms does</b>Speaker promo and a consistent look for every discussion</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
-      <article class="prog tilt" data-cat="research" data-id="Policy" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Research</span><span class="abbr">Policy</span><h3>Policy Program</h3><p><b>What comms does</b>Spotlights that put members' policy proposals in front of the whole IOP</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
-      <article class="prog tilt" data-cat="research" data-id="HPOP" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Research</span><span class="abbr">HPOP</span><h3>Harvard Public Opinion Project</h3><p><b>What comms does</b>Graphics that make Harvard Youth Poll results easy to share</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
-      <article class="prog tilt" data-cat="research" data-id="RSG" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Research</span><span class="abbr">RSG</span><h3>Research & Strategy Group</h3><p><b>What comms does</b>Recruiting graphics and spotlights on the teams' work</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
-      <article class="prog tilt" data-cat="events" data-id="Forum" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Events</span><span class="abbr">Forum</span><h3>John F. Kennedy Jr. Forum</h3><p><b>What comms does</b>Forum promo that fills the room, and event photos back within 24 hours</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
-      <article class="prog tilt" data-cat="events" data-id="FSG" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Events</span><span class="abbr">FSG</span><h3>Fellows and Study Groups</h3><p><b>What comms does</b>Weekly study group graphics from ready-made templates, done fast</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
-      <article class="prog tilt" data-cat="research" data-id="GovLab" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Research</span><span class="abbr">GovLab</span><h3>Governance Lab</h3><p><b>What comms does</b>Spotlights on the student founders and the startups they launch</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
-      <article class="prog tilt" data-cat="service" data-id="CIVICS" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Service</span><span class="abbr">CIVICS</span><h3>CIVICS</h3><p><b>What comms does</b>Recruiting posts for new teachers and spotlights on the people in the classroom</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
-      <article class="prog tilt" data-cat="service" data-id="Cit Tut" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Service</span><span class="abbr">Cit Tut</span><h3>Citizenship Tutoring</h3><p><b>What comms does</b>Recruiting posts for new tutors and stories from the program</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
-      <article class="prog tilt" data-cat="service" data-id="HVC" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Service</span><span class="abbr">HVC</span><h3>Harvard Votes Challenge</h3><p><b>What comms does</b>Turnout campaigns that reach every IOP member at once</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
-      <article class="prog tilt" data-cat="media" data-id="HPR" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Media</span><span class="abbr">HPR</span><h3>Harvard Political Review</h3><p><b>What comms does</b>New issues cross-promoted across every IOP channel</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
-      <article class="prog tilt" data-cat="media" data-id="CAP" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Media</span><span class="abbr">CAP</span><h3>Campaigns and Advocacy Program</h3><p><b>What comms does</b>Workshop promo plus templates for campaign-style graphics</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
-      <article class="prog coal tilt" data-cat="coalition" data-id="Arts" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Coalition</span><span class="abbr">Arts</span><h3>Coalition for the Arts</h3><p><b>What comms does</b>Event promo with a look as creative as the artists you bring in</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
-      <article class="prog coal tilt" data-cat="coalition" data-id="Conservative" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Coalition</span><span class="abbr long">Conservative</span><h3>Conservative Coalition</h3><p><b>What comms does</b>Event promo and an equal place in IOP comms</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
-      <article class="prog coal tilt" data-cat="coalition" data-id="GSC" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Coalition</span><span class="abbr">GSC</span><h3>Gender & Sexuality Coalition</h3><p><b>What comms does</b>Event promo and spotlights on the conversations you lead</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
-      <article class="prog coal tilt" data-cat="coalition" data-id="Service" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Coalition</span><span class="abbr">Service</span><h3>Service Coalition</h3><p><b>What comms does</b>Event promo and spotlights on members' service</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
+      <article class="prog tilt" data-cat="events" data-id="Conferences" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Events</span><span class="abbr long">Conferences</span><h3>Conferences Committee</h3><p><b>What comms does</b>Design and promo help for each conference, on the committee's timeline</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
+      <article class="prog tilt" data-cat="events" data-id="HPU" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Events</span><span class="abbr">HPU</span><h3>Harvard Political Union</h3><p><b>What comms does</b>Debate announcement templates, and photos when we can cover a debate</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
+      <article class="prog tilt" data-cat="events" data-id="WIL" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Events</span><span class="abbr">WIL</span><h3>Women's Initiative in Leadership</h3><p><b>What comms does</b>Speaker promo, photos and member spotlights</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
+      <article class="prog tilt" data-cat="events" data-id="PRE" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Events</span><span class="abbr">PRE</span><h3>Politics of Race and Ethnicity</h3><p><b>What comms does</b>Event promo in PRE's own voice, plus member spotlights</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
+      <article class="prog tilt" data-cat="events" data-id="GAP" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Events</span><span class="abbr">GAP</span><h3>Global Affairs Program</h3><p><b>What comms does</b>Event promo, plus opt-in spotlights on members' work abroad</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
+      <article class="prog tilt" data-cat="events" data-id="Environment" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Events</span><span class="abbr long">Environment</span><h3>Program for Environmental Politics</h3><p><b>What comms does</b>A reusable series template and speaker promo</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
+      <article class="prog tilt" data-cat="research" data-id="Policy" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Research</span><span class="abbr">Policy</span><h3>Policy Program</h3><p><b>What comms does</b>Templates for sharing finished proposals, with the authors' approval</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
+      <article class="prog tilt" data-cat="research" data-id="HPOP" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Research</span><span class="abbr">HPOP</span><h3>Harvard Public Opinion Project</h3><p><b>What comms does</b>Chart templates and release-day help, following HPOP's plan</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
+      <article class="prog tilt" data-cat="research" data-id="RSG" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Research</span><span class="abbr">RSG</span><h3>Research & Strategy Group</h3><p><b>What comms does</b>Recruiting graphics, plus spotlights where teams can share their work</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
+      <article class="prog tilt" data-cat="events" data-id="Forum" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Events</span><span class="abbr">Forum</span><h3>John F. Kennedy Jr. Forum</h3><p><b>What comms does</b>Promo support alongside the Forum's own team, plus event photos</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
+      <article class="prog tilt" data-cat="events" data-id="FSG" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Events</span><span class="abbr">FSG</span><h3>Fellows and Study Groups</h3><p><b>What comms does</b>Ready-made study group templates and Fellows intros</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
+      <article class="prog tilt" data-cat="research" data-id="GovLab" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Research</span><span class="abbr">GovLab</span><h3>Governance Lab</h3><p><b>What comms does</b>Opt-in founder spotlights and demo day promo</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
+      <article class="prog tilt" data-cat="service" data-id="CIVICS" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Service</span><span class="abbr">CIVICS</span><h3>CIVICS</h3><p><b>What comms does</b>Teacher recruiting graphics and opt-in volunteer spotlights</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
+      <article class="prog tilt" data-cat="service" data-id="Cit Tut" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Service</span><span class="abbr">Cit Tut</span><h3>Citizenship Tutoring</h3><p><b>What comms does</b>Tutor recruiting graphics, with learners' privacy first</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
+      <article class="prog tilt" data-cat="service" data-id="HVC" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Service</span><span class="abbr">HVC</span><h3>Harvard Votes Challenge</h3><p><b>What comms does</b>IOP channels behind HVC's registration and turnout pushes</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
+      <article class="prog tilt" data-cat="media" data-id="HPR" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Media</span><span class="abbr">HPR</span><h3>Harvard Political Review</h3><p><b>What comms does</b>New issues shared on IOP channels, the same as any program</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
+      <article class="prog tilt" data-cat="media" data-id="CAP" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Media</span><span class="abbr">CAP</span><h3>Campaigns and Advocacy Program</h3><p><b>What comms does</b>Workshop promo, plus campaign-style graphic templates</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
+      <article class="prog coal tilt" data-cat="coalition" data-id="Arts" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Coalition</span><span class="abbr">Arts</span><h3>Coalition for the Arts</h3><p><b>What comms does</b>Event promo designed with the coalition, and opt-in artist spotlights</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
+      <article class="prog coal tilt" data-cat="coalition" data-id="Conservative" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Coalition</span><span class="abbr long">Conservative</span><h3>Conservative Coalition</h3><p><b>What comms does</b>The same promo, photos and turnaround as every program</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
+      <article class="prog coal tilt" data-cat="coalition" data-id="GSC" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Coalition</span><span class="abbr">GSC</span><h3>Gender & Sexuality Coalition</h3><p><b>What comms does</b>Event promo, with spotlights and photos only by consent</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
+      <article class="prog coal tilt" data-cat="coalition" data-id="Service" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Coalition</span><span class="abbr">Service</span><h3>Service Coalition</h3><p><b>What comms does</b>Promo for service projects and opt-in volunteer spotlights</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
     </div>
     <div class="prog-more"><button type="button" id="prog-more" aria-expanded="false">Show all <span>21</span> ↓</button></div>
     <p class="prog-source label">Program and coalition list from iop.harvard.edu</p>
@@ -1071,7 +1068,6 @@
 <section class="sec ba panel" id="difference">
   <div class="wrap">
     <header class="sec-head">
-      <span class="label">§ 04</span>
       <h2 class="disp">Before / After</h2>
       <p>Six things that change with Aidan as Comms Director.</p>
     </header>
@@ -1126,7 +1122,6 @@
 <section class="sec" id="plan">
   <div class="wrap">
     <header class="sec-head">
-      <span class="label">§ 05</span>
       <h2 class="disp">First 90 Days</h2>
       <p>From audit to launch, month by month. Scroll to run the clock.</p>
     </header>
@@ -1195,7 +1190,6 @@
 <section class="sec" id="membership">
   <div class="wrap">
     <header class="sec-head">
-      <span class="label">§ 06</span>
       <h2 class="disp">Membership</h2>
       <p>Bring more people in, and give them reasons to stay.</p>
     </header>
@@ -1225,7 +1219,6 @@
 <section class="sec done-sec" id="done">
   <div class="wrap">
     <header class="sec-head">
-      <span class="label">§ 07</span>
       <h2 class="disp">Already Done</h2>
       <p>What I've built so far, and where it's headed.</p>
     </header>
@@ -1267,7 +1260,6 @@
 <section class="sec work" id="work">
   <div class="wrap">
     <header class="sec-head">
-      <span class="label">§ 08</span>
       <h2 class="disp">The Work</h2>
       <p>Design and photography already out in the world.</p>
     </header>
@@ -1307,10 +1299,9 @@
       <p class="pd-vision" id="pd-vision"></p>
     </header>
     <div class="pd-body">
-      <section><h4>What I'll build for you</h4><ol class="pd-build" id="pd-build"></ol></section>
-      <section><h4>The rhythm of every event</h4><div class="pd-rhythm" id="pd-rhythm"></div></section>
-      <section><h4>How we'll know it worked</h4><ul class="pd-measure" id="pd-measure"></ul></section>
-      <p class="pd-base"><strong>Plus what every program gets:</strong> Comms Playbook templates, comms training, one request form on OneIOP, and event photos back within 24 hours.</p>
+      <section><h4>What comms can offer</h4><ol class="pd-build" id="pd-build"></ol></section>
+      <section><h4>What I'll hold myself to</h4><ul class="pd-measure" id="pd-measure"></ul></section>
+      <p class="pd-base"><strong>Plus what every program gets:</strong> Comms Playbook templates, comms training, one request form on OneIOP, and event photos back within 24 hours. This is a starting point, not a mandate: your chairs decide what to use, and your program's content and voice stay yours.</p>
       <div class="pd-foot">
         <a class="pd-cta" id="pd-cta" href="#contact">Talk to me about this →</a>
         <div class="pd-nav"><button type="button" id="pd-prev">← Prev</button><button type="button" id="pd-next">Next →</button></div>
@@ -1329,7 +1320,6 @@
 <section class="sec" id="faq">
   <div class="wrap">
     <header class="sec-head">
-      <span class="label">§ 09</span>
       <h2 class="disp">Questions</h2>
       <p>The short answers. Ask me for the long ones.</p>
     </header>
@@ -1381,7 +1371,6 @@
 <section class="sec close panel" id="contact">
   <div class="wrap">
     <header class="sec-head">
-      <span class="label">§ 10</span>
       <span class="label">Let's talk</span>
     </header>
     <h2 class="close-hl disp reveal"><em>Let's</em>Shine.</h2>
@@ -1866,7 +1855,7 @@
   viewer.addEventListener('click', (e) => { if (e.target === viewer) closeLayer(viewer); });
 
   // Program plans: click a card for the full vision for that program
-  const PLANS = {"Forum": {"v": "A packed Forum every night, and a recap people actually see.", "b": ["A speaker promo kit live a week out: poster, feed post and a story countdown", "A standing photographer schedule, with photos back within 24 hours", "A 30-second clip of the best moment for Reels and TikTok", "The full Forum calendar on OneIOP, so members can plan their week around it"], "r": ["Announcement plus countdown stories", "Live stories and line updates", "Photo album and highlight clip within 24 hours"], "m": ["Every Forum promoted at least a week out", "Photos delivered within 24 hours, every time", "More story views and fuller rooms"]}, "FSG": {"v": "Every study group looks as good as the Fellow leading it.", "b": ["Study group templates: fill in the Fellow, topic and time, and it's done", "A Fellows intro series so the whole IOP meets this semester's Fellows in week one", "Every study group's weekly schedule in one place on OneIOP", "Photos and quote cards from the biggest sessions"], "r": ["Fellow intro posts at the start of the semester", "Same-day graphic from the template", "Quote cards from the best sessions"], "m": ["Graphics ready within one day of a request", "Every Fellow introduced in the first two weeks", "Higher study group attendance"]}, "Conferences": {"v": "One look for every conference, from save-the-date to the final recap.", "b": ["A full visual kit for each conference: logo lockup, slides, name badges and signage", "A promo calendar counting back from the date, with speaker reveals", "A photo and video team on site all day", "A recap post and short video, plus thank-you graphics for speakers"], "r": ["Save-the-date, speaker reveals and registration pushes", "Live coverage across stories", "Recap within 24 hours"], "m": ["Visual kit delivered six weeks out", "Registration goals met", "Recap live within 24 hours"]}, "HPU": {"v": "Debates people want to watch, even the ones they missed.", "b": ["A weekly graphic announcing each debate's resolution", "Photos from every debate", "Quote cards of the sharpest arguments, with the speakers' OK", "The semester's debate schedule on OneIOP"], "r": ["Resolution reveal", "Story coverage from the room", "Photos and quote cards"], "m": ["Every debate announced with its resolution", "Photos within 24 hours", "Growing turnout across the semester"]}, "WIL": {"v": "Every speaker, and every member leader, gets the spotlight.", "b": ["A speaker promo kit for every event", "A spotlight series on women leading programs across the IOP", "Photos from every event, back within 24 hours", "WIL events featured in the weekly roundup"], "r": ["Speaker announcement", "Event coverage", "Photos and a member spotlight"], "m": ["Every event promoted at least a week out", "A member spotlight every month", "More first-time attendees"]}, "PRE": {"v": "The conversations PRE leads, seen across the whole IOP.", "b": ["Event promo built from PRE's own look, not a generic template", "Spotlights on the members leading these conversations", "Photos and takeaways from every event", "Co-promotion with other programs on related events"], "r": ["Event promo and co-promotion", "Coverage from the room", "Takeaways post and photos"], "m": ["Every event in the weekly roundup", "At least one co-promoted event a semester", "Wider attendance beyond regulars"]}, "GAP": {"v": "The IOP's window on the world.", "b": ["Event promo for every speaker and discussion", "Spotlights on members' internships and research abroad", "A summer recap series on where members went and what they did", "Photos and takeaways from every event"], "r": ["Speaker promo", "Event coverage", "Recap plus member spotlights"], "m": ["Every event promoted at least a week out", "A spotlight series each semester", "More members applying to GAP opportunities"]}, "Environment": {"v": "Every environmental discussion, instantly recognizable.", "b": ["A discussion series template with one consistent look", "Speaker promo for every event", "Recap posts with the key takeaways", "Cross-promotion with Policy and HPOP on climate topics"], "r": ["Series promo", "Coverage from the discussion", "Takeaways post"], "m": ["Series graphics ready a week out", "A recap after every discussion", "Higher turnout across the series"]}, "Policy": {"v": "Members' policy ideas, in front of the whole IOP and beyond.", "b": ["Proposal spotlights that turn a policy paper into a three-slide carousel", "Author spotlights on the members behind the work", "Promo for policy competitions and presentations", "A searchable archive of proposals on OneIOP"], "r": ["Competition and presentation promo", "Presentation coverage", "Proposal spotlights"], "m": ["Every finished proposal spotlighted", "Archive live on OneIOP", "More members joining policy teams"]}, "HPOP": {"v": "Youth Poll results everyone wants to share.", "b": ["Chart templates in the IOP look, ready for every poll", "A release-day package: carousel, stories and stat cards", "A one-page graphic summary that's easy to pass along", "Recruiting graphics for new HPOP members"], "r": ["Teaser posts before release", "Release-day package across every channel", "Follow-up deep dives on key findings"], "m": ["Release package ready before results go public", "More shares and reach on poll posts", "A stronger HPOP recruiting class"]}, "RSG": {"v": "Recruiting that brings in the right people, and spotlights on the work they do.", "b": ["A recruiting campaign at the start of each semester", "Team and project spotlights", "Coverage of final presentations", "A how-to-join page on OneIOP"], "r": ["Recruiting push", "Presentation coverage", "Project spotlights"], "m": ["Recruiting campaign live in week one", "Every team spotlighted once a semester", "More strong applicants"]}, "GovLab": {"v": "Student founders and their startups, front and center.", "b": ["Founder spotlights on the people building something new", "Demo day promo and full coverage", "An application recruiting campaign", "A GovLab page on OneIOP with past and current ventures"], "r": ["Applications and demo day promo", "Demo day coverage", "Founder spotlights"], "m": ["Every founding team spotlighted", "Demo day recap within 24 hours", "More applications"]}, "CIVICS": {"v": "More teachers in the classroom, and the stories of what they do there.", "b": ["A recruiting campaign for new teachers at the start of each semester", "Volunteer spotlights on the people in the classroom", "Photos from classroom visits, where schools allow it", "An end-of-semester impact recap"], "r": ["Recruiting push", "Classroom coverage (with permission)", "Impact recap"], "m": ["Recruiting goals met", "A volunteer spotlight every month", "An impact recap every semester"]}, "Cit Tut": {"v": "More tutors, and the stories that show why it matters.", "b": ["A recruiting campaign for new tutors", "Stories from tutors, and from learners who want to share theirs", "Celebration posts for citizenship milestones, with consent", "The tutoring schedule on OneIOP"], "r": ["Recruiting push", "Session stories", "Milestone celebrations"], "m": ["Recruiting goals met", "A story every month", "Every milestone celebrated, with consent"]}, "HVC": {"v": "Turnout campaigns that reach every IOP member at once.", "b": ["Registration and turnout pushes coordinated across every IOP channel", "Deadline countdown graphics", "Share-ready templates for houses, dorms and student groups", "A results recap after every election"], "r": ["Registration and deadline countdowns", "Election day push", "Results recap"], "m": ["Every deadline promoted across all channels", "Templates used beyond the IOP", "Higher student registration and turnout"]}, "HPR": {"v": "Every new issue, seen by every member.", "b": ["An issue launch package across every IOP channel", "Author spotlights on HPR writers", "Pull-quote cards for the strongest pieces", "HPR featured in the weekly roundup"], "r": ["Issue teaser", "Launch day package", "Pull quotes and author spotlights"], "m": ["Every issue promoted on launch day", "More readers from IOP channels", "More members pitching pieces"]}, "CAP": {"v": "Campaign-quality graphics, taught and shared.", "b": ["Workshop promo for every session", "Campaign-style graphic templates for students running for office", "A comms training session co-run with CAP", "Photos and takeaways from workshops"], "r": ["Workshop promo", "Workshop coverage", "Takeaways and templates shared"], "m": ["Every workshop promoted a week out", "Templates used by student campaigns", "Higher workshop turnout"]}, "Arts": {"v": "A look as creative as the artists you bring in.", "b": ["Custom promo design for every event, not a template", "Artist spotlights", "Photo and video coverage built for the art itself", "Content on where art and politics meet"], "r": ["Artist reveal", "Event coverage", "Photos and video recap"], "m": ["Every event with its own design", "A recap after every event", "New faces at arts events"]}, "Conservative": {"v": "An equal place in IOP comms.", "b": ["Event promo with the same quality and turnaround as every program", "Speaker spotlights", "Photos from every event", "Events in the weekly roundup and on the OneIOP calendar"], "r": ["Speaker promo", "Event coverage", "Photos and recap"], "m": ["Same templates, timelines and reach as everyone", "Every event promoted a week out", "Photos within 24 hours"]}, "GSC": {"v": "The conversations you lead, seen and supported.", "b": ["Event promo for every discussion", "Spotlights on the conversations and people leading them", "Photos from every event, with consent", "A calendar of key dates, planned with the coalition's lead"], "r": ["Event promo", "Event coverage (with consent)", "Spotlight and recap"], "m": ["Every event promoted a week out", "Key dates planned a semester ahead", "Wider attendance"]}, "Service": {"v": "Members' service, made visible.", "b": ["Event promo for every service project", "Spotlights on members' service", "A volunteer opportunities board on OneIOP", "An impact recap every semester"], "r": ["Volunteer call", "Service day coverage", "Impact recap"], "m": ["Every project promoted a week out", "Opportunities board live on OneIOP", "More members volunteering"]}};
+  const PLANS = {"Forum": {"v": "Help getting the word out on Forum events, alongside the Forum's own team.", "b": ["Promo graphics for Forum events, made with the Forum team's input", "Every Forum event on the OneIOP calendar", "Event photos", "Forum highlights in the weekly roundup"], "m": ["Graphics delivered by the date we agree on", "Events on the OneIOP calendar and in the weekly roundup", "Photos back within 24 hours"]}, "FSG": {"v": "Study group graphics that are quick to make and look consistent.", "b": ["A study group template the program fills in with the Fellow, topic and time", "A Fellows intro post at the start of each semester", "Study group schedules on the OneIOP calendar", "Photos from select sessions, when the Fellow and guests are comfortable"], "m": ["Template ready before the semester starts", "Requests turned around within a few days", "Schedules kept current on OneIOP"]}, "Conferences": {"v": "Design and promo help for each conference, on the committee's timeline.", "b": ["A visual kit for each conference: logo lockup, slides and signage", "Help planning a promo schedule that counts back from the date", "Photo coverage on the day", "A recap post afterward"], "m": ["Kit delivered by the date agreed with the committee", "Promo posts go out on the agreed schedule", "Recap posted within a few days"]}, "HPU": {"v": "Help getting more people to the debates.", "b": ["A template for announcing each week's resolution", "Every debate on the OneIOP calendar", "Photos from debates", "Quote cards, only with the speakers' permission"], "m": ["Graphics delivered by the date we agree on", "Events on the OneIOP calendar and in the weekly roundup", "Photos back within 24 hours"]}, "WIL": {"v": "Promo support for WIL's speakers and events.", "b": ["Speaker promo graphics for the events WIL wants promoted", "Event photos", "WIL events in the weekly roundup", "Member spotlights"], "m": ["Graphics delivered by the date we agree on", "Events on the OneIOP calendar and in the weekly roundup", "Photos back within 24 hours"]}, "PRE": {"v": "Support for PRE's events, in PRE's own voice.", "b": ["Event promo that builds on PRE's existing look", "Member spotlights, for members who opt in", "Event photos, when attendees are comfortable", "Help setting up joint events with other programs, when PRE asks"], "m": ["Graphics delivered by the date we agree on", "Events on the OneIOP calendar and in the weekly roundup", "Photos back within 24 hours"]}, "GAP": {"v": "Help sharing GAP's events and members' work abroad.", "b": ["Speaker and event promo", "Spotlights on members' internships or research abroad, with their OK", "Event photos", "GAP events in the weekly roundup"], "m": ["Graphics delivered by the date we agree on", "Events on the OneIOP calendar and in the weekly roundup", "Photos back within 24 hours"]}, "Environment": {"v": "A consistent look for PEP's discussions.", "b": ["A discussion series template the program can reuse", "Speaker promo for the events PEP wants promoted", "A short takeaways post, if the program shares its notes", "Events on the OneIOP calendar"], "m": ["Graphics delivered by the date we agree on", "Events on the OneIOP calendar and in the weekly roundup", "Photos back within 24 hours"]}, "Policy": {"v": "Help putting members' policy work in front of the IOP.", "b": ["A carousel template for summarizing finished proposals, with the authors' approval", "Author spotlights, for members who opt in", "Promo for policy competitions and presentations", "Links to published proposals on OneIOP"], "m": ["Nothing posted without the authors' approval", "Graphics delivered by the date we agree on", "Requests turned around within a few days"]}, "HPOP": {"v": "Help sharing Youth Poll results, following the release plan HPOP and IOP staff set.", "b": ["Chart and stat-card templates in the IOP look, for HPOP to use", "Help with release-day social posts, following the agreed plan", "Recruiting graphics for new HPOP members", "Follow-up posts on the findings HPOP wants to highlight"], "m": ["Templates ready before the next release", "Release-day posts drafted ahead of time", "Nothing posted before results are public"]}, "RSG": {"v": "Recruiting support, and a way to show the teams' work.", "b": ["Recruiting graphics at the start of each semester", "Team or project spotlights, where teams and clients are OK with sharing", "Photos from final presentations", "A how-to-join page on OneIOP"], "m": ["Graphics delivered by the date we agree on", "Events on the OneIOP calendar and in the weekly roundup", "Photos back within 24 hours"]}, "GovLab": {"v": "Help sharing what GovLab teams are building.", "b": ["Founder spotlights, for teams who opt in", "Demo day promo and photos", "Recruiting graphics for applications", "A GovLab page on OneIOP"], "m": ["Graphics delivered by the date we agree on", "Events on the OneIOP calendar and in the weekly roundup", "Photos back within 24 hours"]}, "CIVICS": {"v": "Help recruiting teachers and sharing what CIVICS does.", "b": ["Recruiting graphics for new teachers each semester", "Volunteer spotlights, with the volunteers' OK", "Classroom photos only where the program and schools allow it", "A semester recap"], "m": ["Recruiting graphics ready before the recruiting window", "Nothing from schools posted without permission", "Requests turned around within a few days"]}, "Cit Tut": {"v": "Help recruiting tutors, with learners' privacy first.", "b": ["Recruiting graphics for new tutors", "Tutor spotlights, with the tutors' OK", "No learner stories or photos unless the program and the learner both want it", "Tutoring info on OneIOP"], "m": ["Recruiting graphics ready before the recruiting window", "Nothing about learners posted without consent", "Requests turned around within a few days"]}, "HVC": {"v": "IOP channels behind HVC's registration and turnout pushes.", "b": ["HVC's registration and deadline posts shared across IOP channels", "Countdown graphics for key deadlines", "Share-ready templates HVC can give to houses and student groups", "A recap after elections"], "m": ["Key deadlines shared on IOP channels", "Templates delivered before each deadline", "Requests turned around within a few days"]}, "HPR": {"v": "The same support as every program, nothing more.", "b": ["New issues shared on IOP channels", "Author spotlights, for writers who opt in", "Pull-quote templates for pieces the editors choose", "HPR in the weekly roundup"], "m": ["Graphics delivered by the date we agree on", "Events on the OneIOP calendar and in the weekly roundup", "Photos back within 24 hours"]}, "CAP": {"v": "Promo for CAP's workshops.", "b": ["Workshop promo graphics", "Campaign-style graphic templates CAP can share with participants", "A comms training session co-hosted with CAP", "Photos from workshops"], "m": ["Graphics delivered by the date we agree on", "Events on the OneIOP calendar and in the weekly roundup", "Photos back within 24 hours"]}, "Arts": {"v": "Promo that fits the work you bring in.", "b": ["Event promo designed with the coalition, building on your look", "Artist spotlights, with the artists' OK", "Photo coverage of events", "Events in the weekly roundup"], "m": ["Graphics delivered by the date we agree on", "Events on the OneIOP calendar and in the weekly roundup", "Photos back within 24 hours"]}, "Conservative": {"v": "The same support as every program.", "b": ["Event and speaker promo with the same templates and turnaround as every program", "Event photos, booked the same way as everyone", "Events in the weekly roundup and on the OneIOP calendar", "Final say on how your events are described"], "m": ["Graphics delivered by the date we agree on", "Events on the OneIOP calendar and in the weekly roundup", "Photos back within 24 hours"]}, "GSC": {"v": "Support for your events, with consent first.", "b": ["Event promo for the discussions you want promoted", "Spotlights only for people who want to be featured", "No photos of attendees without their OK", "Help planning key dates with the coalition's lead"], "m": ["Nothing posted about anyone without their consent", "Graphics delivered by the date we agree on", "Events on the OneIOP calendar"]}, "Service": {"v": "Help finding volunteers and showing the work.", "b": ["Promo for service projects", "Volunteer spotlights, with the members' OK", "Service opportunities listed on OneIOP", "A semester recap"], "m": ["Graphics delivered by the date we agree on", "Events on the OneIOP calendar and in the weekly roundup", "Photos back within 24 hours"]}};
   const drawer = document.getElementById('prog-drawer');
   const pdHead = drawer.querySelector('.pd-head');
   const pdPanel = drawer.querySelector('.pd-panel');
@@ -1887,13 +1876,6 @@
     pdEl('pd-vision').textContent = plan.v;
     pdEl('pd-build').replaceChildren(...listOf(plan.b));
     pdEl('pd-measure').replaceChildren(...listOf(plan.m));
-    pdEl('pd-rhythm').replaceChildren(...['Before', 'Day of', 'After'].map((h, k) => {
-      const d = document.createElement('div');
-      const b = document.createElement('b');
-      b.textContent = h;
-      d.append(b, plan.r[k]);
-      return d;
-    }));
     pdPanel.scrollTop = 0;
   };
   const openPlan = (card) => {
