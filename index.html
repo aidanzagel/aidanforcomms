@@ -148,7 +148,7 @@
   .ctas { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 26px; margin-top: 34px; }
   .first3 { display: grid; gap: 8px; margin-top: 22px; max-width: 46ch; }
   .first3 li { position: relative; padding-left: 28px; font-size: 16px; line-height: 1.4; }
-  .first3 li::before { content: ""; position: absolute; left: 0; top: .2em; width: 16px; height: 16px; border-radius: 50%; background: var(--red) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4.5 8.3l2.3 2.3 4.7-4.9' fill='none' stroke='%23fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 16px no-repeat; }
+  .first3 li::before { content: ""; position: absolute; left: 0; top: .15em; width: 17px; height: 17px; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 96'%3E%3Cpolygon points='50,3 61.5,37 97,37 68.5,58 79.5,92 50,71 20.5,92 31.5,58 3,37 38.5,37' fill='%23d7101b'/%3E%3C/svg%3E") center / contain no-repeat; }
   .first3 a { color: var(--paper); font-weight: 600; text-decoration: none; border-bottom: 1px solid rgba(244, 241, 234, .3); transition: border-color .2s; }
   .first3 a:hover { border-color: var(--paper); }
   .btn {
@@ -163,7 +163,8 @@
   .text-link:hover { color: #fff; }
 
   .hero-art { position: relative; min-height: 560px; }
-  .star { position: absolute; left: -8%; top: 6%; width: 118%; overflow: visible; transition: translate .4s var(--ease); }
+  /* Anchored to the bottom like the portrait, so the star stays behind Aidan however tall the hero gets */
+  .star { position: absolute; left: -8%; bottom: 20%; width: 118%; overflow: visible; transition: translate .4s var(--ease); }
   .star .fill { fill: var(--red); }
   .star .ghost { fill: none; stroke: var(--paper); stroke-width: .45; }
   .star.s1 { rotate: -8deg; animation: star-in 1.3s var(--ease) .15s both; }
@@ -206,8 +207,8 @@
   .ballot .b-row { display: flex; align-items: center; gap: 12px; margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--line); font-weight: 700; font-size: 17px; }
   .ballot svg { width: 30px; flex: none; overflow: visible; }
   .ballot .box { fill: none; stroke: var(--ink); stroke-width: 2; }
-  .ballot .tick { fill: none; stroke: var(--red); stroke-width: 3.6; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 24; stroke-dashoffset: 0; }
-  @keyframes tick { from { stroke-dashoffset: 24; } to { stroke-dashoffset: 0; } }
+  .ballot .tick { fill: var(--red); transform-box: fill-box; transform-origin: center; }
+  @keyframes tick { from { transform: scale(0) rotate(-40deg); } 70% { transform: scale(1.15) rotate(6deg); } to { transform: none; } }
 
   .hero-side {
     position: absolute; right: max(8px, env(safe-area-inset-right, 0px)); top: 50%; z-index: 1;
@@ -465,7 +466,7 @@
   .stop li::before { content: ""; position: absolute; left: 0; top: 12px; width: 18px; height: 18px; border: 2px solid var(--navy); border-radius: 4px; transition: background .3s, border-color .3s; }
   .stop li::after {
     content: ""; position: absolute; left: 0; top: 12px; width: 18px; height: 18px; scale: 0; transition: scale .4s var(--ease);
-    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18'%3E%3Cpath d='M4.5 9.3l3 3 6-6.3' fill='none' stroke='%23fff' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 18px no-repeat;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 96'%3E%3Cpolygon points='50,3 61.5,37 97,37 68.5,58 79.5,92 50,71 20.5,92 31.5,58 3,37 38.5,37' fill='%23fff'/%3E%3C/svg%3E") center / 12px no-repeat;
   }
   .stop.on li { opacity: 1; }
   .stop.on li::before { background: var(--red); border-color: var(--red); }
@@ -510,19 +511,52 @@
 
   /* ====== 06 Work ====== */
   .work { background: var(--paper-2); }
-  /* The Work: a featured piece, then a plain grid that new pieces flow into */
-  .work-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(20px, 2.4vw, 32px); }
-  .work-item { display: grid; align-content: start; gap: 14px; margin: 0; cursor: zoom-in; }
-  .work-item.feature { grid-column: 1 / -1; }
+  /* The Work: one block per project, each with its own grid */
+  .projects { display: grid; gap: clamp(48px, 5vw, 72px); }
+  .project { display: grid; gap: clamp(18px, 2vw, 24px); }
+  .project-head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr); gap: 12px 32px; align-items: baseline; padding-top: 18px; border-top: 1px solid var(--line); }
+  .project-head h3 { font-family: var(--display); font-weight: 900; text-transform: uppercase; font-size: clamp(34px, 3.6vw, 52px); line-height: .9; color: var(--navy); }
+  .project-head p { max-width: 62ch; font-size: 16px; line-height: 1.5; color: var(--muted); }
+  .project-grid { display: grid; gap: clamp(14px, 1.8vw, 24px); }
+  .project-grid.wide, .project-grid.tall { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .project-grid.posts { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  .work-item { display: grid; align-content: start; gap: 10px; margin: 0; cursor: zoom-in; }
+  .work-item[hidden] { display: none; }
   .work-frame { aspect-ratio: 16 / 9; border-radius: 10px; overflow: hidden; background: var(--paper); box-shadow: 0 0 0 1px var(--line); transition: box-shadow .3s; }
   .work-item.feature .work-frame { aspect-ratio: 2000 / 889; }
+  .wide .work-frame { aspect-ratio: 1200 / 630; }
+  .tall .work-frame { aspect-ratio: 3 / 4; }
+  .posts .work-frame { aspect-ratio: 4 / 5; border-radius: 8px; }
   .work-frame img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform .5s var(--ease); }
   .work-item:hover .work-frame img { transform: scale(1.02); }
   .work-item:hover .work-frame, .work-item:focus-visible .work-frame { box-shadow: 0 0 0 2px var(--navy), 0 14px 34px rgba(16, 20, 61, .14); }
   .work-item:focus-visible { outline: none; }
-  .work-item figcaption { display: grid; gap: 3px; font-size: 15px; line-height: 1.35; }
-  .work-item figcaption b { font-size: 17px; color: var(--ink); }
+  .work-item figcaption { display: grid; gap: 2px; font-size: 14px; line-height: 1.35; }
+  .work-item figcaption b { font-size: 16px; color: var(--ink); }
   .work-item figcaption span { color: var(--muted); }
+  .posts .work-item figcaption { font-size: 12.5px; }
+  .posts .work-item figcaption b { font-size: 13.5px; }
+  /* HPR Instagram results: three numbers and the daily views line */
+  .ig-stats { display: grid; grid-template-columns: minmax(0, 260px) minmax(0, 1fr); gap: clamp(20px, 3vw, 44px); align-items: center; padding: clamp(20px, 2.6vw, 32px); background: var(--paper); border-radius: 14px; box-shadow: 0 0 0 1px var(--line); }
+  .ig-nums { display: grid; gap: 18px; }
+  .ig-nums div { display: grid; gap: 2px; }
+  .ig-nums b { font-family: var(--display); font-weight: 900; font-size: clamp(44px, 4.6vw, 64px); line-height: .9; color: var(--navy); }
+  .ig-nums div:first-child b { color: var(--red); }
+  .ig-nums span { font-size: 15px; color: var(--muted); }
+  .ig-chart { margin: 0; display: grid; gap: 8px; min-width: 0; }
+  .ig-plot { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 10px; padding-top: 30px; }
+  .ig-y { display: flex; flex-direction: column; justify-content: space-between; height: calc(clamp(170px, 20vw, 240px) + 1em); margin-top: -.5em; font-size: 12px; font-weight: 600; color: var(--muted); text-align: right; }
+  .ig-y span { line-height: 1; }
+  .ig-area-wrap { position: relative; }
+  .ig-chart svg { display: block; width: 100%; height: clamp(170px, 20vw, 240px); overflow: visible; }
+  .ig-grid line { stroke: var(--line); stroke-width: 1; vector-effect: non-scaling-stroke; }
+  .ig-y text { font: 600 12px var(--sans); fill: var(--muted); text-anchor: end; }
+  .ig-line { fill: none; stroke: var(--red); stroke-width: 2.5; stroke-linejoin: round; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+  .ig-peak { position: absolute; top: -4px; translate: -50% -100%; padding: 3px 8px; border-radius: 99px; background: var(--red); color: var(--paper); font-size: 12px; font-weight: 700; white-space: nowrap; }
+  .ig-x { display: flex; justify-content: space-between; padding-left: 44px; font-size: 13px; font-weight: 600; color: var(--muted); }
+  .ig-chart figcaption { font-size: 13px; color: var(--muted); }
+  .project-more { justify-self: start; padding: 11px 18px; border: 1.5px solid var(--navy); border-radius: 999px; background: none; color: var(--navy); font: 600 14px/1 var(--sans); cursor: pointer; transition: background .2s, color .2s; }
+  .project-more:hover { background: var(--navy); color: var(--paper); }
   .lens { display: grid; grid-template-columns: minmax(0, 240px) minmax(0, 1fr); gap: 24px; align-items: baseline; margin-top: clamp(36px, 4vw, 56px); padding-top: 24px; border-top: 1px solid var(--line); }
   .lens h3 { font-family: var(--serif); font-weight: 400; font-style: italic; font-size: 34px; line-height: 1; color: var(--navy); }
   .lens ul { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 24px; }
@@ -622,8 +656,8 @@
   .pd-measure { display: grid; gap: 8px; }
   .pd-measure li { position: relative; padding-left: 30px; font-size: 16px; line-height: 1.4; }
   .pd-measure li::before {
-    content: ""; position: absolute; left: 0; top: 2px; width: 18px; height: 18px; border-radius: 4px;
-    background: var(--red) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18'%3E%3Cpath d='M4.5 9.3l3 3 6-6.3' fill='none' stroke='%23fff' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 18px no-repeat;
+    content: ""; position: absolute; left: 0; top: 2px; width: 18px; height: 18px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 96'%3E%3Cpolygon points='50,3 61.5,37 97,37 68.5,58 79.5,92 50,71 20.5,92 31.5,58 3,37 38.5,37' fill='%23d7101b'/%3E%3C/svg%3E") center / contain no-repeat;
   }
   .pd-base { padding: 18px 20px; border: 1.5px solid var(--navy); border-radius: 6px; font-size: 15px; line-height: 1.45; color: var(--muted); }
   .pd-base strong { color: var(--ink); }
@@ -705,7 +739,8 @@
     .hero-side { display: none; }
     .sec-head { grid-template-columns: minmax(0, 1fr); gap: 14px; }
     .pillar { grid-template-columns: minmax(0, 1fr); }
-    .work-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .project-grid.wide { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .project-grid.posts { grid-template-columns: repeat(4, minmax(0, 1fr)); }
     .lens ul { grid-template-columns: minmax(0, 1fr); }
     .road-cols { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 48px; }
     .ballot { left: 0; }
@@ -714,7 +749,7 @@
     .hero-grid { grid-template-columns: minmax(0, 1fr); min-height: 0; gap: 0; }
     .hero-copy { padding-bottom: 24px; }
     .hero-art { min-height: 0; height: clamp(470px, 128vw, 640px); }
-    .star { left: 0; top: 4%; width: 100%; }
+    .star { left: 0; top: 4%; bottom: auto; width: 100%; }
     .portrait { width: min(92%, 440px); left: 56%; }
     .ballot { width: 176px; left: 0; bottom: 3%; padding: 9px 11px; }
     .ballot .b-office { font-size: 17px; }
@@ -740,7 +775,9 @@
     .face { min-height: 190px; }
     .vid-ph h3 { font-size: 40px; }
     .play { width: 76px; }
-    .work-grid { grid-template-columns: minmax(0, 1fr); }
+    .project-head { grid-template-columns: minmax(0, 1fr); }
+    .project-grid.wide, .project-grid.tall, .project-grid.posts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .project-grid .work-item figcaption span { display: none; }
     .lens { grid-template-columns: minmax(0, 1fr); gap: 8px; }
     .close-grid { grid-template-columns: minmax(0, 1fr); gap: 22px; }
     .close-sig { width: 70%; margin-top: 10px; }
@@ -799,11 +836,30 @@
     .hl .line > span, .reveal { transform: none; opacity: 1; filter: none; }
     .hl .dot { opacity: 1; }
     .sig { clip-path: none; }
-    .ballot .tick { stroke-dashoffset: 0; }
+    .ballot .tick { transform: none; }
     .ul-line path { stroke-dashoffset: 0; }
     .prog-grid .prog { opacity: 1 !important; }
     .stat .n { transform: none !important; }
     html { scroll-behavior: auto; }
+  }
+  /* Small phones: a smaller ballot, and the portrait nudged right, so the ballot stays below Aidan's face */
+  @media (max-width: 480px) {
+    .portrait { left: 62%; }
+    .ballot { width: 136px; padding: 8px 9px; bottom: 2%; }
+    .ballot .b-office { font-size: 14px; }
+    .ballot .b-note { font-size: 12px; }
+    .ballot .b-row { font-size: 12.5px; gap: 7px; }
+    .ballot svg { width: 20px; }
+  }
+  @media (max-width: 820px) {
+    .ig-stats { grid-template-columns: minmax(0, 1fr); }
+    .ig-nums { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+    .ig-nums b { font-size: clamp(30px, 8vw, 44px); }
+    .ig-nums span { font-size: 13px; }
+  }
+  @media (max-width: 400px) {
+    .ballot { bottom: -6px; }
+    .ballot .b-hint { display: none; }
   }
 </style>
 </head>
@@ -884,7 +940,7 @@
         <p class="b-office">Communications Director</p>
         <p class="b-note">Vote for one</p>
         <div class="b-row">
-          <svg viewBox="0 0 28 28" aria-hidden="true"><rect class="box" x="1" y="1" width="26" height="26"/><path class="tick" d="M7.5 14.5l4.5 4.5L20.5 9"/></svg>
+          <svg viewBox="0 0 28 28" aria-hidden="true"><rect class="box" x="1" y="1" width="26" height="26"/><polygon class="tick" points="14.0,5.0 16.3,11.8 23.4,11.8 17.7,16.0 19.9,22.8 14.0,18.6 8.1,22.8 10.3,16.0 4.6,11.8 11.7,11.8"/></svg>
           Aidan Zagel
         </div>
         <span class="b-hint label">Click to vote again ↺</span>
@@ -1245,23 +1301,155 @@
   <div class="wrap">
     <header class="sec-head">
       <h2 class="disp">The Work</h2>
-      <p>Design and photography already out in the world, with more on the way.</p>
+      <p>Design and photography already out in the world.</p>
     </header>
-    <!-- To add a piece: copy one <figure class="work-item"> block, change the image, title and line under it.
-         The first piece is the big featured one; every piece after it fills the grid in order. -->
-    <div class="work-grid" id="work-grid">
-      <figure class="work-item feature" tabindex="0" role="button" aria-label="View Battle for the Senate larger">
-        <div class="work-frame"><img src="assets/hpr-battle-for-the-senate.webp" alt="Harvard Political Review 'Battle for the Senate: U.S. Midterms 2026' graphic, with Senate candidates from both parties around a map of the battleground states" width="2000" height="889"></div>
-        <figcaption><b>Battle for the Senate</b><span>Harvard Political Review · 2026 Midterm Initiative</span></figcaption>
-      </figure>
-      <figure class="work-item" tabindex="0" role="button" aria-label="View The largest political publication at Harvard College larger">
-        <div class="work-frame"><img src="assets/work-hpr.jpg" alt="Harvard Political Review graphic: the largest political publication at Harvard College" width="284" height="154" loading="lazy"></div>
-        <figcaption><b>The largest political publication at Harvard College</b><span>Harvard Political Review</span></figcaption>
-      </figure>
-      <figure class="work-item" tabindex="0" role="button" aria-label="View Fall Comp '26 larger">
-        <div class="work-frame"><img src="assets/work-fallcomp.jpg" alt="Harvard Political Review Fall Comp '26 graphic" width="284" height="154" loading="lazy"></div>
-        <figcaption><b>Fall Comp '26</b><span>Harvard Political Review</span></figcaption>
-      </figure>
+    <!-- To add a piece: copy a <figure class="work-item"> block inside the right project and change the image, title and line under it.
+         To add a project: copy a whole <article class="project"> block. Images live in assets/work/. -->
+    <div class="projects" id="work-grid">
+      <article class="project">
+        <header class="project-head">
+          <h3>Battle for the Senate</h3>
+          <p>Harvard Political Review · 2026 Midterm Initiative. A graphic for every race in the series, built on one shared layout.</p>
+        </header>
+        <figure class="work-item feature" tabindex="0" role="button" aria-label="View Battle for the Senate larger">
+          <div class="work-frame"><img src="assets/hpr-battle-for-the-senate.webp" alt="Harvard Political Review &#x27;Battle for the Senate: U.S. Midterms 2026&#x27; graphic, with Senate candidates from both parties around a map of the battleground states" width="2000" height="889"></div>
+          <figcaption><b>Battle for the Senate</b><span>HPR Midterm Initiative</span></figcaption>
+        </figure>
+        <div class="project-grid wide">
+        <figure class="work-item" tabindex="0" role="button" aria-label="View Texas Senate larger">
+          <div class="work-frame"><img src="assets/work/midterms-texas.jpg" alt="HPR Battle for the Texas Senate graphic: Paxton vs. Talarico" width="1200" height="630" loading="lazy"></div>
+          <figcaption><b>Texas Senate</b><span>Paxton vs. Talarico · HPR Midterm Initiative</span></figcaption>
+        </figure>
+        <figure class="work-item" tabindex="0" role="button" aria-label="View Maine Senate larger">
+          <div class="work-frame"><img src="assets/work/midterms-maine.jpg" alt="HPR Battle for the Maine Senate graphic: Collins vs. Jackson" width="1200" height="630" loading="lazy"></div>
+          <figcaption><b>Maine Senate</b><span>Collins vs. Jackson · HPR Midterm Initiative</span></figcaption>
+        </figure>
+        <figure class="work-item" tabindex="0" role="button" aria-label="View Michigan Senate larger">
+          <div class="work-frame"><img src="assets/work/midterms-michigan.jpg" alt="HPR Battle for the Michigan Senate graphic: Rogers vs. El-Sayed" width="1200" height="630" loading="lazy"></div>
+          <figcaption><b>Michigan Senate</b><span>Rogers vs. El-Sayed · HPR Midterm Initiative</span></figcaption>
+        </figure>
+        <figure class="work-item" tabindex="0" role="button" aria-label="View Alaska Senate larger">
+          <div class="work-frame"><img src="assets/work/midterms-alaska.jpg" alt="HPR Battle for the Alaska Senate graphic: Sullivan vs. Peltola" width="1200" height="630" loading="lazy"></div>
+          <figcaption><b>Alaska Senate</b><span>Sullivan vs. Peltola · HPR Midterm Initiative</span></figcaption>
+        </figure>
+        <figure class="work-item" tabindex="0" role="button" aria-label="View Montana Senate larger">
+          <div class="work-frame"><img src="assets/work/midterms-montana.jpg" alt="HPR Battle for the Montana Senate graphic: Alme, Bankhead and Bodnar" width="1200" height="630" loading="lazy"></div>
+          <figcaption><b>Montana Senate</b><span>Alme, Bankhead and Bodnar · HPR Midterm Initiative</span></figcaption>
+        </figure>
+        <figure class="work-item" tabindex="0" role="button" aria-label="View Georgia Senate and Governor larger">
+          <div class="work-frame"><img src="assets/work/midterms-georgia.jpg" alt="HPR Battle for the Georgia Senate and Governor graphic: Jackson, Bottoms, Collins and Ossoff" width="1200" height="630" loading="lazy"></div>
+          <figcaption><b>Georgia Senate and Governor</b><span>Jackson, Bottoms, Collins and Ossoff · HPR Midterm Initiative</span></figcaption>
+        </figure>
+        </div>
+      </article>
+      <article class="project">
+        <header class="project-head">
+          <h3>Fall Comp '26</h3>
+          <p>Harvard Political Review · Recruitment. Posters for the events that brought new writers and designers in.</p>
+        </header>
+        <div class="project-grid tall">
+        <figure class="work-item" tabindex="0" role="button" aria-label="View HPR Cocktail Hour larger">
+          <div class="work-frame"><img src="assets/work/comp-cocktail.jpg" alt="HPR Cocktail Hour poster for the Harvard Political Review" width="800" height="1067" loading="lazy"></div>
+          <figcaption><b>HPR Cocktail Hour</b><span>Event poster · Harvard Political Review</span></figcaption>
+        </figure>
+        <figure class="work-item" tabindex="0" role="button" aria-label="View Join the HPR Fall Comp larger">
+          <div class="work-frame"><img src="assets/work/comp-join.jpg" alt="Join the HPR Fall Comp poster for the Harvard Political Review" width="800" height="1067" loading="lazy"></div>
+          <figcaption><b>Join the HPR Fall Comp</b><span>Comp poster · Harvard Political Review</span></figcaption>
+        </figure>
+        <figure class="work-item" tabindex="0" role="button" aria-label="View HPR 101 larger">
+          <div class="work-frame"><img src="assets/work/comp-hpr101.jpg" alt="HPR 101 poster for the Harvard Political Review" width="800" height="1067" loading="lazy"></div>
+          <figcaption><b>HPR 101</b><span>Info session poster · Harvard Political Review</span></figcaption>
+        </figure>
+        </div>
+      </article>
+      <article class="project">
+        <header class="project-head">
+          <h3>Article template</h3>
+          <p>Redesigned the HPR's article posts to increase engagement. Rebuilt the Marketing team to ensure consistent posting and ed-side support.</p>
+        </header>
+        <div class="ig-stats" role="group" aria-label="HPR Instagram views, Aug 7 to Nov 4">
+          <div class="ig-nums">
+            <div><b>53K</b><span>views on posts</span></div>
+            <div><b>11,803</b><span>accounts reached</span></div>
+            <div><b>8.7K</b><span>views on the best day</span></div>
+          </div>
+          <figure class="ig-chart">
+            <div class="ig-plot">
+              <div class="ig-y" aria-hidden="true"><span>8.7K</span><span>4.3K</span><span>0</span></div>
+              <div class="ig-area-wrap">
+                <span class="ig-peak" style="left: 33.8%" aria-hidden="true">8.7K</span>
+            <svg viewBox="0 0 1000 280" preserveAspectRatio="none" role="img" aria-label="Daily Instagram views from Aug 7 to Nov 4: flat until a spike to 8.7K in late August, then repeated peaks between 2K and 4.3K from October into November">
+              <defs><linearGradient id="igfill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--red)" stop-opacity=".22"/><stop offset="1" stop-color="var(--red)" stop-opacity="0"/></linearGradient></defs>
+              <g class="ig-grid"><line x1="0" x2="1000" y1="0" y2="0"/><line x1="0" x2="1000" y1="140" y2="140"/><line x1="0" x2="1000" y1="280" y2="280"/></g>
+              <path class="ig-area" d="M0.0 280.0 L317.1 278.5 L326.5 280.0 L337.7 1.5 L347.1 104.5 L360.2 272.4 L371.5 278.5 L382.7 238.0 L392.1 268.6 L403.4 280.0 L678.2 280.0 L688.6 215.1 L698.9 276.2 L710.1 174.7 L721.4 272.4 L732.6 254.1 L755.2 278.5 L779.5 280.0 L789.9 198.4 L801.1 261.7 L814.3 278.5 L879.9 280.0 L891.2 219.0 L901.5 261.7 L913.7 142.7 L925.0 258.6 L937.1 163.3 L948.4 254.1 L959.7 220.5 L970.0 157.9 L982.2 144.2 L1000.0 258.6 L1000 280 L0 280 Z" fill="url(#igfill)"/>
+              <path class="ig-line" d="M0.0 280.0 L317.1 278.5 L326.5 280.0 L337.7 1.5 L347.1 104.5 L360.2 272.4 L371.5 278.5 L382.7 238.0 L392.1 268.6 L403.4 280.0 L678.2 280.0 L688.6 215.1 L698.9 276.2 L710.1 174.7 L721.4 272.4 L732.6 254.1 L755.2 278.5 L779.5 280.0 L789.9 198.4 L801.1 261.7 L814.3 278.5 L879.9 280.0 L891.2 219.0 L901.5 261.7 L913.7 142.7 L925.0 258.6 L937.1 163.3 L948.4 254.1 L959.7 220.5 L970.0 157.9 L982.2 144.2 L1000.0 258.6"/>
+            </svg>
+              </div>
+            </div>
+            <div class="ig-x"><span>Aug 7</span><span>Sep 20</span><span>Nov 4</span></div>
+            <figcaption>Daily views on HPR Instagram, Aug 7 to Nov 4. From Instagram Insights.</figcaption>
+          </figure>
+        </div>
+        <div class="project-grid posts" id="ig-grid">
+        <figure class="work-item" tabindex="0" role="button" aria-label="View An Interview with Alejandro Mayorkas larger">
+          <div class="work-frame"><img src="assets/work/ig-10.jpg" alt="HPR Instagram post: An Interview with Alejandro Mayorkas" width="800" height="1000" loading="lazy"></div>
+          <figcaption><b>An Interview with Alejandro Mayorkas</b><span>Interviews · HPR Instagram</span></figcaption>
+        </figure>
+        <figure class="work-item" tabindex="0" role="button" aria-label="View An Interview with Chris Lu larger">
+          <div class="work-frame"><img src="assets/work/ig-11.jpg" alt="HPR Instagram post: An Interview with Chris Lu" width="800" height="1000" loading="lazy"></div>
+          <figcaption><b>An Interview with Chris Lu</b><span>Interviews · HPR Instagram</span></figcaption>
+        </figure>
+        <figure class="work-item" tabindex="0" role="button" aria-label="View An Interview with Doug Jones larger">
+          <div class="work-frame"><img src="assets/work/ig-14.jpg" alt="HPR Instagram post: An Interview with Doug Jones" width="800" height="1000" loading="lazy"></div>
+          <figcaption><b>An Interview with Doug Jones</b><span>Interviews · HPR Instagram</span></figcaption>
+        </figure>
+        <figure class="work-item" tabindex="0" role="button" aria-label="View Utah&#x27;s Legislature vs. Its Own Voters larger">
+          <div class="work-frame"><img src="assets/work/ig-3.jpg" alt="HPR Instagram post: Utah&#x27;s Legislature vs. Its Own Voters" width="800" height="1000" loading="lazy"></div>
+          <figcaption><b>Utah&#x27;s Legislature vs. Its Own Voters</b><span>United States · HPR Instagram</span></figcaption>
+        </figure>
+        <figure class="work-item" tabindex="0" role="button" aria-label="View Vote Yes on Massachusetts Ballot Question 7 larger">
+          <div class="work-frame"><img src="assets/work/ig-4.jpg" alt="HPR Instagram post: Vote Yes on Massachusetts Ballot Question 7" width="800" height="1000" loading="lazy"></div>
+          <figcaption><b>Vote Yes on Massachusetts Ballot Question 7</b><span>Local · HPR Instagram</span></figcaption>
+        </figure>
+        <figure class="work-item" tabindex="0" role="button" aria-label="View Nuclear&#x27;s Upcoming Resurgence larger">
+          <div class="work-frame"><img src="assets/work/ig-8.jpg" alt="HPR Instagram post: Nuclear&#x27;s Upcoming Resurgence" width="800" height="1000" loading="lazy"></div>
+          <figcaption><b>Nuclear&#x27;s Upcoming Resurgence</b><span>Sci Tech · HPR Instagram</span></figcaption>
+        </figure>
+        <figure class="work-item" hidden tabindex="0" role="button" aria-label="View An Interview with Ambassador Kelly Craft larger">
+          <div class="work-frame"><img src="assets/work/ig-12.jpg" alt="HPR Instagram post: An Interview with Ambassador Kelly Craft" width="800" height="1000" loading="lazy"></div>
+          <figcaption><b>An Interview with Ambassador Kelly Craft</b><span>Interviews · HPR Instagram</span></figcaption>
+        </figure>
+        <figure class="work-item" hidden tabindex="0" role="button" aria-label="View An Interview with Alani Bankhead larger">
+          <div class="work-frame"><img src="assets/work/ig-13.jpg" alt="HPR Instagram post: An Interview with Alani Bankhead" width="800" height="1000" loading="lazy"></div>
+          <figcaption><b>An Interview with Alani Bankhead</b><span>Interviews · HPR Instagram</span></figcaption>
+        </figure>
+        <figure class="work-item" hidden tabindex="0" role="button" aria-label="View An Interview with Mike Walsh larger">
+          <div class="work-frame"><img src="assets/work/ig-15.jpg" alt="HPR Instagram post: An Interview with Mike Walsh" width="800" height="1000" loading="lazy"></div>
+          <figcaption><b>An Interview with Mike Walsh</b><span>Interviews · HPR Instagram</span></figcaption>
+        </figure>
+        <figure class="work-item" hidden tabindex="0" role="button" aria-label="View An Interview with Johnny Austin Thompson larger">
+          <div class="work-frame"><img src="assets/work/ig-9.jpg" alt="HPR Instagram post: An Interview with Johnny Austin Thompson" width="800" height="1000" loading="lazy"></div>
+          <figcaption><b>An Interview with Johnny Austin Thompson</b><span>Interviews · HPR Instagram</span></figcaption>
+        </figure>
+        <figure class="work-item" hidden tabindex="0" role="button" aria-label="View Young Men and Women Agree on the Economy. They Can&#x27;t on Culture. larger">
+          <div class="work-frame"><img src="assets/work/ig-5.jpg" alt="HPR Instagram post: Young Men and Women Agree on the Economy. They Can&#x27;t on Culture." width="800" height="1000" loading="lazy"></div>
+          <figcaption><b>Young Men and Women Agree on the Economy. They Can&#x27;t on Culture.</b><span>United States · HPR Instagram</span></figcaption>
+        </figure>
+        <figure class="work-item" hidden tabindex="0" role="button" aria-label="View On the Brink of Another Lost Decade larger">
+          <div class="work-frame"><img src="assets/work/ig-6.jpg" alt="HPR Instagram post: On the Brink of Another Lost Decade" width="800" height="1000" loading="lazy"></div>
+          <figcaption><b>On the Brink of Another Lost Decade</b><span>World · HPR Instagram</span></figcaption>
+        </figure>
+        <figure class="work-item" hidden tabindex="0" role="button" aria-label="View Harvard&#x27;s Gates of Hope larger">
+          <div class="work-frame"><img src="assets/work/ig-7.jpg" alt="HPR Instagram post: Harvard&#x27;s Gates of Hope" width="800" height="1000" loading="lazy"></div>
+          <figcaption><b>Harvard&#x27;s Gates of Hope</b><span>Local · HPR Instagram</span></figcaption>
+        </figure>
+        <figure class="work-item" hidden tabindex="0" role="button" aria-label="View The SAT: An Easy Scapegoat larger">
+          <div class="work-frame"><img src="assets/work/ig-2.jpg" alt="HPR Instagram post: The SAT: An Easy Scapegoat" width="800" height="1000" loading="lazy"></div>
+          <figcaption><b>The SAT: An Easy Scapegoat</b><span>United States · HPR Instagram</span></figcaption>
+        </figure>
+        </div>
+        <button type="button" class="project-more" data-more="ig-grid" aria-expanded="false">Show all 14 posts</button>
+      </article>
     </div>
     <p class="work-hint">Click any piece to see it larger.</p>
     <div class="lens">
@@ -1477,14 +1665,14 @@
     }
   };
 
-  // The ballot: the check lands with confetti, and clicking it votes again
+  // The ballot: the star lands with confetti, and clicking it votes again
   const ballot = document.querySelector('.ballot');
   const tick = ballot.querySelector('.tick');
   const boxCenter = () => {
     const r = ballot.querySelector('svg').getBoundingClientRect();
     return [r.left + r.width / 2, r.top + r.height / 2];
   };
-  // Draw the check; a click redraws it with a little confetti
+  // Pop the star in; a click does it again with a little confetti
   const castBallot = (withConfetti) => {
     if (calm) return;
     tick.style.animation = 'none';
@@ -1760,6 +1948,17 @@
   const viewer = document.getElementById('viewer');
   const vImg = document.getElementById('v-img');
   const vCap = document.getElementById('v-cap');
+  document.querySelectorAll('[data-more]').forEach((btn) => {
+    const grid = document.getElementById(btn.dataset.more);
+    const extra = [...grid.querySelectorAll('.work-item[hidden]')];
+    const label = btn.textContent;
+    btn.addEventListener('click', () => {
+      const open = btn.getAttribute('aria-expanded') !== 'true';
+      extra.forEach((f) => { f.hidden = !open; });
+      btn.setAttribute('aria-expanded', open);
+      btn.textContent = open ? 'Show fewer' : label;
+    });
+  });
   const pieces = [...document.querySelectorAll('#work-grid figure')];
   let vIndex = 0;
   const showPiece = (i) => {
@@ -1865,7 +2064,7 @@
     btn.addEventListener('click', async () => {
       try {
         await navigator.clipboard.writeText(btn.dataset.copy);
-        btn.textContent = 'Copied ✓';
+        btn.textContent = 'Copied ★';
       } catch {
         const range = document.createRange();
         range.selectNodeContents(btn.parentElement.querySelector('.val'));
