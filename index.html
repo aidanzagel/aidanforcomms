@@ -6,7 +6,8 @@
 <title>Aidan for Comms</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="description" content="Aidan Zagel for IOP Communications Director. Programs First. OneIOP. Comms Playbook. Member Perks.">
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231b2384'/%3E%3Cpolygon fill='%23d7101b' points='32,9 38.8,25.4 56.5,25.4 42.3,36 47.6,53 32,42.8 16.4,53 21.7,36 7.5,25.4 25.2,25.4'/%3E%3C/svg%3E">
+<link rel="icon" type="image/png" sizes="64x64" href="assets/brand/favicon-64.png">
+<link rel="apple-touch-icon" href="assets/brand/icon-180.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400..800&family=Sofia+Sans+Extra+Condensed:wght@700..900&family=IBM+Plex+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..600&display=swap" rel="stylesheet">
@@ -75,7 +76,8 @@
     border-bottom: 1px solid var(--line);
   }
   .top .wrap { display: flex; align-items: center; gap: 28px; height: 76px; max-width: none; }
-  .mark { display: flex; align-items: baseline; gap: 7px; text-decoration: none; white-space: nowrap; }
+  .mark { display: flex; align-items: center; text-decoration: none; }
+  .mark img { display: block; height: 26px; width: auto; }
   .mark svg { width: 20px; align-self: center; fill: var(--red); }
   .mark b { font-family: var(--display); font-weight: 900; font-size: 30px; letter-spacing: .01em; text-transform: uppercase; color: var(--navy); line-height: 1; }
   .mark i { font-family: var(--serif); font-size: 22px; color: var(--ink); line-height: 1; }
@@ -291,15 +293,26 @@
   .squig path { fill: none; stroke: var(--red); stroke-width: 3; stroke-linecap: round; vector-effect: non-scaling-stroke; stroke-dasharray: 1; stroke-dashoffset: 0; transition: stroke-dashoffset 1.3s var(--ease) .5s; }
   .meet-grid > div:first-child { position: relative; }
   .pull + .label { display: block; margin-top: 22px; color: var(--muted); }
-  .pull + .label + .chips { margin-top: 30px; }
   .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 22px; }
   .chips span { padding: 7px 12px; border: 1.5px solid var(--navy); border-radius: 999px; color: var(--navy); transition: background .2s, color .2s, rotate .3s var(--ease); }
   .chips span:hover { background: var(--navy); color: var(--paper); rotate: -3deg; }
-  .spec > div { display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 18px; padding: 16px 0; border-top: 1px solid var(--line); }
-  .spec > div:last-child { border-bottom: 1px solid var(--line); }
-  .spec dt { color: var(--muted); padding-top: 4px; }
-  .spec dd { font-size: 19px; line-height: 1.35; font-weight: 600; }
-  .spec dd span { display: block; font-weight: 400; color: var(--muted); font-size: 16px; }
+  /* Meet Aidan: a framed photo beside the quote, with a one-line intro and roles */
+  .profile { display: grid; grid-template-columns: minmax(220px, 340px) minmax(0, 1fr); gap: clamp(28px, 5vw, 72px); align-items: center; }
+  .profile-photo { position: relative; isolation: isolate; margin: 0; aspect-ratio: 4 / 5; border-radius: 20px; overflow: hidden; background: var(--navy); }
+  .profile-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 42% 30%; }
+  .profile-text { display: grid; gap: 14px; min-width: 0; }
+  /* Under the quote: a byline, then the three roles side by side */
+  /* Year, house and studies as one bold strip in the heading type, so it reads at a glance */
+  .profile-by { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; margin-top: 14px; font-family: var(--display); font-weight: 900; font-size: clamp(26px, 2.6vw, 36px); line-height: 1; text-transform: uppercase; letter-spacing: .01em; color: var(--navy); }
+  .profile-by i { font-style: normal; display: inline-block; width: 9px; height: 9px; border-radius: 50%; background: var(--red); font-size: 0; }
+  .profile-roles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: clamp(18px, 2.4vw, 30px); border-top: 2px solid var(--navy); }
+  .profile-roles > div { display: grid; align-content: start; gap: 8px; padding: 16px 20px 4px 0; }
+  .profile-roles > div + div { padding-left: 20px; border-left: 1px solid var(--line); }
+  .profile-roles dt { font-family: var(--display); font-weight: 900; font-size: clamp(30px, 2.8vw, 40px); line-height: .9; text-transform: uppercase; color: var(--navy); }
+  .profile-roles > div:last-child dt { color: var(--red); }
+  .profile-roles dd { display: grid; gap: 3px; }
+  .profile-roles dd b { font-size: 16px; line-height: 1.3; color: var(--ink); }
+  .profile-roles dd span { font-size: 14px; line-height: 1.4; color: var(--muted); }
 
   /* ====== Numbers ====== */
   .stats { background: var(--paper-2); border-block: 1px solid var(--line); }
@@ -332,6 +345,8 @@
   .pillar .label { padding-top: 10px; color: var(--muted); }
   .pillar:hover .label { color: var(--paper); }
   .pillar h3 { font-size: clamp(54px, 6.6vw, 104px); color: var(--navy); }
+  .pillar-num { display: block; margin-bottom: .12em; font-size: .42em; line-height: 1; color: var(--red); }
+  .pillar:hover .pillar-num { color: var(--paper); }
   .pillar .why { font-family: var(--serif); font-style: italic; font-size: 22px; line-height: 1.2; margin-top: 12px; max-width: 30ch; color: var(--muted); transition: color .3s; }
   .pillar:hover .why { color: rgba(244, 241, 234, .8); }
   .pillar:hover h3 { color: var(--paper); }
@@ -463,14 +478,12 @@
   .stop.on .theme { background: var(--red); }
   .stop .goal { margin: 14px 0 14px; font-family: var(--serif); font-size: 21px; line-height: 1.2; }
   .stop li { position: relative; padding: 11px 0 11px 32px; border-top: 1px solid var(--line); font-size: 16.5px; line-height: 1.4; opacity: .4; transition: opacity .4s; }
-  .stop li::before { content: ""; position: absolute; left: 0; top: 12px; width: 18px; height: 18px; border: 2px solid var(--navy); border-radius: 4px; transition: background .3s, border-color .3s; }
-  .stop li::after {
-    content: ""; position: absolute; left: 0; top: 12px; width: 18px; height: 18px; scale: 0; transition: scale .4s var(--ease);
-    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 96'%3E%3Cpolygon points='50,3 61.5,37 97,37 68.5,58 79.5,92 50,71 20.5,92 31.5,58 3,37 38.5,37' fill='%23fff'/%3E%3C/svg%3E") center / 12px no-repeat;
-  }
+  /* The box and its check are one element, so the check is always centered in the red box */
+  .stop li::before { content: ""; position: absolute; left: 0; top: 12px; width: 18px; height: 18px; border: 2px solid var(--navy); border-radius: 4px;
+    background: transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18'%3E%3Cpath d='M5 9l2.8 2.8L13 6.2' fill='none' stroke='%23fff' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 0 0 no-repeat; background-origin: border-box; background-clip: border-box;
+    transition: background-color .3s, border-color .3s, background-size .4s var(--ease); }
   .stop.on li { opacity: 1; }
-  .stop.on li::before { background: var(--red); border-color: var(--red); }
-  .stop.on li::after { scale: 1; }
+  .stop.on li::before { background-color: var(--red); background-size: 18px 18px; border-color: var(--red); }
   .stop li:nth-child(2), .stop li:nth-child(2)::before, .stop li:nth-child(2)::after { transition-delay: .15s; }
   .stop li:nth-child(3), .stop li:nth-child(3)::before, .stop li:nth-child(3)::after { transition-delay: .3s; }
   .stop li:nth-child(4), .stop li:nth-child(4)::before, .stop li:nth-child(4)::after { transition-delay: .45s; }
@@ -538,6 +551,9 @@
   .posts .work-item figcaption b { font-size: 13.5px; }
   /* HPR Instagram results: three numbers and the daily views line */
   .ig-stats { display: grid; grid-template-columns: minmax(0, 260px) minmax(0, 1fr); gap: clamp(20px, 3vw, 44px); align-items: center; padding: clamp(20px, 2.6vw, 32px); background: var(--paper); border-radius: 14px; box-shadow: 0 0 0 1px var(--line); }
+  .ig-head { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 24px; padding-bottom: 14px; border-bottom: 1px solid var(--line); }
+  .ig-head h3 { font-family: var(--display); font-weight: 900; text-transform: uppercase; font-size: clamp(30px, 3.2vw, 44px); line-height: .9; color: var(--navy); }
+  .ig-head p { max-width: 52ch; font-size: 15px; line-height: 1.45; color: var(--muted); }
   .ig-nums { display: grid; gap: 18px; }
   .ig-nums div { display: grid; gap: 2px; }
   .ig-nums b { font-family: var(--display); font-weight: 900; font-size: clamp(44px, 4.6vw, 64px); line-height: .9; color: var(--navy); }
@@ -547,7 +563,16 @@
   .ig-plot { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 10px; padding-top: 30px; }
   .ig-y { display: flex; flex-direction: column; justify-content: space-between; height: calc(clamp(170px, 20vw, 240px) + 1em); margin-top: -.5em; font-size: 12px; font-weight: 600; color: var(--muted); text-align: right; }
   .ig-y span { line-height: 1; }
-  .ig-area-wrap { position: relative; }
+  .ig-area-wrap { position: relative; cursor: crosshair; touch-action: pan-y; outline: none; border-radius: 6px; }
+  .ig-area-wrap:focus-visible { box-shadow: 0 0 0 2px var(--navy); }
+  .ig-guide, .ig-dot, .ig-tip { position: absolute; pointer-events: none; opacity: 0; transition: opacity .15s; }
+  .ig-area-wrap.on .ig-dot, .ig-area-wrap.on .ig-tip { opacity: 1; }
+  .ig-area-wrap.on .ig-peak { opacity: 0; }
+  .ig-guide { top: 0; bottom: 0; width: 1px; background: var(--navy); }
+  .ig-area-wrap.on .ig-guide { opacity: .35; }
+  .ig-dot { width: 12px; height: 12px; margin: -6px 0 0 -6px; border-radius: 50%; background: var(--red); box-shadow: 0 0 0 3px var(--paper); }
+  .ig-tip { top: -6px; translate: -50% -100%; display: grid; gap: 1px; padding: 6px 10px; border-radius: 8px; background: var(--navy); color: var(--paper); font-size: 12px; line-height: 1.25; white-space: nowrap; text-align: center; box-shadow: 0 8px 20px rgba(16, 20, 61, .25); }
+  .ig-tip b { font-size: 15px; }
   .ig-chart svg { display: block; width: 100%; height: clamp(170px, 20vw, 240px); overflow: visible; }
   .ig-grid line { stroke: var(--line); stroke-width: 1; vector-effect: non-scaling-stroke; }
   .ig-y text { font: 600 12px var(--sans); fill: var(--muted); text-anchor: end; }
@@ -728,6 +753,9 @@
   .foot { background: var(--ink); color: rgba(244, 241, 234, .7); }
   .foot .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px 24px; padding-block: 18px calc(18px + env(safe-area-inset-bottom, 0px)); }
   .foot a { text-decoration: none; }
+  .foot .wrap { align-items: center; }
+  .foot-brand { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 18px; }
+  .foot-brand img { display: block; height: 16px; width: auto; }
   .foot a:hover { color: var(--paper); }
 
   :focus-visible { outline: 3px solid var(--red); outline-offset: 3px; }
@@ -758,6 +786,10 @@
     .ballot svg { width: 24px; }
     .sig { width: 42%; right: 0; bottom: 6%; }
     .meet-grid, .faq, .mem { grid-template-columns: minmax(0, 1fr); }
+    .profile { grid-template-columns: minmax(0, 1fr); }
+    .profile-photo { width: min(100%, 340px); }
+    .profile-roles { grid-template-columns: minmax(0, 1fr); }
+    .profile-roles > div, .profile-roles > div + div { padding: 14px 0; border-left: 0; border-bottom: 1px solid var(--line); display: grid; grid-template-columns: 76px minmax(0, 1fr); align-items: baseline; }
     .mem-bridge { justify-self: center; margin: -18px 0; rotate: 90deg; }
     .faq details:nth-last-child(2) { border-bottom: 0; }
     .stats .wrap { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -786,15 +818,13 @@
     .wrap { padding-left: max(18px, env(safe-area-inset-left, 0px)); padding-right: max(18px, env(safe-area-inset-right, 0px)); }
     .top .wrap { gap: 12px; }
     .pill { padding: 8px 11px; font-size: 10px; letter-spacing: .08em; }
-    .mark b { font-size: 24px; }
-    .mark i { font-size: 18px; }
+    .mark img { height: 20px; }
     .hl { font-size: clamp(76px, 25vw, 120px); }
     .sec-head, .close .sec-head { grid-template-columns: minmax(0, 1fr); gap: 10px; }
     .sec-head p { grid-column: 1; }
     .pillar { grid-template-columns: minmax(0, 1fr); gap: 10px; }
     .pillar ul { grid-column: 1; }
     .pillar::before { inset: 0 -18px; }
-    .spec > div { grid-template-columns: minmax(0, 1fr); gap: 4px; }
     .story { grid-template-columns: minmax(0, 1fr); }
     .sm-inner { grid-template-columns: minmax(0, 1fr); justify-items: center; padding: 22px 18px; }
     .sm-form { order: 2; width: 100%; }
@@ -822,7 +852,7 @@
   .loader.out { opacity: 0; visibility: hidden; }
   .loading .hero *, .loading .hero *::before, .loading .hero *::after { animation-play-state: paused !important; }
   .ld-mark { display: flex; align-items: center; gap: 14px; opacity: 0; translate: 0 10px; animation: ld-in .9s var(--ease) .1s forwards; }
-  .ld-mark svg { width: 44px; fill: var(--red); }
+  .ld-mark img { display: block; width: min(300px, 62vw); height: auto; }
   .ld-mark b { font-family: var(--display); font-weight: 900; font-size: clamp(54px, 9vw, 96px); line-height: .85; text-transform: uppercase; letter-spacing: .01em; }
   .ld-mark i { font-family: var(--serif); font-style: italic; font-size: clamp(28px, 4.4vw, 46px); color: rgba(244, 241, 234, .8); }
   .ld-bar { width: min(240px, 60vw); height: 2px; background: rgba(244, 241, 234, .18); border-radius: 2px; overflow: hidden; opacity: 0; animation: ld-in .6s ease .3s forwards; }
@@ -873,10 +903,7 @@
   }
 </script>
 <div class="loader" aria-hidden="true">
-  <div class="ld-mark">
-    <svg viewBox="0 0 100 96"><polygon points="50,3 61.5,37 97,37 68.5,58 79.5,92 50,71 20.5,92 31.5,58 3,37 38.5,37"/></svg>
-    <b>Aidan</b><i>for Comms</i>
-  </div>
+  <div class="ld-mark"><img src="assets/brand/badge-white.png" alt="" width="800" height="658"></div>
   <div class="ld-bar"><i></i></div>
   <p class="label ld-sub">IOP Communications Director</p>
 </div>
@@ -889,8 +916,7 @@
 <header class="top">
   <div class="wrap">
     <a href="#top" class="mark" aria-label="Aidan for Comms, back to top">
-      <svg viewBox="0 0 100 96" aria-hidden="true"><polygon points="50,3 61.5,37 97,37 68.5,58 79.5,92 50,71 20.5,92 31.5,58 3,37 38.5,37"/></svg>
-      <b>Aidan</b><i>for Comms</i>
+      <img src="assets/brand/wordmark-color.png" alt="Aidan for Comms" width="1000" height="96">
     </a>
     <button type="button" class="menu-btn label" aria-expanded="false" aria-controls="site-nav"><i aria-hidden="true"></i>Menu</button>
     <nav class="nav label" id="site-nav" aria-label="Sections">
@@ -898,7 +924,6 @@
       <a href="#platform">Platform</a>
       <a href="#programs">Programs</a>
       <a href="#plan">90 Days</a>
-      <a href="#done">Track record</a>
       <a href="#work">Work</a>
       <a href="#faq">Questions</a>
     </nav>
@@ -986,19 +1011,20 @@
     <header class="sec-head">
       <h2 class="disp">Meet Aidan</h2>
     </header>
-    <div class="meet-grid">
-      <div class="reveal">
+    <div class="profile">
+      <!-- To use a different photo, change the src below (a cutout PNG or a regular photo both work) -->
+      <figure class="profile-photo">
+        <img src="assets/aidan-meet.jpg" alt="Aidan Zagel smiling and pointing at the camera outside a campus building" width="1400" height="933" loading="lazy">
+      </figure>
+      <div class="profile-text">
         <blockquote class="pull">“The IOP is one of a kind. It's time our comms <em>matched that.<svg class="squig" viewBox="0 0 200 12" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M2 8 Q12 1 22 7 T42 7 T62 7 T82 7 T102 7 T122 7 T142 7 T162 7 T182 7 T198 6"/></svg></em>”</blockquote>
-        <span class="label">— Aidan Zagel</span>
-        <div class="chips label" aria-label="Skills"><span>Design</span><span>Photography</span><span>Marketing</span><span>Branding</span><span>Recruiting</span></div>
+        <p class="profile-by"><span>Sophomore</span><i aria-hidden="true"></i><span>Quincy House</span><i aria-hidden="true"></i><span>Government + Economics</span></p>
+        <dl class="profile-roles">
+          <div><dt>HPR</dt><dd><b>Marketing + Comp Director</b><span>Harvard Political Review</span></dd></div>
+          <div><dt>HPU</dt><dd><b>External Affairs</b><span>Harvard Political Union</span></dd></div>
+          <div><dt>Photo</dt><dd><b>Photographer</b><span>HPU, the HMC Boston 2027 board, and other student orgs</span></dd></div>
+        </dl>
       </div>
-      <dl class="spec reveal">
-        <div><dt class="label">Year</dt><dd>Sophomore, Quincy House</dd></div>
-        <div><dt class="label">Studies</dt><dd>Government + Economics</dd></div>
-        <div><dt class="label">Now</dt><dd>Marketing + Comp Director<span>Harvard Political Review</span></dd></div>
-        <div><dt class="label">Also</dt><dd>External Affairs<span>Harvard Political Union</span></dd></div>
-        <div><dt class="label">Behind the lens</dt><dd>Photographer<span>HPU, the HMC Boston 2027 board, and other student orgs</span></dd></div>
-      </dl>
     </div>
     <div class="story reveal" id="why">
       <div>
@@ -1033,7 +1059,7 @@
     <div class="platform">
       <article class="pillar reveal">
         <div>
-          <h3 class="disp">Programs First</h3>
+          <h3 class="disp"><span class="pillar-num">#1</span>Programs First</h3>
           <p class="why">Every program does great work. Every program should be seen doing it.</p>
         </div>
         <ul>
@@ -1044,7 +1070,7 @@
       </article>
       <article class="pillar reveal">
         <div>
-          <h3 class="disp">OneIOP</h3>
+          <h3 class="disp"><span class="pillar-num">#2</span>OneIOP</h3>
           <p class="why">Find anything in one click, and get fewer emails while you're at it.</p>
           <a class="demo-link" href="oneiop.html">Try the OneIOP demo →</a>
         </div>
@@ -1055,7 +1081,7 @@
       </article>
       <article class="pillar reveal">
         <div>
-          <h3 class="disp">Comms Playbook</h3>
+          <h3 class="disp"><span class="pillar-num">#3</span>Comms Playbook</h3>
           <p class="why">One shared look makes the IOP recognizable and saves every program from starting at zero.</p>
         </div>
         <ul>
@@ -1066,7 +1092,7 @@
       </article>
       <article class="pillar reveal">
         <div>
-          <h3 class="disp">Member Perks</h3>
+          <h3 class="disp"><span class="pillar-num">#4</span>Member Perks</h3>
           <p class="why">Being an IOP member should feel like something.</p>
         </div>
         <ul>
@@ -1256,53 +1282,38 @@
   </div>
 </section>
 
-<section class="sec done-sec" id="done">
-  <div class="wrap">
-    <header class="sec-head">
-      <h2 class="disp">Already Done</h2>
-      <p>What I've built so far, and where it's headed.</p>
-    </header>
-    <ol class="done">
-      <li class="done-item reveal">
-        <span class="label done-when">Fall 2025</span>
-        <span class="done-dot" aria-hidden="true"></span>
-        <div class="done-body"><span class="done-tag">Harvard</span><h3>Arrived on campus</h3><p>Now a sophomore in Quincy House, concentrating in Government and Economics.</p></div>
-      </li>
-      <li class="done-item reveal">
-        <span class="label done-when">Now</span>
-        <span class="done-dot" aria-hidden="true"></span>
-        <div class="done-body"><span class="done-tag">HPR</span><h3>Marketing + Comp Director, Harvard Political Review</h3><p>I run marketing and the comp for the largest political publication at Harvard College, including campaigns like Battle for the Senate and Fall Comp '26.</p></div>
-      </li>
-      <li class="done-item reveal">
-        <span class="label done-when">Now</span>
-        <span class="done-dot" aria-hidden="true"></span>
-        <div class="done-body"><span class="done-tag">HPU</span><h3>External Affairs, Harvard Political Union</h3><p>Working on how the Political Union shows up to the rest of campus, and photographing its debates.</p></div>
-      </li>
-      <li class="done-item reveal">
-        <span class="label done-when">Ongoing</span>
-        <span class="done-dot" aria-hidden="true"></span>
-        <div class="done-body"><span class="done-tag">Photo</span><h3>Photographer for student orgs</h3><p>Shooting for HPU, the HMC Boston 2027 board and other student organizations, and getting photos back fast.</p></div>
-      </li>
-      <li class="done-item reveal">
-        <span class="label done-when">Fall 2026</span>
-        <span class="done-dot" aria-hidden="true"></span>
-        <div class="done-body"><span class="done-tag">IOP</span><h3>Running for Communications Director</h3><p>Bringing all of it to the IOP: Programs First, OneIOP, the Comms Playbook and Member Perks.</p></div>
-      </li>
-      <li class="done-item reveal next">
-        <span class="label done-when">Nov 15</span>
-        <span class="done-dot" aria-hidden="true"></span>
-        <div class="done-body"><span class="done-tag">Next</span><h3>Election day</h3><p>Voting opens at 12:01am. This is where you come in.</p></div>
-      </li>
-    </ol>
-  </div>
-</section>
-
 <section class="sec work" id="work">
   <div class="wrap">
     <header class="sec-head">
       <h2 class="disp">The Work</h2>
       <p>Design and photography already out in the world.</p>
     </header>
+    <section class="ig-stats" aria-labelledby="ig-title">
+      <header class="ig-head"><h3 id="ig-title">HPR Instagram, Aug 7 – Nov 4</h3><p>Daily views after the article-post redesign and the rebuilt Marketing team. Hover or tap the chart to see any day.</p></header>
+      <div class="ig-nums">
+        <div><b>53K</b><span>views on posts</span></div>
+        <div><b>11,803</b><span>accounts reached</span></div>
+        <div><b>8.7K</b><span>views on the best day</span></div>
+      </div>
+      <figure class="ig-chart">
+        <div class="ig-plot">
+          <div class="ig-y" aria-hidden="true"><span>8.7K</span><span>4.3K</span><span>0</span></div>
+          <div class="ig-area-wrap" tabindex="0" role="slider" aria-label="Daily views; use the arrow keys to move between days" aria-valuemin="0" aria-valuemax="89" aria-valuenow="0">
+            <span class="ig-peak" style="left: 33.8%" aria-hidden="true">8.7K</span>
+        <svg viewBox="0 0 1000 280" preserveAspectRatio="none" role="img" aria-label="Daily Instagram views from Aug 7 to Nov 4: flat until a spike to 8.7K in late August, then repeated peaks between 2K and 4.3K from October into November">
+          <defs><linearGradient id="igfill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--red)" stop-opacity=".22"/><stop offset="1" stop-color="var(--red)" stop-opacity="0"/></linearGradient></defs>
+          <g class="ig-grid"><line x1="0" x2="1000" y1="0" y2="0"/><line x1="0" x2="1000" y1="140" y2="140"/><line x1="0" x2="1000" y1="280" y2="280"/></g>
+          <path class="ig-area" d="M0.0 280.0 L317.1 278.5 L326.5 280.0 L337.7 1.5 L347.1 104.5 L360.2 272.4 L371.5 278.5 L382.7 238.0 L392.1 268.6 L403.4 280.0 L678.2 280.0 L688.6 215.1 L698.9 276.2 L710.1 174.7 L721.4 272.4 L732.6 254.1 L755.2 278.5 L779.5 280.0 L789.9 198.4 L801.1 261.7 L814.3 278.5 L879.9 280.0 L891.2 219.0 L901.5 261.7 L913.7 142.7 L925.0 258.6 L937.1 163.3 L948.4 254.1 L959.7 220.5 L970.0 157.9 L982.2 144.2 L1000.0 258.6 L1000 280 L0 280 Z" fill="url(#igfill)"/>
+          <path class="ig-line" d="M0.0 280.0 L317.1 278.5 L326.5 280.0 L337.7 1.5 L347.1 104.5 L360.2 272.4 L371.5 278.5 L382.7 238.0 L392.1 268.6 L403.4 280.0 L678.2 280.0 L688.6 215.1 L698.9 276.2 L710.1 174.7 L721.4 272.4 L732.6 254.1 L755.2 278.5 L779.5 280.0 L789.9 198.4 L801.1 261.7 L814.3 278.5 L879.9 280.0 L891.2 219.0 L901.5 261.7 L913.7 142.7 L925.0 258.6 L937.1 163.3 L948.4 254.1 L959.7 220.5 L970.0 157.9 L982.2 144.2 L1000.0 258.6"/>
+        </svg>
+            <span class="ig-guide" aria-hidden="true"></span>
+            <span class="ig-dot" aria-hidden="true"></span>
+            <span class="ig-tip" aria-hidden="true"><b></b><span></span></span>
+          </div>
+        </div>
+        <div class="ig-x"><span>Aug 7</span><span>Sep 20</span><span>Nov 4</span></div>
+      </figure>
+    </section>
     <!-- To add a piece: copy a <figure class="work-item"> block inside the right project and change the image, title and line under it.
          To add a project: copy a whole <article class="project"> block. Images live in assets/work/. -->
     <div class="projects" id="work-grid">
@@ -1367,29 +1378,6 @@
           <h3>Article template</h3>
           <p>Redesigned the HPR's article posts to increase engagement. Rebuilt the Marketing team to ensure consistent posting and ed-side support.</p>
         </header>
-        <div class="ig-stats" role="group" aria-label="HPR Instagram views, Aug 7 to Nov 4">
-          <div class="ig-nums">
-            <div><b>53K</b><span>views on posts</span></div>
-            <div><b>11,803</b><span>accounts reached</span></div>
-            <div><b>8.7K</b><span>views on the best day</span></div>
-          </div>
-          <figure class="ig-chart">
-            <div class="ig-plot">
-              <div class="ig-y" aria-hidden="true"><span>8.7K</span><span>4.3K</span><span>0</span></div>
-              <div class="ig-area-wrap">
-                <span class="ig-peak" style="left: 33.8%" aria-hidden="true">8.7K</span>
-            <svg viewBox="0 0 1000 280" preserveAspectRatio="none" role="img" aria-label="Daily Instagram views from Aug 7 to Nov 4: flat until a spike to 8.7K in late August, then repeated peaks between 2K and 4.3K from October into November">
-              <defs><linearGradient id="igfill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--red)" stop-opacity=".22"/><stop offset="1" stop-color="var(--red)" stop-opacity="0"/></linearGradient></defs>
-              <g class="ig-grid"><line x1="0" x2="1000" y1="0" y2="0"/><line x1="0" x2="1000" y1="140" y2="140"/><line x1="0" x2="1000" y1="280" y2="280"/></g>
-              <path class="ig-area" d="M0.0 280.0 L317.1 278.5 L326.5 280.0 L337.7 1.5 L347.1 104.5 L360.2 272.4 L371.5 278.5 L382.7 238.0 L392.1 268.6 L403.4 280.0 L678.2 280.0 L688.6 215.1 L698.9 276.2 L710.1 174.7 L721.4 272.4 L732.6 254.1 L755.2 278.5 L779.5 280.0 L789.9 198.4 L801.1 261.7 L814.3 278.5 L879.9 280.0 L891.2 219.0 L901.5 261.7 L913.7 142.7 L925.0 258.6 L937.1 163.3 L948.4 254.1 L959.7 220.5 L970.0 157.9 L982.2 144.2 L1000.0 258.6 L1000 280 L0 280 Z" fill="url(#igfill)"/>
-              <path class="ig-line" d="M0.0 280.0 L317.1 278.5 L326.5 280.0 L337.7 1.5 L347.1 104.5 L360.2 272.4 L371.5 278.5 L382.7 238.0 L392.1 268.6 L403.4 280.0 L678.2 280.0 L688.6 215.1 L698.9 276.2 L710.1 174.7 L721.4 272.4 L732.6 254.1 L755.2 278.5 L779.5 280.0 L789.9 198.4 L801.1 261.7 L814.3 278.5 L879.9 280.0 L891.2 219.0 L901.5 261.7 L913.7 142.7 L925.0 258.6 L937.1 163.3 L948.4 254.1 L959.7 220.5 L970.0 157.9 L982.2 144.2 L1000.0 258.6"/>
-            </svg>
-              </div>
-            </div>
-            <div class="ig-x"><span>Aug 7</span><span>Sep 20</span><span>Nov 4</span></div>
-            <figcaption>Daily views on HPR Instagram, Aug 7 to Nov 4. From Instagram Insights.</figcaption>
-          </figure>
-        </div>
         <div class="project-grid posts" id="ig-grid">
         <figure class="work-item" tabindex="0" role="button" aria-label="View An Interview with Alejandro Mayorkas larger">
           <div class="work-frame"><img src="assets/work/ig-10.jpg" alt="HPR Instagram post: An Interview with Alejandro Mayorkas" width="800" height="1000" loading="lazy"></div>
@@ -1582,7 +1570,7 @@
 
 <footer class="foot label">
   <div class="wrap">
-    <span>Paid for by Aidan for Comms</span>
+    <span class="foot-brand"><img src="assets/brand/wordmark-white.png" alt="Aidan for Comms" width="1200" height="120"><span>Paid for by Aidan for Comms</span></span>
     <a href="#top">Back to top ↑</a>
   </div>
 </footer>
@@ -2058,6 +2046,52 @@
   });
 
   // Copy the campaign link
+  // Instagram chart: hover, tap or use the arrow keys to read any day
+  (() => {
+    const wrap = document.querySelector('.ig-area-wrap');
+    if (!wrap) return;
+    const path = wrap.querySelector('.ig-line').getAttribute('d');
+    const pts = [...path.matchAll(/[ML]([\d.]+) ([\d.]+)/g)].map((m) => [+m[1], +m[2]]);
+    const DAYS = 89, START = Date.UTC(2026, 7, 7), PEAK = 8700, H = 280;
+    const yAt = (x) => {
+      for (let i = 1; i < pts.length; i++) {
+        if (x <= pts[i][0]) { const [x0, y0] = pts[i - 1], [x1, y1] = pts[i]; return y0 + (y1 - y0) * ((x - x0) / (x1 - x0 || 1)); }
+      }
+      return pts[pts.length - 1][1];
+    };
+    const guide = wrap.querySelector('.ig-guide'), dot = wrap.querySelector('.ig-dot'), tip = wrap.querySelector('.ig-tip');
+    const fmtDate = (d) => new Date(START + d * 864e5).toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' });
+    const fmtViews = (v) => (v < 50 ? 'Under 50' : v >= 1000 ? `About ${(Math.round(v / 100) / 10).toFixed(1)}K` : `About ${Math.round(v / 10) * 10}`);
+    let day = 0;
+    const show = (d) => {
+      day = Math.max(0, Math.min(DAYS, d));
+      // Each day shows its highest point, so a spike that falls between two day marks still reads at full height
+      const x = (day / DAYS) * 1000, half = 500 / DAYS;
+      const ys = [yAt(x), yAt(Math.max(0, x - half)), yAt(Math.min(1000, x + half)), ...pts.filter(([px]) => Math.abs(px - x) <= half).map(([, py]) => py)];
+      const y = Math.min(...ys), v = (1 - y / H) * PEAK;
+      const left = `${x / 10}%`;
+      guide.style.left = left; dot.style.left = left; dot.style.top = `${(y / H) * 100}%`;
+      tip.style.left = `clamp(56px, ${x / 10}%, calc(100% - 56px))`;
+      tip.querySelector('b').textContent = `${fmtViews(v)} views`;
+      tip.querySelector('span').textContent = fmtDate(day);
+      wrap.setAttribute('aria-valuenow', day);
+      wrap.setAttribute('aria-valuetext', `${fmtDate(day)}: ${fmtViews(v).replace(/^About/, 'about').replace(/^Under/, 'under')} views`);
+      wrap.classList.add('on');
+    };
+    const fromPointer = (e) => { const r = wrap.getBoundingClientRect(); show(Math.round(((e.clientX - r.left) / r.width) * DAYS)); };
+    wrap.addEventListener('pointermove', fromPointer);
+    wrap.addEventListener('pointerdown', fromPointer);
+    wrap.addEventListener('pointerleave', (e) => { if (e.pointerType === 'mouse') wrap.classList.remove('on'); });
+    wrap.addEventListener('focus', () => show(day));
+    wrap.addEventListener('blur', () => wrap.classList.remove('on'));
+    wrap.addEventListener('keydown', (e) => {
+      const step = { ArrowLeft: -1, ArrowRight: 1, ArrowDown: -1, ArrowUp: 1, PageDown: -7, PageUp: 7 }[e.key];
+      if (step) { e.preventDefault(); show(day + step); }
+      else if (e.key === 'Home') { e.preventDefault(); show(0); }
+      else if (e.key === 'End') { e.preventDefault(); show(DAYS); }
+    });
+  })();
+
   // Copy buttons in the contact section (email, number, campaign link)
   document.querySelectorAll('[data-copy]').forEach((btn) => {
     const label = btn.textContent;
