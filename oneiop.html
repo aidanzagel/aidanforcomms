@@ -160,7 +160,7 @@
   .g-dots button { position: relative; width: 34px; height: 6px; padding: 0; border: 0; border-radius: 99px; background: var(--line-2); overflow: hidden; cursor: pointer; }
   .g-dots button i { position: absolute; inset: 0; border-radius: inherit; background: var(--accent); transform: scaleX(0); transform-origin: left; }
   /* The current slide's bar fills over the time it stays up (driven by the gallery clock below) */
-  .g-dots button[aria-current="true"] i { transition: transform .2s linear; }
+  .g-dots button[aria-current="true"] i { transition: transform .1s linear; }
   .banner-media img.wide { aspect-ratio: auto; }
   .banner-text { font-size: 15px; line-height: 1.5; color: rgba(255, 255, 255, .82); max-width: 46ch; }
   .g-label { font-size: 12.5px; color: var(--muted); }
@@ -226,6 +226,7 @@
   .tag { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 99px; background: var(--navy-tint-2); color: var(--accent); font: 600 9.5px/1.6 var(--mono); letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; }
   .tag.coal { background: var(--red-tint); color: var(--red); }
   .tag.you { background: var(--red); color: #fff; }
+  .tag.sample { background: transparent; color: var(--muted); box-shadow: inset 0 0 0 1px var(--line-2); }
   .empty { padding: 30px; text-align: center; color: var(--muted); font-size: 14.5px; }
 
   /* Digest */
@@ -863,8 +864,45 @@
   // come from each program's roster.
   const canSee = (x) => x.aud !== 'members' || following.has(x.p);
   const SAMPLE_EVENTS = () => [
-    { id: 990001, p: 'CIVICS', aud: 'members', local: true, date: addDays(DAYS[0].date, 2), s: '18:00', e: '19:30', where: 'IOP Conference Room',
+    { id: 990001, p: 'CIVICS', aud: 'members', local: true, sample: true, date: addDays(DAYS[0].date, 2), s: '18:00', e: '19:30', where: 'IOP Conference Room',
       title: 'CIVICS teachers’ social', host: 'CIVICS chairs', desc: 'Dinner and a semester debrief for everyone teaching with CIVICS this fall.' },
+    // Sample events so every program has something on the calendar in the demo. Real program events would come from each program's chairs.
+    { id: 990100, p: 'Conferences', local: true, sample: true, date: addDays(DAYS[0].date, 1), s: '17:00', e: '18:00', where: 'IOP Conference Room',
+      title: 'Spring conference planning kickoff', host: 'Conferences Committee', desc: 'Help pick the theme and speakers for the spring conference. New members welcome.' },
+    { id: 990101, p: 'HPU', local: true, sample: true, date: addDays(DAYS[0].date, 1), s: '19:30', e: '21:00', where: 'IOP Library',
+      title: 'Weekly debate', host: 'Harvard Political Union', desc: 'This week’s resolution is posted Monday. Come to argue or just to listen.' },
+    { id: 990102, p: 'WIL', local: true, sample: true, date: addDays(DAYS[0].date, 2), s: '17:30', e: '18:30', where: 'IOP Conference Room',
+      title: 'Speaker dinner and conversation', host: 'Women’s Initiative in Leadership', desc: 'Dinner and an informal conversation with this month’s guest speaker.' },
+    { id: 990103, p: 'PRE', local: true, sample: true, date: addDays(DAYS[0].date, 3), s: '18:00', e: '19:00', where: 'IOP Library',
+      title: 'Discussion night', host: 'Politics of Race and Ethnicity', desc: 'An open discussion on this week’s news. Snacks provided.' },
+    { id: 990104, p: 'GAP', local: true, sample: true, date: addDays(DAYS[0].date, 4), s: '12:00', e: '13:00', where: 'IOP Conference Room',
+      title: 'Global affairs lunch', host: 'Global Affairs Program', desc: 'Lunch and a conversation on summer internships abroad.' },
+    { id: 990105, p: 'Environment', local: true, sample: true, date: addDays(DAYS[0].date, 2), s: '19:00', e: '20:00', where: 'IOP Library',
+      title: 'Climate policy discussion', host: 'Program for Environmental Politics', desc: 'This week’s discussion in the climate policy series.' },
+    { id: 990106, p: 'Policy', aud: 'members', local: true, sample: true, date: addDays(DAYS[0].date, 3), s: '19:30', e: '21:00', where: 'IOP Conference Room',
+      title: 'Policy team work session', host: 'The Policy Program', desc: 'Teams meet to work on their proposals. Bring your laptop.' },
+    { id: 990107, p: 'HPOP', local: true, sample: true, date: addDays(DAYS[0].date, 5), s: '15:00', e: '16:00', where: 'IOP Conference Room',
+      title: 'Youth Poll info session', host: 'Harvard Public Opinion Project', desc: 'Learn how the Harvard Youth Poll is made and how to join the team.' },
+    { id: 990108, p: 'RSG', aud: 'members', local: true, sample: true, date: addDays(DAYS[0].date, 5), s: '17:00', e: '18:00', where: 'IOP Library',
+      title: 'Project team check-in', host: 'Research & Strategy Group', desc: 'Teams share progress on this semester’s client projects.' },
+    { id: 990109, p: 'GovLab', local: true, sample: true, date: addDays(DAYS[0].date, 6), s: '13:00', e: '15:00', where: 'IOP Conference Room',
+      title: 'Founder workshop', host: 'Governance Lab', desc: 'A hands-on session on pitching a civic startup.' },
+    { id: 990110, p: 'Cit Tut', aud: 'members', local: true, sample: true, date: addDays(DAYS[0].date, 6), s: '10:00', e: '12:00', where: 'Off campus',
+      title: 'Tutoring session', host: 'Citizenship Tutoring', desc: 'Tutoring with learners preparing for the citizenship test. Ride details are sent to tutors.' },
+    { id: 990111, p: 'HVC', local: true, sample: true, date: addDays(DAYS[0].date, 4), s: '18:30', e: '19:30', where: 'IOP Library',
+      title: 'Turnout team meeting', host: 'Harvard Votes Challenge', desc: 'Planning the next registration push across houses and dorms.' },
+    { id: 990112, p: 'HPR', local: true, sample: true, date: addDays(DAYS[0].date, 1), s: '18:00', e: '19:00', where: 'IOP Conference Room',
+      title: 'Pitch meeting', host: 'Harvard Political Review', desc: 'Bring a story idea for the next issue. Writers and editors of every year welcome.' },
+    { id: 990113, p: 'CAP', local: true, sample: true, date: addDays(DAYS[0].date, 3), s: '17:00', e: '18:30', where: 'IOP Conference Room',
+      title: 'Campaign workshop', host: 'Campaigns and Advocacy Program', desc: 'A hands-on workshop on running a campus campaign.' },
+    { id: 990114, p: 'Arts', local: true, sample: true, date: addDays(DAYS[0].date, 7), s: '19:00', e: '20:30', where: 'IOP Library',
+      title: 'Art and politics night', host: 'Coalition for the Arts', desc: 'An evening of student work on art and politics.' },
+    { id: 990115, p: 'Conservative', local: true, sample: true, date: addDays(DAYS[0].date, 4), s: '19:00', e: '20:00', where: 'IOP Conference Room',
+      title: 'Speaker and discussion', host: 'Conservative Coalition', desc: 'A guest speaker and open Q&A.' },
+    { id: 990116, p: 'GSC', local: true, sample: true, date: addDays(DAYS[0].date, 5), s: '19:00', e: '20:00', where: 'IOP Library',
+      title: 'Community conversation', host: 'Gender & Sexuality Coalition', desc: 'An open conversation on gender, sexuality and politics.' },
+    { id: 990117, p: 'Service', local: true, sample: true, date: addDays(DAYS[0].date, 6), s: '09:00', e: '12:00', where: 'Off campus',
+      title: 'Service day', host: 'Service Coalition', desc: 'Volunteering in Cambridge. Sign-up details are sent the week before.' },
   ];
   const refreshEvents = () => {
     const now = eastern(), live = DAYS[0].date === now.date;
@@ -933,7 +971,7 @@
         <h3>${esc(e.title)}</h3>
         <p class="ev-host">${esc(e.host)}</p>
         <div class="ev-meta"><span>${ICON.pin}${esc(where(e))}</span></div>
-        <div class="tags">${tag(e.p)}${e.aud === 'members' ? LOCK : ''}${following.has(e.p) ? '<span class="tag you">Your program</span>' : ''}</div>
+        <div class="tags">${tag(e.p)}${e.aud === 'members' ? LOCK : ''}${e.sample ? '<span class="tag sample">Sample event</span>' : ''}</div>
         <div class="ev-actions">
           <a class="btn primary" href="${esc(gcal(e))}" target="_blank" rel="noopener">${ICON.cal}Add to Google Calendar</a>
           <button type="button" class="btn" data-save="${e.id}" aria-pressed="${saved.has(e.id)}">${saved.has(e.id) ? ICON.check + 'Saved' : ICON.star + 'Save'}</button>
@@ -1017,6 +1055,7 @@
       </section>`;
   };
   const banner = () => {
+    slideClock = 0;
     const list = slides();
     if (!list.length) return '';
     const n = list.length;
@@ -1055,21 +1094,22 @@
     const lab = wrap.querySelector('.g-label'); if (lab) lab.textContent = `${state.slide + 1} of ${n}`;
     slideClock = 0; fillBar();
   };
-  // One clock drives both the bar and the move, so they always agree. It pauses while you point at or
-  // tab into the gallery, while a dialog is open, and while the tab is in the background.
-  let slideClock = 0;
+  // One clock drives both the bar and the move, so they always agree. Each slide gets 10 seconds of real time.
+  // It only pauses while a dialog is open or the tab is in the background; hovering or clicking no longer stops it.
+  let slideClock = 0, lastTick = performance.now();
   const fillBar = () => {
     const bar = $('.g-dots button[aria-current="true"] i');
     if (bar) bar.style.transform = `scaleX(${calmMotion ? 1 : Math.min(slideClock / SLIDE_MS, 1)})`;
     document.querySelectorAll('.g-dots button:not([aria-current="true"]) i').forEach((el) => { el.style.transform = ''; });
   };
   setInterval(() => {
+    const now = performance.now(), dt = Math.min(now - lastTick, 400);
+    lastTick = now;
     const wrap = $('.gallery-wrap');
-    if (!wrap || calmMotion || +wrap.dataset.n < 2) return;
-    if (document.hidden || wrap.matches(':hover, :focus-within') || $('.veil')) return;
-    slideClock += 200;
+    if (!wrap || calmMotion || +wrap.dataset.n < 2 || document.hidden || $('.veil')) return;
+    slideClock += dt;
     if (slideClock >= SLIDE_MS) setSlide(state.slide + 1); else fillBar();
-  }, 200);
+  }, 100);
 
   // ====== Views ======
   const state = { slide: 0, newsSel: null, evMode: store.get('evMode', null), view: 'home', day: TODAY, evFilter: 'all', newsFilter: 'following', progFilter: 'all', dept: 'all', dq: '', program: null, sent: null, confirmDel: null, gateErr: false, postErr: '' };
