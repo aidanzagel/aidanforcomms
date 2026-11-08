@@ -120,6 +120,8 @@
   .search kbd { position: absolute; right: 10px; top: 50%; translate: 0 -50%; padding: 1px 7px; border: 1px solid var(--line-2); border-radius: 5px; font: 500 11px/1.5 var(--mono); color: var(--faint); background: var(--bg); }
 
   .view { animation: in .4s var(--ease); }
+  .drop-in { animation: drop-in .45s var(--ease) both; animation-delay: calc(var(--i, 0) * 60ms); }
+  @keyframes drop-in { from { opacity: 0; transform: translateY(-16px); } }
   @keyframes in { from { opacity: 0; transform: translateY(5px); } }
   .v-head { margin-bottom: 24px; }
   .v-head h1, .hello h1 { font-size: clamp(28px, 3vw, 36px); font-weight: 700; letter-spacing: -.025em; line-height: 1.1; }
@@ -244,6 +246,73 @@
   .news { display: grid; gap: 10px; }
 
   /* ====== Announcements: inbox with a reading pane ====== */
+  /* Announcements: a bulletin board of short cards */
+  /* Each group fills its row: as many columns as it has cards, up to four */
+  .bb-full.coal { --c: var(--red); }
+  .bb-full.iop { --c: #10143d; }
+  .bb-band { display: flex; align-items: center; gap: 6px; padding: 6px 12px; background: var(--c); color: #fff; font-size: 11.5px; font-weight: 600; }
+  .bb-band b { font-family: var(--display); font-weight: 900; font-size: 16px; line-height: 1; text-transform: uppercase; letter-spacing: .01em; }
+  .bb-band span { padding: 1px 7px; border-radius: 99px; background: rgba(255, 255, 255, .18); }
+  .bb-band .bb-new { background: #fff; color: var(--c); }
+  .bb-band .tag.lock { background: rgba(255, 255, 255, .18); color: #fff; padding: 1px 7px; }
+  .bb-full { --c: var(--navy); }
+  /* Announcements: one readable column, grouped by day */
+  .nl-wrap { max-width: 760px; }
+  .nl-group + .nl-group { margin-top: 26px; }
+  .nl-day { margin: 0 0 10px; font-size: 15px; font-weight: 700; color: var(--ink); }
+  .nl { border-radius: 14px; background: var(--card); box-shadow: 0 0 0 1px var(--line); overflow: hidden; }
+  .nl-row { --c: var(--navy); display: grid; grid-template-columns: 44px minmax(0, 1fr) auto; gap: 14px; align-items: start; width: 100%; padding: 16px 18px; border: 0; background: none; color: var(--ink); font: inherit; text-align: left; cursor: pointer; transition: background .15s; }
+  .nl-row + .nl-row { border-top: 1px solid var(--line); }
+  .nl-row:hover { background: var(--well); }
+  .nl-row:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+  .nl-row.coal { --c: var(--red); }
+  .nl-row.iop { --c: #10143d; }
+  .nl-av { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 12px; background: var(--c); color: #fff; font: 800 11px/1 var(--sans); letter-spacing: .02em; text-transform: uppercase; }
+  .nl-body { display: grid; gap: 4px; min-width: 0; }
+  .nl-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; font-size: 13px; color: var(--muted); }
+  .nl-meta b { font-weight: 600; color: var(--ink); }
+  .nl-new { padding: 1px 8px; border-radius: 99px; background: var(--red); color: #fff; font-size: 11.5px; font-weight: 700; }
+  .nl-body strong { font-size: 17px; line-height: 1.3; letter-spacing: -.01em; }
+  .nl-prev { font-size: 14.5px; line-height: 1.5; color: var(--muted); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .nl-go { align-self: center; font-size: 26px; line-height: 1; color: var(--faint); transition: translate .15s, color .15s; }
+  .nl-row:hover .nl-go { translate: 3px 0; color: var(--ink); }
+  @media (max-width: 560px) {
+    .nl-row { grid-template-columns: 38px minmax(0, 1fr); gap: 12px; padding: 14px; }
+    .nl-av { width: 38px; height: 38px; border-radius: 10px; font-size: 10px; }
+    .nl-go { display: none; }
+    .nl-body strong { font-size: 16px; }
+  }
+  .bb-full .bb-band { padding: 16px 56px 16px 20px; }
+  .bb-full .bb-band b { font-size: 20px; margin-right: auto; }
+  .bb-full-body { display: grid; gap: 10px; padding: 20px 22px 24px; }
+  .bb-full h2 { font-size: 22px; line-height: 1.25; }
+  .bb-meta { font-size: 13px; color: var(--muted); }
+  .bb-text { font-size: 15.5px; line-height: 1.55; }
+  /* Announcements: a feed of full cards, pinned on top */
+  .chips.nf-filter { position: sticky; top: calc(46px + env(safe-area-inset-top, 0px)); z-index: 5; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; margin-bottom: 14px; box-shadow: 0 6px 14px -8px rgba(16, 20, 61, .25); }
+  .chips.nf-filter::-webkit-scrollbar { display: none; }
+  .chips.nf-filter button { flex: none; }
+  @media (max-width: 820px) { .chips.nf-filter { position: static; box-shadow: none; } }
+  .nf { display: grid; gap: 10px; max-width: 780px; }
+  .nf-pins, .nf-list { display: grid; gap: 12px; }
+  .nf-card { display: grid; gap: 10px; padding: clamp(18px, 2vw, 24px); scroll-margin: 90px; transition: box-shadow .4s; }
+  .nf-card.pinned { border-left: 4px solid var(--red); }
+  .nf-card.flash { box-shadow: 0 0 0 3px var(--accent); }
+  .nf-head { display: flex; align-items: center; gap: 12px; }
+  .nf-av { display: grid; place-items: center; flex: none; width: 40px; height: 40px; border-radius: 11px; background: var(--navy); color: #fff; font: 700 10.5px/1 var(--sans); letter-spacing: .02em; }
+  .nf-av.coal { background: var(--red); }
+  .nf-av.iop { background: var(--ink); color: var(--bg); }
+  .nf-from { display: grid; gap: 1px; min-width: 0; flex: 1; }
+  .nf-from b { font-size: 14.5px; }
+  .nf-from small { font-size: 12.5px; color: var(--muted); }
+  .nf-flags { display: flex; gap: 6px; flex: none; }
+  .nf-card h2 { font-size: clamp(19px, 1.8vw, 22px); line-height: 1.25; letter-spacing: -.01em; }
+  .nf-body { font-size: 15.5px; line-height: 1.55; color: var(--ink); max-width: 64ch; }
+  .nf-aud { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); }
+  .nf-aud svg { width: 14px; height: 14px; flex: none; }
+  .nf-foot { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; margin-top: 4px; }
+  .nf-link { border: 0; background: none; padding: 0; font: 600 13.5px var(--sans); color: var(--accent); cursor: pointer; }
+  .nf-link:hover { text-decoration: underline; }
   .inbox { display: grid; grid-template-columns: minmax(280px, 380px) minmax(0, 1fr); min-height: 560px; overflow: hidden; }
   .ib-list { border-right: 1px solid var(--line); display: flex; flex-direction: column; min-width: 0; }
   .ib-tools { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 14px; border-bottom: 1px solid var(--line); }
@@ -779,19 +848,21 @@
   // The first and third posts follow the live event data, so they never go stale
   let NEWS = [];
   const buildNews = () => {
-    const forum = EVENTS.filter((e) => e.p === 'Forum').sort(byTime)[0];
-    const sg = EVENTS.filter((e) => e.p === 'FSG' && e.day < DAYS.length).length;
+    // Sample program updates for the demo. Announcements are news from programs (applications, results,
+    // new work, thank-yous), not event promos: events live on the Events page.
     NEWS = [
-      forum && { id: 1, p: 'Forum', pin: true, when: 'Today', title: `Next in the Forum: ${forum.title}`, body: `${dayName(forum.day)} at ${fmt(forum.s)}. ${forum.host}. Tickets, if needed, and full details are on the event page.`, link: URL_BASE + forum.url, act: 'Event details' },
-      { id: 2, p: null, pin: true, when: 'Today', title: 'Welcome to OneIOP', body: 'Every announcement, event and contact now lives here. Emails get shorter: one digest every Sunday, with the details one click away.' },
-      sg && { id: 3, p: 'FSG', when: 'Yesterday', title: 'Study groups this week', body: `${plural(sg, 'study group')} in the next eight days, each led by a Resident Fellow. Times and RSVP details are on each event.`, act: 'See study groups', go: 'FSG' },
-      { id: 9, p: 'CIVICS', aud: 'members', when: 'Yesterday', title: `Teachers’ social: ${dayInfo(2).d}, ${dayInfo(2).m} ${dayInfo(2).n}`, body: 'Dinner in the IOP Conference Room for everyone teaching with CIVICS this fall, 6 PM. It’s on your Events calendar.', act: 'See it in Events', goto: 'events' },
-      { id: 4, p: 'HPOP', when: 'Yesterday', title: 'Join the next Youth Poll team', body: 'No experience needed. Info session details coming soon.' },
-      { id: 5, p: 'HPR', when: '2 days ago', title: 'Pitch a piece for the next issue', body: 'Takes on the midterm results welcome. Pitches go to the HPR editors through the request form.' },
-      { id: 6, p: 'HVC', when: '3 days ago', title: 'Thanks, turnout captains', body: 'Thank you to everyone who ran a registration push this fall. A recap of Harvard’s turnout is coming soon.' },
-      { id: 7, p: 'Service', when: '4 days ago', title: 'Saturday service day sign-ups', body: 'Sign-ups are open for this weekend’s service shift. Spots are limited.', act: 'Sign up' },
-      { id: 8, p: 'CAP', from: 'Communications Director', when: '5 days ago', title: 'New: campaign graphics templates', body: 'Running for office on campus? Grab the templates from the Comms Playbook.', act: 'Get the templates' },
-    ].filter(Boolean);
+      { id: 2, p: null, pin: true, when: 'Today', title: 'Welcome to OneIOP', body: 'Every program’s updates now live here, so emails can get shorter: one digest every Sunday, with the details one click away. Events are on the Events page.' },
+      { id: 10, p: null, pin: true, when: 'Today', title: 'Spring program applications are open', body: 'Most programs take new members at the start of each semester. Every program’s page now lists how to join and who to ask.', act: 'Browse programs', goto: 'programs' },
+      { id: 5, p: 'HPR', when: 'Today', title: 'The fall issue is out', body: 'The new issue of the Harvard Political Review is online now, with print copies at the IOP. Thank you to every writer, editor and designer who worked on it.', act: 'Read the issue' },
+      { id: 11, p: 'Policy', when: 'Today', title: 'Proposal teams are set for the semester', body: 'Every team now has a topic and a faculty advisor. Teams present their final proposals at the end of the semester.', act: 'Policy page', go: 'Policy' },
+      { id: 9, p: 'CIVICS', aud: 'members', when: 'Yesterday', title: 'New lesson plans are in the shared folder', body: 'This semester’s lesson plans and classroom materials are ready. Teaching teams, please review yours before your next school visit.', act: 'Open the folder' },
+      { id: 4, p: 'HPOP', when: 'Yesterday', title: 'The Youth Poll team is recruiting', body: 'No experience needed. HPOP is adding members for the next Harvard Youth Poll, from survey design to the final release.', act: 'How to join', go: 'HPOP' },
+      { id: 12, p: 'GovLab', when: 'Yesterday', title: 'Applications open for the next cohort', body: 'Have an idea for a civic startup? Governance Lab is taking applications from student founders and teams.', act: 'Apply' },
+      { id: 6, p: 'HVC', when: '2 days ago', title: 'Thanks, turnout captains', body: 'Thank you to everyone who ran a registration push this fall. A recap of Harvard’s turnout is coming soon.' },
+      { id: 13, p: 'WIL', when: '3 days ago', title: 'Welcome to this year’s cohort', body: 'Please welcome the newest members of the Women’s Initiative in Leadership. Watch for member spotlights over the coming weeks.' },
+      { id: 7, p: 'Service', when: '4 days ago', title: 'Thank you for a great fall of service', body: 'Members volunteered across Cambridge and Boston this fall. Photos from the semester are up, and spring projects are being planned now.', act: 'See the photos' },
+      { id: 8, p: 'CAP', from: 'Communications Director', when: '5 days ago', title: 'New: campaign graphics templates', body: 'Running for office on campus? Ready-made campaign graphics are now in the Comms Playbook for any student to use.', act: 'Get the templates' },
+    ];
     NEWS.forEach((n) => { n.from = n.from || (n.p ? `${n.p} chair` : 'Communications Director'); });
   };
 
@@ -1114,11 +1185,17 @@
   // ====== Views ======
   const state = { slide: 0, newsSel: null, evMode: store.get('evMode', null), view: 'home', day: TODAY, evFilter: 'all', newsFilter: 'following', progFilter: 'all', dept: 'all', dq: '', program: null, sent: null, confirmDel: null, gateErr: false, postErr: '' };
 
+  // The events for the picked day. Picking a day swaps only this column, so the page doesn't reload.
+  const dayCol = () => {
+    const top = featured();
+    const dayAll = EVENTS.filter((e) => e.day === state.day);
+    const dayEvents = dayAll.filter((e) => e !== top).sort((a, b) => following.has(b.p) - following.has(a.p) || byTime(a, b));
+    return `${secTitle(dayEvents.length && dayEvents.length < dayAll.length ? `Also ${dayName(state.day).replace(/^(Today|Tomorrow)/, (w) => w.toLowerCase())}` : dayName(state.day), dayEvents.length ? plural(dayEvents.length, 'event') : '')}
+            ${dayEvents.length ? evList(dayEvents) : `<div class="card empty">${dayAll.length ? 'That\u2019s the only event today. It\u2019s featured above.' : 'No IOP events this day.'} Pick another day to see more.</div>`}`;
+  };
+
   const views = {
     home() {
-      const top = featured();
-      const dayAll = EVENTS.filter((e) => e.day === state.day);
-      const dayEvents = dayAll.filter((e) => e !== top).sort((a, b) => following.has(b.p) - following.has(a.p) || byTime(a, b));
       const mine = newsFor().filter(forYou).slice(0, 4);
       const yours = EVENTS.filter((e) => following.has(e.p) && e.day < 7).length;
       const h = new Date().getHours();
@@ -1130,10 +1207,7 @@
           ${DAYS.map((d) => { const l = EVENTS.filter((e) => e.day === d.i).sort((a, b) => following.has(b.p) - following.has(a.p)).slice(0, 3); return `<button type="button" data-day="${d.i}" aria-pressed="${state.day === d.i}"><span class="label">${d.i === TODAY ? 'Today' : d.d}</span><b>${d.n}</b><small>${l.map((e) => `<i${following.has(e.p) ? '' : ' class="other"'}></i>`).join('')}</small></button>`; }).join('')}
         </div>
         <div class="grid-2">
-          <div>
-            ${secTitle(dayEvents.length && dayEvents.length < dayAll.length ? `Also ${dayName(state.day).replace(/^(Today|Tomorrow)/, (w) => w.toLowerCase())}` : dayName(state.day), dayEvents.length ? plural(dayEvents.length, 'event') : '')}
-            ${dayEvents.length ? evList(dayEvents) : `<div class="card empty">${dayAll.length ? 'That\u2019s the only event today. It\u2019s featured above.' : 'No IOP events this day.'} Pick another day to see more.</div>`}
-          </div>
+          <div id="day-col">${dayCol()}</div>
           <div>
             ${secTitle('Announcements', `<button type="button" class="see-all" data-goto="news">See all</button>`)}
             <div class="card mini">${mine.map((n) => `
@@ -1158,57 +1232,43 @@
           : [...new Set(list.map((e) => e.day))].sort((a, b) => a - b).map((i) => { const l = list.filter((e) => e.day === i); return secTitle(dayName(i), plural(l.length, 'event')) + evGrid(l); }).join('') || '<div class="card empty">Nothing here yet. Try another filter.</div>'}`;
     },
     news() {
+      // One column, grouped by day, pinned first. Click a row to read the full message.
+      // Opening the page marks everything read, so the badge clears; "New" stays on this visit.
       const all = newsFor();
-      const list = DEMO_ALL_PROGRAMS ? all : all.filter((n) => state.newsFilter === 'all' || forYou(n));
-      const wide = !matchMedia('(max-width: 820px)').matches;
-      let sel = list.find((n) => String(n.id) === String(state.newsSel)) || null;
-      if (!sel && wide) sel = list[0] || null;
-      const unreadBefore = new Set(list.filter((n) => !read.has(n.id)).map((n) => n.id));
-      if (sel && !read.has(sel.id)) { read.add(sel.id); store.set('read', [...read]); updateCount(); }
-      const unread = list.filter((n) => !read.has(n.id)).length;
-      const av = (n) => `<span class="ib-av${!n.p ? ' iop' : isCoal(n.p) ? ' coal' : ''}" aria-hidden="true">${n.p ? esc(n.p.slice(0, 4).toUpperCase()) : 'IOP'}</span>`;
-      const src = (n) => n.p ? prog(n.p).name : 'Institute of Politics';
-      const PIN = '<span class="tag coal">Pinned</span>';
-      const actBtn = (n) => n.link ? `<a class="btn primary" href="${esc(n.link)}" target="_blank" rel="noopener">${esc(n.act)} ${ICON.out}</a>`
-        : n.go ? `<button type="button" class="btn primary" data-prog="${esc(n.go)}">${esc(n.act)} →</button>`
-        : n.goto ? `<button type="button" class="btn primary" data-goto="${esc(n.goto)}">${esc(n.act)} →</button>`
-        : n.act ? `<button type="button" class="btn primary" data-demo="${esc(n.act)}">${esc(n.act)} →</button>` : '';
-      const chairs = sel && sel.p ? chairsOf(sel.p) : [];
-      const reader = sel ? `
-        <article class="ib-read" aria-labelledby="ib-title">
-          <button type="button" class="back" data-nback>← All announcements</button>
-          <div class="ib-kick"><span class="label">${esc(src(sel))}</span>${sel.pin ? PIN : ''}${sel.aud === 'members' ? LOCK : ''}</div>
-          <h2 id="ib-title">${esc(sel.title)}</h2>
-          <div class="ib-from">${av(sel)}<div><b>${esc(sel.from)}</b><small>${esc(src(sel))} · ${esc(sel.when)}</small></div></div>
-          <p class="ib-body">${esc(sel.body)}</p>
-          ${actBtn(sel) ? `<div class="ib-acts">${actBtn(sel)}</div>` : ''}
-          <p class="ib-aud">${sel.aud === 'members' ? ICON.lock : '<svg class="i" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5M16 4.8a3.5 3.5 0 0 1 0 6.4M18.5 14.8c1.6.8 2.6 2.5 3 5.2"/></svg>'}<span>${sel.aud === 'members'
-            ? DEMO_ALL_PROGRAMS ? `Sent to ${esc(prog(sel.p).name)} members only. You can see it because you’re in every program for the demo.` : `Sent to ${esc(prog(sel.p).name)} members only. You can see it because ${esc(sel.p)} is one of your programs.`
-            : 'Sent to all IOP members.'}</span></p>
-          ${chairs.length ? `<p class="ib-ask">Questions? Ask ${chairs.map((c) => esc(c.name)).join(' or ')}, ${chairs.length > 1 ? 'the chairs' : 'the chair'}. <button type="button" data-prog="${esc(sel.p)}">${esc(sel.p)} page →</button></p>` : ''}
-        </article>` : '<article class="ib-read"><p class="ib-empty">Pick an announcement to read it.</p></article>';
+      const newIds = new Set(all.filter((n) => !read.has(n.id)).map((n) => n.id));
+      if (newIds.size) { newIds.forEach((id) => read.add(id)); store.set('read', [...read]); updateCount(); }
+      boardNew = newIds;
+      const senders = [...new Set(all.map((n) => n.p || 'IOP'))];
+      const f = state.newsFilter && state.newsFilter !== 'following' ? state.newsFilter : 'all';
+      const list = all.filter((n) => f === 'all' || (n.p || 'IOP') === f).sort((x, y) => (y.pin ? 1 : 0) - (x.pin ? 1 : 0));
+      const row = (n) => `
+          <button type="button" class="nl-row${!n.p ? ' iop' : isCoal(n.p) ? ' coal' : ''}" data-news="${esc(n.id)}">
+            <span class="nl-av" aria-hidden="true">${esc((n.p || 'IOP').slice(0, 4))}</span>
+            <span class="nl-body">
+              <span class="nl-meta"><b>${esc(n.p ? prog(n.p).name : 'Institute of Politics')}</b><span class="nl-when">${esc(n.when)}</span>${newIds.has(n.id) ? '<span class="nl-new">New</span>' : ''}${n.aud === 'members' ? LOCK : ''}</span>
+              <strong>${esc(n.title)}</strong>
+              <span class="nl-prev">${esc(n.body)}</span>
+            </span>
+            <span class="nl-go" aria-hidden="true">›</span>
+          </button>`;
+      // Grouped by when it was posted, so the newest are first and nothing sits alone in a half-empty row
+      const groups = [
+        ['Pinned', list.filter((n) => n.pin)],
+        ['Today', list.filter((n) => !n.pin && n.when === 'Today')],
+        ['Yesterday', list.filter((n) => !n.pin && n.when === 'Yesterday')],
+        ['Earlier this week', list.filter((n) => !n.pin && n.when !== 'Today' && n.when !== 'Yesterday')],
+      ];
+      const chips = [['all', 'Everything', all.length], ...senders.map((id) => [id, id, all.filter((n) => (n.p || 'IOP') === id).length])];
       return `
-        <header class="v-head"><h1>Announcements</h1><p>Short updates from the IOP and program chairs, in place of long emails.</p></header>
-        <div class="card inbox${sel && !wide ? ' reading' : ''}">
-          <div class="ib-list">
-            <div class="ib-tools">
-              ${DEMO_ALL_PROGRAMS ? `<span class="ib-count">${plural(all.length, 'announcement')}</span>` : `<div class="chips" role="group" aria-label="Filter announcements">${[['following', 'For you', all.filter(forYou).length], ['all', 'Everything', all.length]].map(([k, l, c]) => `<button type="button" data-nf="${k}" aria-pressed="${state.newsFilter === k}">${l}<span class="n">${c}</span></button>`).join('')}</div>`}
-              <span class="unread">${unread ? `<b>${unread}</b> unread` : 'All read'}</span>
-            </div>
-            <div class="ib-rows" role="list">${list.map((n) => `
-              <button type="button" role="listitem" class="ib-row${unreadBefore.has(n.id) && n !== sel ? ' unread' : ''}" data-nsel="${esc(n.id)}" aria-current="${n === sel}">
-                ${av(n)}
-                <span class="ib-main">
-                  <span class="ib-top"><b>${esc(src(n))}</b><time>${esc(n.when)}</time></span>
-                  <span class="ib-title">${esc(n.title)}</span>
-                  <span class="ib-prev">${esc(n.body)}</span>
-                  ${n.pin || n.aud === 'members' ? `<span class="ib-flags">${n.pin ? PIN : ''}${n.aud === 'members' ? LOCK : ''}</span>` : ''}
-                </span>
-              </button>`).join('') || '<p class="ib-empty">Nothing here yet.</p>'}
-            </div>
-            ${hiddenNote(hiddenNews())}
-          </div>
-          ${reader}
+        <header class="v-head"><h1>Announcements</h1><p>News from the IOP and every program: applications, new work, results and thank-yous. Click any update to read it.</p></header>
+        <div class="nl-wrap">
+        <div class="chips nf-filter" role="group" aria-label="Show announcements from">${chips.map(([k, l, c]) => `<button type="button" data-nf="${esc(k)}" aria-pressed="${f === k}">${esc(l)}<span class="n">${c}</span></button>`).join('')}</div>
+        ${groups.map(([title, items]) => items.length ? `
+          <section class="nl-group">
+            <h2 class="nl-day">${esc(title)}</h2>
+            <div class="nl">${items.map(row).join('')}</div>
+          </section>` : '').join('') || '<div class="card empty">Nothing here yet.</div>'}
+        ${hiddenNote(hiddenNews())}
         </div>`;
     },
     programs() {
@@ -1385,6 +1445,27 @@
     modal.innerHTML = `<button type="button" class="m-close" data-mclose aria-label="Close">${ICON.x}</button>${html}`;
     modal.querySelector('.m-close').focus();
   };
+  let boardNew = new Set();
+  const newsAction = (n) => n.link ? `<a class="btn primary" href="${esc(n.link)}" target="_blank" rel="noopener">${esc(n.act)} ${ICON.out}</a>`
+    : n.go ? `<button type="button" class="btn primary" data-mgo="prog" data-to="${esc(n.go)}">${esc(n.act)} →</button>`
+    : n.goto ? `<button type="button" class="btn primary" data-mgo="view" data-to="${esc(n.goto)}">${esc(n.act)} →</button>`
+    : n.act ? `<button type="button" class="btn primary" data-mgo="demo" data-to="${esc(n.act)}">${esc(n.act)} →</button>` : '';
+  const openNews = (id) => {
+    const n = NEWS.find((x) => String(x.id) === String(id));
+    if (!n) return;
+    const chairs = n.p ? chairsOf(n.p) : [];
+    openModal(`
+      <article class="bb-full${!n.p ? ' iop' : isCoal(n.p) ? ' coal' : ''}">
+        <div class="bb-band"><b>${esc(n.p ? prog(n.p).name : 'Institute of Politics')}</b>${n.pin ? '<span>Pinned</span>' : ''}${n.aud === 'members' ? LOCK : ''}</div>
+        <div class="bb-full-body">
+          <h2>${esc(n.title)}</h2>
+          <p class="bb-meta">${esc(n.from)} · ${esc(n.when)}</p>
+          <p class="bb-text">${esc(n.body)}</p>
+          ${n.aud === 'members' ? `<p class="nf-aud">${ICON.lock}<span>Only ${esc(prog(n.p).name)} members see this.</span></p>` : ''}
+          <div class="nf-foot">${newsAction(n)}${n.p ? `<button type="button" class="nf-link" data-mgo="prog" data-to="${esc(n.p)}">${chairs.length ? `Questions? Ask ${esc(chairs.map((c) => c.name.split(' ')[0]).join(' or '))}` : `${esc(n.p)} page`} →</button>` : ''}</div>
+        </div>
+      </article>`, n.title);
+  };
   let openEv = null;
   const openEvent = (id) => { const e = EVENTS.find((x) => x.id === id); if (!e) return; openEv = id; openModal(evCard(e), e.title); };
 
@@ -1417,8 +1498,13 @@
   const openSettings = () => { $('#me-menu').hidden = true; openModal(settingsHTML(), 'Settings'); };
   document.addEventListener('click', (ev) => {
     if (!modal) return;
-    const t = ev.target.closest('[data-mclose], [data-theme-set], [data-evdef], [data-set], .modal [data-save]');
+    const t = ev.target.closest('[data-mclose], [data-theme-set], [data-evdef], [data-set], .modal [data-save], .modal [data-mgo]');
     if (!t) return;
+    if (t.dataset.mgo) { const to = t.dataset.to; closeModal();
+      if (t.dataset.mgo === 'prog') go('programs', { program: to });
+      else if (t.dataset.mgo === 'view') go(to);
+      else toast(`“${to}” would open here. This is a demo.`);
+      return; }
     if (t.hasAttribute('data-mclose')) { closeModal(); return; }
     if (t.dataset.themeSet) { store.set('theme', t.dataset.themeSet); applyTheme(t.dataset.themeSet); openModal(settingsHTML(), 'Settings'); return; }
     if (t.dataset.evdef) { state.evMode = t.dataset.evdef === 'auto' ? null : t.dataset.evdef; store.set('evMode', state.evMode); openModal(settingsHTML(), 'Settings'); render(); return; }
@@ -1442,6 +1528,7 @@
     refreshEvents();
     viewEl.innerHTML = `<div class="view">${term ? views.search(term) : views[state.view]()}</div>`;
     updateCount();
+    if (!term && state.view === 'news' && state.newsSel) { const id = state.newsSel; state.newsSel = null; setTimeout(() => openNews(id), 0); }
     document.querySelectorAll('.views button').forEach((b) => { if (!term && b.dataset.view === state.view) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current'); });
     if (scroll) scrollTo({ top: 0, behavior: 'instant' });
   };
@@ -1470,9 +1557,18 @@
     if (t.dataset.nsel) { state.newsSel = t.dataset.nsel; render(); if (matchMedia('(max-width: 820px)').matches) scrollTo({ top: 0, behavior: 'instant' }); }
     else if (t.hasAttribute('data-nback')) { state.newsSel = null; render(true); }
     else if (t.dataset.evopen) openEvent(+t.dataset.evopen);
+    else if (t.dataset.news) openNews(t.dataset.news);
     else if (t.dataset.evmode) { state.evMode = t.dataset.evmode; render(); }
-    else if (t.dataset.day) { state.day = +t.dataset.day; render(); }
-    else if (t.dataset.goto) go(t.dataset.goto, t.dataset.sel ? { newsSel: t.dataset.sel, newsFilter: 'all' } : t.dataset.goto === 'news' ? { newsSel: null } : {});
+    else if (t.dataset.day) {
+      state.day = +t.dataset.day;
+      const col = document.getElementById('day-col');
+      if (!col || q.value.trim()) { render(); return; }
+      t.closest('.week').querySelectorAll('[data-day]').forEach((b) => b.setAttribute('aria-pressed', b === t));
+      col.innerHTML = dayCol();
+      // New events drop in from the top, one after another
+      col.querySelectorAll('.events > *, .empty').forEach((el, i) => { el.style.setProperty('--i', i); el.classList.add('drop-in'); });
+    }
+    else if (t.dataset.goto) go(t.dataset.goto, t.dataset.sel ? { newsSel: t.dataset.sel, newsFilter: 'all' } : t.dataset.goto === 'news' ? { newsSel: null, newsFilter: 'all' } : {});
     else if (t.dataset.save) {
       const id = +t.dataset.save;
       saved.has(id) ? saved.delete(id) : saved.add(id);

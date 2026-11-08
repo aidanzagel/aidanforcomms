@@ -61,11 +61,12 @@
   /* ====== Announcement bar ====== */
   /* The bar and header sit at the top of the page and scroll away with it */
   .masthead { position: relative; z-index: 50; }
-  .announce { display: block; background: var(--navy); color: var(--paper); text-decoration: none; font-size: 14px; line-height: 1.4; transition: background .25s; }
-  .announce:hover { background: var(--ink); }
-  .announce .wrap { display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; padding-block: 10px; text-align: center; }
-  .announce .label { padding: 3px 8px; border-radius: 999px; background: var(--red); color: #fff; font-size: 10.5px; }
-  .announce b { font-weight: 650; white-space: nowrap; }
+  .announce { display: block; background: var(--red); color: #fff; text-decoration: none; font-size: 15.5px; font-weight: 500; line-height: 1.4; transition: background .25s; }
+  .announce:hover { background: #b80d17; }
+  .announce .wrap { display: flex; align-items: center; justify-content: center; gap: 10px 14px; flex-wrap: wrap; padding-block: 11px; text-align: center; }
+  .announce .label { padding: 4px 9px; border-radius: 999px; background: #fff; color: var(--red); font-size: 11px; font-weight: 700; }
+  .announce b { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 999px; background: var(--navy); color: #fff; font-size: 14px; font-weight: 700; white-space: nowrap; transition: background .2s; }
+  .announce:hover b { background: var(--ink); }
   .announce b span { display: inline-block; transition: transform .25s var(--ease); }
   .announce:hover b span { transform: translateX(3px); }
   @media (max-width: 560px) { .announce .more { display: none; } }
@@ -316,6 +317,7 @@
   .profile-roles dd { display: grid; gap: 3px; }
   .profile-roles dd b { font-size: 16px; line-height: 1.3; color: var(--ink); }
   .profile-roles dd span { font-size: 14px; line-height: 1.4; color: var(--muted); }
+  .profile-work { justify-self: start; align-self: start; width: fit-content; margin-top: clamp(20px, 2.4vw, 28px); }
 
   /* ====== Numbers ====== */
   .stats { background: var(--paper-2); border-block: 1px solid var(--line); }
@@ -547,6 +549,8 @@
   .wide .work-frame { aspect-ratio: 1200 / 630; }
   .tall .work-frame { aspect-ratio: 3 / 4; }
   .posts .work-frame { aspect-ratio: 4 / 5; border-radius: 8px; }
+  .project-grid.photo { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .photo .work-frame { aspect-ratio: 3 / 2; }
   .work-frame img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform .5s var(--ease); }
   .work-item:hover .work-frame img { transform: scale(1.02); }
   .work-item:hover .work-frame, .work-item:focus-visible .work-frame { box-shadow: 0 0 0 2px var(--navy), 0 14px 34px rgba(16, 20, 61, .14); }
@@ -628,12 +632,12 @@
 
   /* ====== Work viewer ====== */
   .work-hint { margin-top: 18px; color: var(--muted); font-weight: 500; }
-  .viewer, .share-modal {
+  .viewer {
     position: fixed; inset: 0; z-index: 120; display: grid; place-items: center; padding: max(20px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) max(20px, env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
     background: rgba(10, 13, 46, .78); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
     animation: fade-in .3s ease;
   }
-  .viewer[hidden], .share-modal[hidden] { display: none; }
+  .viewer[hidden] { display: none; }
   .viewer figure { display: grid; gap: 14px; justify-items: center; max-width: min(92vw, 760px); animation: lift .45s cubic-bezier(.16, 1, .3, 1); }
   @keyframes lift { from { opacity: 0; transform: translateY(16px) scale(.98); } }
   .viewer img { width: min(92vw, 760px); max-height: 74vh; object-fit: contain; background: var(--paper); box-shadow: 0 30px 80px rgba(0, 0, 0, .45); }
@@ -681,12 +685,6 @@
   .pd-build { display: grid; counter-reset: b; }
   .pd-build li { counter-increment: b; display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 8px; padding: 13px 0; border-top: 1px solid var(--line); font-size: 16.5px; line-height: 1.4; }
   .pd-build li::before { content: "0" counter(b); font-family: var(--display); font-weight: 900; font-size: 22px; line-height: 1; color: var(--navy); }
-  .pd-measure { display: grid; gap: 8px; }
-  .pd-measure li { position: relative; padding-left: 30px; font-size: 16px; line-height: 1.4; }
-  .pd-measure li::before {
-    content: ""; position: absolute; left: 0; top: 2px; width: 18px; height: 18px;
-    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 96'%3E%3Cpolygon points='50,3 61.5,37 97,37 68.5,58 79.5,92 50,71 20.5,92 31.5,58 3,37 38.5,37' fill='%23d7101b'/%3E%3C/svg%3E") center / contain no-repeat;
-  }
   .pd-base { padding: 18px 20px; border: 1.5px solid var(--navy); border-radius: 6px; font-size: 15px; line-height: 1.45; color: var(--muted); }
   .pd-base strong { color: var(--ink); }
   .pd-foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding-top: 6px; }
@@ -698,32 +696,6 @@
   @media (max-width: 560px) {
     .pd-head, .pd-body { padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-right: max(20px, env(safe-area-inset-right, 0px)); }
   }
-
-  /* ====== Share card ====== */
-  .sm-inner { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 30px; align-items: center; width: min(820px, 100%); max-height: 100%; overflow: auto; padding: 30px; border-radius: 6px; background: var(--paper); color: var(--ink); animation: lift .45s cubic-bezier(.16, 1, .3, 1); }
-  .sm-inner .v-close { position: absolute; z-index: 3; top: 12px; right: 12px; background: var(--paper-2); color: var(--ink); box-shadow: 0 4px 12px rgba(16, 20, 61, .2); }
-  .sm-form { display: grid; gap: 14px; }
-  .sm-form h3 { font-size: 54px; color: var(--navy); }
-  .sm-form label { display: grid; gap: 6px; font-family: var(--sans); font-weight: 600; font-size: 13px; letter-spacing: 0; color: var(--muted); }
-  .sm-form input, .sm-form select { font: 500 16px/1.2 var(--sans); color: var(--ink); padding: 12px 14px; border: 1.5px solid var(--line); border-radius: 6px; background: #fff; letter-spacing: 0; text-transform: none; }
-  .sm-form input:focus, .sm-form select:focus { outline: 2px solid var(--navy); outline-offset: 1px; }
-  .sc-themes { display: flex; gap: 8px; }
-  .sc-themes button { width: 34px; height: 34px; border-radius: 50%; border: 2px solid var(--paper); box-shadow: 0 0 0 1.5px var(--line); cursor: pointer; }
-  .sc-themes button[aria-pressed="true"] { box-shadow: 0 0 0 2.5px var(--ink); }
-  .sm-hint { color: var(--muted); }
-  .story-card {
-    --c-bg: var(--navy); --c-fg: var(--paper); --c-ac: var(--red);
-    position: relative; overflow: hidden; isolation: isolate; width: min(300px, 72vw); aspect-ratio: 9 / 16; border-radius: 14px; padding: 26px 22px;
-    display: flex; flex-direction: column; background: var(--c-bg); color: var(--c-fg); box-shadow: 0 24px 50px rgba(16, 20, 61, .3);
-  }
-  .story-card[data-theme="red"] { --c-bg: var(--red); --c-fg: var(--paper); --c-ac: var(--navy); }
-  .story-card[data-theme="cream"] { --c-bg: var(--paper); --c-fg: var(--navy); --c-ac: var(--red); box-shadow: 0 24px 50px rgba(16, 20, 61, .18), inset 0 0 0 1px var(--line); }
-  .story-card .sc-star { position: absolute; z-index: -1; width: 150%; left: -25%; top: 22%; rotate: -10deg; fill: var(--c-ac); opacity: .95; }
-  .story-card .label { font-size: 10px; opacity: .8; }
-  .story-card h4 { font-family: var(--display); font-weight: 900; text-transform: uppercase; font-size: 76px; line-height: .84; margin-top: auto; }
-  .story-card .sc-for { font-family: var(--serif); font-style: italic; font-size: 20px; margin-top: 10px; }
-  .story-card .sc-from { margin-top: 14px; font-weight: 700; font-size: 15px; min-height: 1.2em; }
-  .story-card .sc-url { margin-top: 16px; padding-top: 12px; border-top: 1px solid currentColor; font-family: var(--sans); font-weight: 600; font-size: 12.5px; letter-spacing: 0; opacity: .85; }
 
   /* ====== Close-section actions ====== */
   .close-ctas { display: flex; flex-wrap: wrap; gap: 12px 14px; margin-top: 32px; }
@@ -816,6 +788,7 @@
     .project-head { grid-template-columns: minmax(0, 1fr); }
     .project-grid.wide, .project-grid.tall, .project-grid.posts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .project-grid .work-item figcaption span { display: none; }
+    .project-grid.photo { grid-template-columns: minmax(0, 1fr); }
     .close-grid { grid-template-columns: minmax(0, 1fr); gap: 22px; }
     .close-sig { width: 70%; margin-top: 10px; }
   }
@@ -831,9 +804,6 @@
     .pillar ul { grid-column: 1; }
     .pillar::before { inset: 0 -18px; }
     .story { grid-template-columns: minmax(0, 1fr); }
-    .sm-inner { grid-template-columns: minmax(0, 1fr); justify-items: center; padding: 22px 18px; }
-    .sm-form { order: 2; width: 100%; }
-    .sm-form h3 { font-size: 40px; }
     .cd-units span { min-width: 52px; }
     .cd-units b { font-size: 28px; }
     .close-ctas a, .close-ctas button { flex: 1 1 100%; justify-content: center; }
@@ -981,9 +951,9 @@
 </section>
 
 <!-- Countdown: set data-election to the election start, e.g. 2026-12-02T09:00:00-05:00 -->
-<div class="countdown" id="countdown" data-election="2026-11-15T00:01:00-05:00" hidden>
+<div class="countdown" id="countdown" data-election="2026-11-14T00:01:00-05:00" hidden>
   <div class="wrap">
-    <span class="label">Election day · Sun, Nov 15</span>
+    <span class="label">Voting opens · Sat, Nov 14</span>
     <div class="cd-units" aria-live="off"><span><b data-u="d">0</b><small>days</small></span><span><b data-u="h">0</b><small>hrs</small></span><span><b data-u="m">0</b><small>min</small></span><span><b data-u="s">0</b><small>sec</small></span></div>
     <span class="cd-cta">Vote Aidan for Comms.</span>
   </div>
@@ -1030,6 +1000,7 @@
           <div><dt>HPU</dt><dd><b>External Affairs</b><span>Harvard Political Union</span></dd></div>
           <div><dt>Photo</dt><dd><b>Photographer</b><span>HPU, the HMC Boston 2027 board, and other student orgs</span></dd></div>
         </dl>
+        <a href="#work" class="btn profile-work">See my work <span class="arr">→</span></a>
       </div>
     </div>
     <div class="story reveal" id="why">
@@ -1129,13 +1100,13 @@
       <button type="button" data-f="coalition" aria-pressed="false">Coalitions</button>
     </div>
     <div class="prog-grid">
-      <article class="prog tilt" data-cat="events" data-id="Conferences" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Events</span><span class="abbr long">Conferences</span><h3>Conferences Committee</h3><p><b>What comms does</b>Design and promo help for each conference, on the committee's timeline</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
-      <article class="prog tilt" data-cat="events" data-id="HPU" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Events</span><span class="abbr">HPU</span><h3>Harvard Political Union</h3><p><b>What comms does</b>Debate announcement templates, and photos when we can cover a debate</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
+      <article class="prog tilt" data-cat="research" data-id="Policy" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Research</span><span class="abbr">Policy</span><h3>Policy Program</h3><p><b>What comms does</b>Templates for sharing finished proposals, with the authors' approval</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
       <article class="prog tilt" data-cat="events" data-id="WIL" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Events</span><span class="abbr">WIL</span><h3>Women's Initiative in Leadership</h3><p><b>What comms does</b>Speaker promo, photos and member spotlights</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
+      <article class="prog tilt" data-cat="events" data-id="HPU" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Events</span><span class="abbr">HPU</span><h3>Harvard Political Union</h3><p><b>What comms does</b>Debate announcement templates, and photos when we can cover a debate</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
+      <article class="prog tilt" data-cat="events" data-id="Conferences" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Events</span><span class="abbr long">Conferences</span><h3>Conferences Committee</h3><p><b>What comms does</b>Design and promo help for each conference, on the committee's timeline</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
       <article class="prog tilt" data-cat="events" data-id="PRE" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Events</span><span class="abbr">PRE</span><h3>Politics of Race and Ethnicity</h3><p><b>What comms does</b>Event promo in PRE's own voice, plus member spotlights</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
       <article class="prog tilt" data-cat="events" data-id="GAP" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Events</span><span class="abbr">GAP</span><h3>Global Affairs Program</h3><p><b>What comms does</b>Event promo, plus opt-in spotlights on members' work abroad</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
       <article class="prog tilt" data-cat="events" data-id="Environment" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Events</span><span class="abbr long">Environment</span><h3>Program for Environmental Politics</h3><p><b>What comms does</b>A reusable series template and speaker promo</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
-      <article class="prog tilt" data-cat="research" data-id="Policy" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Research</span><span class="abbr">Policy</span><h3>Policy Program</h3><p><b>What comms does</b>Templates for sharing finished proposals, with the authors' approval</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
       <article class="prog tilt" data-cat="research" data-id="HPOP" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Research</span><span class="abbr">HPOP</span><h3>Harvard Public Opinion Project</h3><p><b>What comms does</b>Chart templates and release-day help, following HPOP's plan</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
       <article class="prog tilt" data-cat="research" data-id="RSG" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Research</span><span class="abbr">RSG</span><h3>Research & Strategy Group</h3><p><b>What comms does</b>Recruiting graphics, plus spotlights where teams can share their work</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
       <article class="prog tilt" data-cat="events" data-id="Forum" tabindex="0" role="button" aria-haspopup="dialog"><span class="cat">Events</span><span class="abbr">Forum</span><h3>John F. Kennedy Jr. Forum</h3><p><b>What comms does</b>Promo support alongside the Forum's own team, plus event photos</p><span class="prog-open label" aria-hidden="true">See the full plan →</span></article>
@@ -1309,7 +1280,6 @@
   <div class="wrap">
     <header class="sec-head">
       <h2 class="disp">The Work</h2>
-      <p>Design and photography already out in the world.</p>
     </header>
     <section class="ig-stats" aria-labelledby="ig-title">
       <header class="ig-head"><h3 id="ig-title">HPR Instagram, Aug 7 – Nov 4</h3><p>Daily views after the article-post redesign and the rebuilt Marketing team. Hover or tap the chart to see any day.</p></header>
@@ -1379,7 +1349,7 @@
       <article class="project">
         <header class="project-head">
           <h3>Fall Comp '26</h3>
-          <p>Harvard Political Review · Recruitment. Posters for the events that brought new writers and designers in.</p>
+          <p>Created posts that boosted engagement, leading to our largest ever comp class.</p>
         </header>
         <div class="project-grid tall">
         <figure class="work-item" tabindex="0" role="button" aria-label="View HPR Cocktail Hour larger">
@@ -1461,6 +1431,26 @@
         </div>
         <button type="button" class="project-more" data-more="ig-grid" aria-expanded="false">Show all 14 posts</button>
       </article>
+      <article class="project">
+        <header class="project-head">
+          <h3>HPU vs. West Point</h3>
+          <p>Event photography for the Harvard Political Union's debate with cadets from West Point.</p>
+        </header>
+        <div class="project-grid photo">
+        <figure class="work-item" tabindex="0" role="button" aria-label="View Making the case larger">
+          <div class="work-frame"><img src="assets/work/hpu-westpoint-2.jpg" alt="A West Point cadet pointing upward as he makes his argument" width="1600" height="1066" loading="lazy"></div>
+        </figure>
+        <figure class="work-item" tabindex="0" role="button" aria-label="View The room larger">
+          <div class="work-frame"><img src="assets/work/hpu-westpoint-1.jpg" alt="Harvard students and West Point cadets listening during the debate, the death penalty resolution on screen" width="1600" height="1066" loading="lazy"></div>
+        </figure>
+        <figure class="work-item" tabindex="0" role="button" aria-label="View Breakout discussion larger">
+          <div class="work-frame"><img src="assets/work/hpu-westpoint-3.jpg" alt="A West Point cadet leaning over a table, talking with Harvard students in a small-group discussion" width="1600" height="1066" loading="lazy"></div>
+        </figure>
+        <figure class="work-item" tabindex="0" role="button" aria-label="View Floor speech larger">
+          <div class="work-frame"><img src="assets/work/hpu-westpoint-4.jpg" alt="A West Point cadet gesturing mid-speech in front of a whiteboard" width="1600" height="1066" loading="lazy"></div>
+        </figure>
+        </div>
+      </article>
     </div>
     <p class="work-hint">Click any piece to see it larger.</p>
   </div>
@@ -1477,7 +1467,6 @@
     </header>
     <div class="pd-body">
       <section><h4>What comms can offer</h4><ol class="pd-build" id="pd-build"></ol></section>
-      <section><h4>What I'll hold myself to</h4><ul class="pd-measure" id="pd-measure"></ul></section>
       <p class="pd-base"><strong>Plus what every program gets:</strong> a spot in the program spotlight series, reels and short posts for your events, Comms Playbook templates, comms training, one request form on OneIOP, and event photos back within 24 hours. This is a starting point, not a mandate: your chairs decide what to use, and your program's content and voice stay yours.</p>
       <div class="pd-foot">
         <a class="pd-cta" id="pd-cta" href="#contact">Talk to me about this →</a>
@@ -1532,7 +1521,7 @@
 <section class="sec close panel" id="contact">
   <div class="wrap">
     <h2 class="close-hl disp"><em>Let's</em>Shine.</h2>
-    <p class="close-ask">Vote Aidan for Comms on <strong>Sunday, Nov 15</strong>. Voting opens at 12:01am.</p>
+    <p class="close-ask">Vote Aidan for Comms <strong>Saturday, Nov. 14 – Sunday, Nov. 15</strong>. Voting opens at 12:01am.</p>
     <img class="close-sig" src="assets/signature.png" alt="" width="900" height="270">
     <div class="close-grid">
       <div>
@@ -1551,41 +1540,14 @@
     <div class="close-ctas">
       <!-- Calendly: set data-calendly to your booking link, e.g. https://calendly.com/your-name/15min. The button stays hidden until it's set. -->
       <a class="cta-light" id="calendly-link" data-calendly="" href="#contact" hidden>Book 15 minutes with me →</a>
-      <button type="button" class="cta-ghost" id="open-share">Make your share card</button>
     </div>
   </div>
 </section>
 </main>
 
-<div class="share-modal" id="share-modal" hidden role="dialog" aria-modal="true" aria-labelledby="sc-title">
-  <div class="sm-inner">
-    <button type="button" class="v-btn v-close" id="close-share" aria-label="Close">×</button>
-    <div class="sm-form">
-      <span class="label">Share card</span>
-      <h3 class="disp" id="sc-title">Show you're in.</h3>
-      <label>First name <input id="sc-name" maxlength="24" placeholder="Optional" autocomplete="given-name"></label>
-      <label>Your program <select id="sc-prog"><option value="">Optional</option><option>John F. Kennedy Jr. Forum</option><option>Fellows and Study Groups</option><option>Conferences Committee</option><option>Harvard Political Union</option><option>Women's Initiative in Leadership</option><option>Politics of Race and Ethnicity</option><option>Global Affairs Program</option><option>Program for Environmental Politics</option><option>Policy Program</option><option>Harvard Public Opinion Project</option><option>Research & Strategy Group</option><option>Governance Lab</option><option>CIVICS</option><option>Citizenship Tutoring</option><option>Harvard Votes Challenge</option><option>Harvard Political Review</option><option>Campaigns and Advocacy Program</option><option>Coalition for the Arts</option><option>Conservative Coalition</option><option>Gender & Sexuality Coalition</option><option>Service Coalition</option></select></label>
-      <div class="sc-themes" role="group" aria-label="Card color">
-        <button type="button" data-t="navy" aria-pressed="true" aria-label="Navy" style="background:var(--navy)"></button>
-        <button type="button" data-t="red" aria-pressed="false" aria-label="Red" style="background:var(--red)"></button>
-        <button type="button" data-t="cream" aria-pressed="false" aria-label="Cream" style="background:var(--paper)"></button>
-      </div>
-      <p class="sm-hint label">Screenshot the card and post it to your story.</p>
-    </div>
-    <div class="story-card" id="story-card" data-theme="navy">
-      <svg class="sc-star" viewBox="0 0 100 96" aria-hidden="true"><polygon points="50,3 61.5,37 97,37 68.5,58 79.5,92 50,71 20.5,92 31.5,58 3,37 38.5,37"/></svg>
-      <span class="label">IOP Elections</span>
-      <h4>I'm with Aidan</h4>
-      <p class="sc-for">for IOP Communications Director</p>
-      <p class="sc-from" id="sc-from"></p>
-      <span class="sc-url">aidanforcomms.com</span>
-    </div>
-  </div>
-</div>
-
 <footer class="foot label">
   <div class="wrap">
-    <span class="foot-brand"><img src="assets/brand/wordmark-white.png" alt="Aidan for Comms" width="1200" height="120"><span>Paid for by Aidan for Comms</span></span>
+    <span class="foot-brand"><img src="assets/brand/wordmark-white.png" alt="Aidan for Comms" width="1200" height="120"></span>
     <a href="#top">Back to top ↑</a>
   </div>
 </footer>
@@ -1933,7 +1895,7 @@
     });
   }
 
-  // Shared open/close for the work viewer, share card and program plans
+  // Shared open/close for the work viewer and program plans
   let lastFocus = null;
   const openLayer = (el) => {
     lastFocus = document.activeElement;
@@ -1969,7 +1931,7 @@
     const img = pieces[vIndex].querySelector('img');
     vImg.src = img.src;
     vImg.alt = img.alt;
-    vCap.innerHTML = pieces[vIndex].querySelector('figcaption').innerHTML;
+    const fc = pieces[vIndex].querySelector('figcaption'); vCap.innerHTML = fc ? fc.innerHTML : '';
   };
   pieces.forEach((f, i) => {
     const open = () => { showPiece(i); openLayer(viewer); };
@@ -1982,7 +1944,7 @@
   viewer.addEventListener('click', (e) => { if (e.target === viewer) closeLayer(viewer); });
 
   // Program plans: click a card for the full vision for that program
-  const PLANS = {"Forum": {"v": "Help getting the word out on Forum events, alongside the Forum's own team.", "b": ["Promo graphics for Forum events, made with the Forum team's input", "Every Forum event on the OneIOP calendar", "Event photos", "Forum highlights in the weekly roundup"], "m": ["Graphics delivered by the date we agree on", "Events on the OneIOP calendar and in the weekly roundup", "Photos back within 24 hours"]}, "FSG": {"v": "Study group graphics that are quick to make and look consistent.", "b": ["A study group template the program fills in with the Fellow, topic and time", "A Fellows intro post at the start of each semester", "Short reels from study groups, where students actually look", "Study group schedules on the OneIOP calendar", "Photos from select sessions, when the Fellow and guests are comfortable"], "m": ["Template ready before the semester starts", "Requests turned around within a few days", "Schedules kept current on OneIOP"]}, "Conferences": {"v": "Design and promo help for each conference, on the committee's timeline.", "b": ["A visual kit for each conference: logo lockup, slides and signage", "Help planning a promo schedule that counts back from the date", "Photo coverage on the day", "A recap post afterward"], "m": ["Kit delivered by the date agreed with the committee", "Promo posts go out on the agreed schedule", "Recap posted within a few days"]}, "HPU": {"v": "Help getting more people to the debates.", "b": ["A template for announcing each week's resolution", "Every debate on the OneIOP calendar", "Photos from debates", "Quote cards, only with the speakers' permission"], "m": ["Graphics delivered by the date we agree on", "Events on the OneIOP calendar and in the weekly roundup", "Photos back within 24 hours"]}, "WIL": {"v": "Promo support for WIL's speakers and events.", "b": ["Speaker promo graphics for the events WIL wants promoted", "Event photos", "WIL events in the weekly roundup", "Member spotlights"], "m": ["Graphics delivered by the date we agree on", "Events on the OneIOP calendar and in the weekly roundup", "Photos back within 24 hours"]}, "PRE": {"v": "Support for PRE's events, in PRE's own voice.", "b": ["Event promo that builds on PRE's existing look", "Member spotlights, for members who opt in", "Event photos, when attendees are comfortable", "Help setting up joint events with other programs, when PRE asks"], "m": ["Graphics delivered by the date we agree on", "Events on the OneIOP calendar and in the weekly roundup", "Photos back within 24 hours"]}, "GAP": {"v": "Help sharing GAP's events and members' work abroad.", "b": ["Speaker and event promo", "Spotlights on members' internships or research abroad, with their OK", "Event photos", "GAP events in the weekly roundup"], "m": ["Graphics delivered by the date we agree on", "Events on the OneIOP calendar and in the weekly roundup", "Photos back within 24 hours"]}, "Environment": {"v": "A consistent look for PEP's discussions.", "b": ["A discussion series template the program can reuse", "Speaker promo for the events PEP wants promoted", "A short takeaways post, if the program shares its notes", "Events on the OneIOP calendar"], "m": ["Graphics delivered by the date we agree on", "Events on the OneIOP calendar and in the weekly roundup", "Photos back within 24 hours"]}, "Policy": {"v": "Help putting members' policy work in front of the IOP.", "b": ["A carousel template for summarizing finished proposals, with the authors' approval", "Author spotlights, for members who opt in", "Promo for policy competitions and presentations", "Links to published proposals on OneIOP"], "m": ["Nothing posted without the authors' approval", "Graphics delivered by the date we agree on", "Requests turned around within a few days"]}, "HPOP": {"v": "Help sharing Youth Poll results, following the release plan HPOP and IOP staff set.", "b": ["Chart and stat-card templates in the IOP look, for HPOP to use", "Help with release-day social posts, following the agreed plan", "Recruiting graphics for new HPOP members", "Follow-up posts on the findings HPOP wants to highlight"], "m": ["Templates ready before the next release", "Release-day posts drafted ahead of time", "Nothing posted before results are public"]}, "RSG": {"v": "Recruiting support, and a way to show the teams' work.", "b": ["Recruiting graphics at the start of each semester", "Team or project spotlights, where teams and clients are OK with sharing", "Photos from final presentations", "A how-to-join page on OneIOP"], "m": ["Graphics delivered by the date we agree on", "Events on the OneIOP calendar and in the weekly roundup", "Photos back within 24 hours"]}, "GovLab": {"v": "Help sharing what GovLab teams are building.", "b": ["Founder spotlights, for teams who opt in", "Demo day promo and photos", "Recruiting graphics for applications", "A GovLab page on OneIOP"], "m": ["Graphics delivered by the date we agree on", "Events on the OneIOP calendar and in the weekly roundup", "Photos back within 24 hours"]}, "CIVICS": {"v": "Help recruiting teachers and sharing what CIVICS does.", "b": ["Recruiting graphics for new teachers each semester", "Volunteer spotlights, with the volunteers' OK", "Classroom photos only where the program and schools allow it", "A semester recap"], "m": ["Recruiting graphics ready before the recruiting window", "Nothing from schools posted without permission", "Requests turned around within a few days"]}, "Cit Tut": {"v": "Help recruiting tutors, with learners' privacy first.", "b": ["Recruiting graphics for new tutors", "Tutor spotlights, with the tutors' OK", "No learner stories or photos unless the program and the learner both want it", "Tutoring info on OneIOP"], "m": ["Recruiting graphics ready before the recruiting window", "Nothing about learners posted without consent", "Requests turned around within a few days"]}, "HVC": {"v": "IOP channels behind HVC's registration and turnout pushes.", "b": ["HVC's registration and deadline posts shared across IOP channels", "Countdown graphics for key deadlines", "Share-ready templates HVC can give to houses and student groups", "A recap after elections"], "m": ["Key deadlines shared on IOP channels", "Templates delivered before each deadline", "Requests turned around within a few days"]}, "HPR": {"v": "The same support as every program, nothing more.", "b": ["New issues shared on IOP channels", "HPR featured in the program spotlight series, like every other program", "Author spotlights, for writers who opt in", "Pull-quote templates for pieces the editors choose", "HPR in the weekly roundup"], "m": ["Graphics delivered by the date we agree on", "Events on the OneIOP calendar and in the weekly roundup", "Photos back within 24 hours"]}, "CAP": {"v": "Promo for CAP's workshops, and a bigger spotlight for a program that gets missed today.", "b": ["CAP featured in the program spotlight series, so more members know what it offers", "Workshop promo graphics", "Reels and short posts for workshops, not just emails", "Campaign-style graphic templates CAP can share with participants", "A comms training session co-hosted with CAP", "Photos from workshops"], "m": ["Graphics delivered by the date we agree on", "Events on the OneIOP calendar and in the weekly roundup", "Photos back within 24 hours"]}, "Arts": {"v": "Promo that fits the work you bring in.", "b": ["Event promo designed with the coalition, building on your look", "Artist spotlights, with the artists' OK", "Photo coverage of events", "Events in the weekly roundup"], "m": ["Graphics delivered by the date we agree on", "Events on the OneIOP calendar and in the weekly roundup", "Photos back within 24 hours"]}, "Conservative": {"v": "The same support as every program.", "b": ["Event and speaker promo with the same templates and turnaround as every program", "Event photos, booked the same way as everyone", "Events in the weekly roundup and on the OneIOP calendar", "Final say on how your events are described"], "m": ["Graphics delivered by the date we agree on", "Events on the OneIOP calendar and in the weekly roundup", "Photos back within 24 hours"]}, "GSC": {"v": "Support for your events, with consent first.", "b": ["Event promo for the discussions you want promoted", "Spotlights only for people who want to be featured", "No photos of attendees without their OK", "Help planning key dates with the coalition's lead"], "m": ["Nothing posted about anyone without their consent", "Graphics delivered by the date we agree on", "Events on the OneIOP calendar"]}, "Service": {"v": "Help finding volunteers and showing the work.", "b": ["Promo for service projects", "Volunteer spotlights, with the members' OK", "Service opportunities listed on OneIOP", "A semester recap"], "m": ["Graphics delivered by the date we agree on", "Events on the OneIOP calendar and in the weekly roundup", "Photos back within 24 hours"]}};
+  const PLANS = {"Forum": {"v": "Help getting the word out on Forum events, alongside the Forum's own team.", "b": ["Promo graphics for Forum events, made with the Forum team's input", "Every Forum event on the OneIOP calendar", "Event photos", "Forum highlights in the weekly roundup"]}, "FSG": {"v": "Study group graphics that are quick to make and look consistent.", "b": ["A study group template the program fills in with the Fellow, topic and time", "A Fellows intro post at the start of each semester", "Short reels from study groups, where students actually look", "Study group schedules on the OneIOP calendar", "Photos from select sessions, when the Fellow and guests are comfortable"]}, "Conferences": {"v": "Design and promo help for each conference, on the committee's timeline.", "b": ["A visual kit for each conference: logo lockup, slides and signage", "Help planning a promo schedule that counts back from the date", "Photo coverage on the day", "A recap post afterward"]}, "HPU": {"v": "Help getting more people to the debates.", "b": ["A template for announcing each week's resolution", "Every debate on the OneIOP calendar", "Photos from debates", "Quote cards, only with the speakers' permission"]}, "WIL": {"v": "Promo support for WIL's speakers and events.", "b": ["Speaker promo graphics for the events WIL wants promoted", "Event photos", "WIL events in the weekly roundup", "Member spotlights"]}, "PRE": {"v": "Support for PRE's events, in PRE's own voice.", "b": ["Event promo that builds on PRE's existing look", "Member spotlights, for members who opt in", "Event photos, when attendees are comfortable", "Help setting up joint events with other programs, when PRE asks"]}, "GAP": {"v": "Help sharing GAP's events and members' work abroad.", "b": ["Speaker and event promo", "Spotlights on members' internships or research abroad, with their OK", "Event photos", "GAP events in the weekly roundup"]}, "Environment": {"v": "A consistent look for PEP's discussions.", "b": ["A discussion series template the program can reuse", "Speaker promo for the events PEP wants promoted", "A short takeaways post, if the program shares its notes", "Events on the OneIOP calendar"]}, "Policy": {"v": "Help putting members' policy work in front of the IOP.", "b": ["A carousel template for summarizing finished proposals, with the authors' approval", "Author spotlights, for members who opt in", "Promo for policy competitions and presentations", "Links to published proposals on OneIOP"]}, "HPOP": {"v": "Help sharing Youth Poll results, following the release plan HPOP and IOP staff set.", "b": ["Chart and stat-card templates in the IOP look, for HPOP to use", "Help with release-day social posts, following the agreed plan", "Recruiting graphics for new HPOP members", "Follow-up posts on the findings HPOP wants to highlight"]}, "RSG": {"v": "Recruiting support, and a way to show the teams' work.", "b": ["Recruiting graphics at the start of each semester", "Team or project spotlights, where teams and clients are OK with sharing", "Photos from final presentations", "A how-to-join page on OneIOP"]}, "GovLab": {"v": "Help sharing what GovLab teams are building.", "b": ["Founder spotlights, for teams who opt in", "Demo day promo and photos", "Recruiting graphics for applications", "A GovLab page on OneIOP"]}, "CIVICS": {"v": "Help recruiting teachers and sharing what CIVICS does.", "b": ["Recruiting graphics for new teachers each semester", "Volunteer spotlights, with the volunteers' OK", "Classroom photos only where the program and schools allow it", "A semester recap"]}, "Cit Tut": {"v": "Help recruiting tutors, with learners' privacy first.", "b": ["Recruiting graphics for new tutors", "Tutor spotlights, with the tutors' OK", "No learner stories or photos unless the program and the learner both want it", "Tutoring info on OneIOP"]}, "HVC": {"v": "IOP channels behind HVC's registration and turnout pushes.", "b": ["HVC's registration and deadline posts shared across IOP channels", "Countdown graphics for key deadlines", "Share-ready templates HVC can give to houses and student groups", "A recap after elections"]}, "HPR": {"v": "The same support as every program, nothing more.", "b": ["New issues shared on IOP channels", "HPR featured in the program spotlight series, like every other program", "Author spotlights, for writers who opt in", "Pull-quote templates for pieces the editors choose", "HPR in the weekly roundup"]}, "CAP": {"v": "Promo for CAP's workshops, and a bigger spotlight for a program that gets missed today.", "b": ["CAP featured in the program spotlight series, so more members know what it offers", "Workshop promo graphics", "Reels and short posts for workshops, not just emails", "Campaign-style graphic templates CAP can share with participants", "A comms training session co-hosted with CAP", "Photos from workshops"]}, "Arts": {"v": "Promo that fits the work you bring in.", "b": ["Event promo designed with the coalition, building on your look", "Artist spotlights, with the artists' OK", "Photo coverage of events", "Events in the weekly roundup"]}, "Conservative": {"v": "The same support as every program.", "b": ["Event and speaker promo with the same templates and turnaround as every program", "Event photos, booked the same way as everyone", "Events in the weekly roundup and on the OneIOP calendar", "Final say on how your events are described"]}, "GSC": {"v": "Support for your events, with consent first.", "b": ["Event promo for the discussions you want promoted", "Spotlights only for people who want to be featured", "No photos of attendees without their OK", "Help planning key dates with the coalition's lead"]}, "Service": {"v": "Help finding volunteers and showing the work.", "b": ["Promo for service projects", "Volunteer spotlights, with the members' OK", "Service opportunities listed on OneIOP", "A semester recap"]}};
   const drawer = document.getElementById('prog-drawer');
   const pdHead = drawer.querySelector('.pd-head');
   const pdPanel = drawer.querySelector('.pd-panel');
@@ -2002,7 +1964,6 @@
     pdEl('pd-name').textContent = card.querySelector('h3').textContent;
     pdEl('pd-vision').textContent = plan.v;
     pdEl('pd-build').replaceChildren(...listOf(plan.b));
-    pdEl('pd-measure').replaceChildren(...listOf(plan.m));
     pdPanel.scrollTop = 0;
   };
   const openPlan = (card) => {
@@ -2026,33 +1987,11 @@
     document.getElementById('contact').scrollIntoView({ behavior: calm ? 'auto' : 'smooth' });
   });
 
-  // Share card: name, program and color update the card live
-  const shareModal = document.getElementById('share-modal');
-  const scName = document.getElementById('sc-name');
-  const scProg = document.getElementById('sc-prog');
-  const scFrom = document.getElementById('sc-from');
-  const card = document.getElementById('story-card');
-  const paintCard = () => {
-    const parts = [scName.value.trim(), scProg.value].filter(Boolean);
-    scFrom.textContent = parts.length ? '— ' + parts.join(', ') : '';
-  };
-  scName.addEventListener('input', paintCard);
-  scProg.addEventListener('change', paintCard);
-  shareModal.querySelectorAll('.sc-themes button').forEach((b) => b.addEventListener('click', () => {
-    card.dataset.theme = b.dataset.t;
-    shareModal.querySelectorAll('.sc-themes button').forEach((x) => x.setAttribute('aria-pressed', x === b));
-  }));
-  document.getElementById('open-share').addEventListener('click', () => openLayer(shareModal));
-  document.getElementById('close-share').addEventListener('click', () => closeLayer(shareModal));
-  shareModal.addEventListener('click', (e) => { if (e.target === shareModal) closeLayer(shareModal); });
-
   addEventListener('keydown', (e) => {
     if (!viewer.hidden) {
       if (e.key === 'Escape') closeLayer(viewer);
       if (e.key === 'ArrowLeft') showPiece(vIndex - 1);
       if (e.key === 'ArrowRight') showPiece(vIndex + 1);
-    } else if (!shareModal.hidden && e.key === 'Escape') {
-      closeLayer(shareModal);
     } else if (!drawer.hidden) {
       if (e.key === 'Escape') closeLayer(drawer);
       if (e.key === 'ArrowLeft') showPlan(pdIndex - 1);
