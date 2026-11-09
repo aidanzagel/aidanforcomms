@@ -7,10 +7,10 @@
 <title>OneIOP Demo</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="description" content="A working demo of OneIOP: one member site for every IOP event, announcement and contact. Part of Aidan Zagel's platform for IOP Communications Director.">
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231b2384'/%3E%3Cpolygon fill='%23d7101b' points='32,9 38.8,25.4 56.5,25.4 42.3,36 47.6,53 32,42.8 16.4,53 21.7,36 7.5,25.4 25.2,25.4'/%3E%3C/svg%3E">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 96'%3E%3Cpolygon fill='%23d7101b' points='50,3 61.5,37 97,37 68.5,58 79.5,92 50,71 20.5,92 31.5,58 3,37 38.5,37'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400..800&family=Sofia+Sans+Extra+Condensed:wght@700..900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400..800&family=Sofia+Sans+Extra+Condensed:wght@700..900&family=IBM+Plex+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@1,6..72,400..600&display=swap" rel="stylesheet">
 <style>
   /* Same campaign palette as the main site: one deliberate light look */
   :root {
@@ -91,11 +91,10 @@
     display: flex; flex-direction: column; gap: 26px; padding: 22px 12px 16px max(12px, env(safe-area-inset-left, 0px));
     background: var(--card); border-right: 1px solid var(--line);
   }
-  .brand { display: flex; align-items: center; gap: 10px; padding: 2px 10px; }
-  .brand-mark { display: grid; place-items: center; width: 32px; height: 32px; flex: none; border-radius: 9px; background: var(--navy); }
-  .brand-mark svg { width: 17px; fill: var(--red); }
-  .brand b { display: block; font-family: var(--display); font-weight: 900; font-size: 27px; text-transform: uppercase; line-height: 1; letter-spacing: .01em; color: var(--accent); }
-  .brand small { display: block; font-family: var(--mono); font-size: 9px; letter-spacing: .14em; text-transform: uppercase; color: var(--faint); margin-top: 3px; }
+  /* OneIOP logo: paired like the hero's "Let's SHINE, IOP." — "One" in the italic serif, IOP in the tall condensed headline caps */
+  .brand { display: flex; align-items: center; padding: 2px 10px; }
+  .brand-word { display: inline-flex; align-items: baseline; font-family: "Newsreader", Georgia, "Times New Roman", serif; font-style: italic; font-size: 31px; font-weight: 500; line-height: 1; letter-spacing: -.01em; color: var(--ink); white-space: nowrap; }
+  .brand-word b { margin-left: .12em; font-family: var(--display); font-style: normal; font-size: 1.12em; font-weight: 900; line-height: .8; letter-spacing: .01em; text-transform: uppercase; color: var(--red); }
   .views { display: grid; gap: 1px; }
   .views .label { padding: 0 12px 8px; color: var(--faint); font-size: 9.5px; }
   .views button {
@@ -492,7 +491,6 @@
   .dept { margin-bottom: 28px; }
   .dept-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; margin-bottom: 10px; }
   .dept-head h2 { font-size: 15px; font-weight: 700; letter-spacing: -.01em; }
-  .dept-head p { font-size: 13px; color: var(--faint); }
   .staff { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 10px; }
   .person { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 14px; align-items: center; padding: 14px 16px; }
   .person > i { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; background: var(--navy-tint-2); color: var(--accent); font: 700 13px/1 var(--sans); font-style: normal; letter-spacing: .02em; }
@@ -583,9 +581,8 @@
   .login-art { position: relative; isolation: isolate; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; gap: 32px; padding: clamp(28px, 5vw, 60px); background: var(--navy); color: #fff; }
   .login-art::before { content: ""; position: absolute; inset: 0; z-index: -1; background: radial-gradient(ellipse 70% 60% at 100% 0%, rgba(215, 16, 27, .4), transparent 60%), radial-gradient(ellipse 60% 60% at 0% 100%, rgba(83, 96, 255, .35), transparent 60%); }
   .login-art .brand { padding: 0; }
-  .login-art .brand b { color: #fff; font-size: 30px; }
-  .login-art .brand small { color: rgba(255, 255, 255, .55); }
-  .login-art .brand-mark { background: #fff; }
+  .login-art .brand-word { font-size: 40px; color: #fff; }
+  .login-art .brand-word b { color: #ff4a52; }
   .login-art h1 { font-size: clamp(36px, 4.4vw, 58px); font-weight: 700; letter-spacing: -.03em; line-height: 1.02; max-width: 12ch; }
   .login-art ul { display: grid; gap: 12px; margin-top: 24px; max-width: 420px; }
   .login-art li { display: grid; grid-template-columns: 22px 1fr; gap: 12px; font-size: 14.5px; color: rgba(255, 255, 255, .82); }
@@ -648,9 +645,8 @@
     .side { position: sticky; top: calc(38px + env(safe-area-inset-top, 0px)); z-index: 40; height: auto; flex-direction: row; align-items: center; gap: 12px; padding: 8px max(16px, env(safe-area-inset-right, 0px)) 8px max(16px, env(safe-area-inset-left, 0px)); border-right: 0; border-bottom: 1px solid var(--line); overflow-x: auto; scrollbar-width: none; }
     .side::-webkit-scrollbar { display: none; }
     .brand { padding: 0; }
-    .brand-mark { width: 28px; height: 28px; }
-    .brand b { font-size: 23px; }
-    .brand small, .views .label, .side-note { display: none; }
+    .brand-word { font-size: 25px; }
+    .views .label, .side-note { display: none; }
     .views { display: flex; gap: 2px; }
     .views button { padding: 7px 10px; font-size: 13px; white-space: nowrap; }
     .views button svg { display: none; }
@@ -685,7 +681,7 @@
 
 <section class="login" id="login" hidden>
   <div class="login-art">
-    <div class="brand"><span class="brand-mark"><svg viewBox="0 0 100 95" aria-hidden="true"><polygon points="50,0 61.5,37 97,37 68.5,58 79.5,92 50,71 20.5,92 31.5,58 3,37 38.5,37"/></svg></span><div><b>OneIOP</b><small>Institute of Politics</small></div></div>
+    <div class="brand"><span class="brand-word" aria-label="OneIOP">One<b>IOP</b></span></div>
     <div>
       <h1>Your IOP, in one place.</h1>
       <ul>
@@ -718,7 +714,7 @@
 
 <div class="app" id="app" hidden>
   <aside class="side">
-    <div class="brand"><span class="brand-mark"><svg viewBox="0 0 100 95" aria-hidden="true"><polygon points="50,0 61.5,37 97,37 68.5,58 79.5,92 50,71 20.5,92 31.5,58 3,37 38.5,37"/></svg></span><div><b>OneIOP</b><small>Institute of Politics</small></div></div>
+    <div class="brand"><span class="brand-word" aria-label="OneIOP">One<b>IOP</b></span></div>
     <nav class="views" aria-label="OneIOP sections">
       <button type="button" data-view="home" aria-current="page"><svg class="i" viewBox="0 0 24 24"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg>This week</button>
       <button type="button" data-view="events"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Events</button>
@@ -727,7 +723,7 @@
       <button type="button" data-view="people"><svg class="i" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5M16 4.8a3.5 3.5 0 0 1 0 6.4M18.5 14.8c1.6.8 2.6 2.5 3 5.2"/></svg>Staff directory</button>
       <button type="button" data-view="request"><svg class="i" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Request comms help</button>
     </nav>
-    <p class="side-note"><strong>Why OneIOP?</strong>Today the details are spread across emails, group chats and Instagram. Here, everything lives in one place, and the inbox gets one digest a week.</p>
+    <p class="side-note"><strong>Why OneIOP?</strong>Today the details are spread across emails, group chats and Instagram. Here, everything lives in one place, and your inbox only gets one digest a week.</p>
   </aside>
 
   <main class="main">
@@ -905,6 +901,7 @@
     ['Henry Pahlow', 'Campaigns and Advocacy Program Chair', 'chair', '2028', 'CAP'],
     ['Evan Wang', 'Coalition for the Arts Chair', 'coal', '2029', 'Arts'],
     ['Justin Dunning', 'Conservative Coalition Chair', 'coal', '', 'Conservative'],
+    ['Connor Chaffin', 'Gender & Sexuality Coalition Chair', 'coal', '2029', 'GSC'],
     ['Theresa Bartelme', 'Service Coalition Chair', 'coal', '2029', 'Service'],
   ].map(([name, title, dept, year, p]) => ({ name, title, dept, year, p }));
   const chairsOf = (id) => STAFF.filter((s) => s.p === id);
@@ -929,45 +926,57 @@
   // only for its members. In this demo you pick your programs yourself; with Harvard sign-in, membership would
   // come from each program's roster.
   const canSee = (x) => x.aud !== 'members' || following.has(x.p);
+  // Event titles in title case (AP style): every word capitalized except short joining words in the middle.
+  // Words that already have capitals (CIVICS, iPhone, McCain) are left as they are.
+  const SMALL_WORDS = new Set(['a', 'an', 'and', 'as', 'at', 'but', 'by', 'for', 'in', 'nor', 'of', 'on', 'or', 'the', 'to', 'up', 'vs', 'vs.', 'via']);
+  const titleCase = (t) => {
+    const words = t.split(' ');
+    return words.map((w, i) => {
+      if (/[A-Z]/.test(w.slice(1)) || !/^[a-z]/.test(w)) return w;
+      const after = i > 0 && /[:—–-]$/.test(words[i - 1]);
+      if (i > 0 && i < words.length - 1 && !after && SMALL_WORDS.has(w.toLowerCase())) return w;
+      return w.split('-').map((p) => p.charAt(0).toUpperCase() + p.slice(1)).join('-');
+    }).join(' ');
+  };
   const SAMPLE_EVENTS = () => [
-    { id: 990001, p: 'CIVICS', aud: 'members', local: true, sample: true, date: addDays(DAYS[0].date, 2), s: '18:00', e: '19:30', where: 'IOP Conference Room',
+    { id: 990001, p: 'CIVICS', aud: 'members', local: true, sample: true, img: 'assets/events/civics-civics-teachers-social.jpg', date: addDays(DAYS[0].date, 2), s: '18:00', e: '19:30', where: 'IOP Conference Room',
       title: 'CIVICS teachers’ social', host: 'CIVICS chairs', desc: 'Dinner and a semester debrief for everyone teaching with CIVICS this fall.' },
     // Sample events so every program has something on the calendar in the demo. Real program events would come from each program's chairs.
-    { id: 990100, p: 'Conferences', local: true, sample: true, date: addDays(DAYS[0].date, 1), s: '17:00', e: '18:00', where: 'IOP Conference Room',
+    { id: 990100, p: 'Conferences', local: true, sample: true, img: 'assets/events/conferences-spring-conference-planning-kickoff.jpg', date: addDays(DAYS[0].date, 1), s: '17:00', e: '18:00', where: 'IOP Conference Room',
       title: 'Spring conference planning kickoff', host: 'Conferences Committee', desc: 'Help pick the theme and speakers for the spring conference. New members welcome.' },
-    { id: 990101, p: 'HPU', local: true, sample: true, date: addDays(DAYS[0].date, 1), s: '19:30', e: '21:00', where: 'IOP Library',
+    { id: 990101, p: 'HPU', local: true, sample: true, img: 'assets/events/hpu-weekly-debate.jpg', date: addDays(DAYS[0].date, 1), s: '19:30', e: '21:00', where: 'Littauer 116',
       title: 'Weekly debate', host: 'Harvard Political Union', desc: 'This week’s resolution is posted Monday. Come to argue or just to listen.' },
-    { id: 990102, p: 'WIL', local: true, sample: true, date: addDays(DAYS[0].date, 2), s: '17:30', e: '18:30', where: 'IOP Conference Room',
+    { id: 990102, p: 'WIL', local: true, sample: true, img: 'assets/events/wil-speaker-dinner-and-conversation.jpg', date: addDays(DAYS[0].date, 2), s: '17:30', e: '18:30', where: 'IOP Conference Room',
       title: 'Speaker dinner and conversation', host: 'Women’s Initiative in Leadership', desc: 'Dinner and an informal conversation with this month’s guest speaker.' },
-    { id: 990103, p: 'PRE', local: true, sample: true, date: addDays(DAYS[0].date, 3), s: '18:00', e: '19:00', where: 'IOP Library',
+    { id: 990103, p: 'PRE', local: true, sample: true, img: 'assets/events/pre-discussion-night.jpg', date: addDays(DAYS[0].date, 3), s: '18:00', e: '19:00', where: 'Littauer 116',
       title: 'Discussion night', host: 'Politics of Race and Ethnicity', desc: 'An open discussion on this week’s news. Snacks provided.' },
-    { id: 990104, p: 'GAP', local: true, sample: true, date: addDays(DAYS[0].date, 4), s: '12:00', e: '13:00', where: 'IOP Conference Room',
+    { id: 990104, p: 'GAP', local: true, sample: true, img: 'assets/events/gap-global-affairs-lunch.jpg', date: addDays(DAYS[0].date, 4), s: '12:00', e: '13:00', where: 'IOP Conference Room',
       title: 'Global affairs lunch', host: 'Global Affairs Program', desc: 'Lunch and a conversation on summer internships abroad.' },
-    { id: 990105, p: 'Environment', local: true, sample: true, date: addDays(DAYS[0].date, 2), s: '19:00', e: '20:00', where: 'IOP Library',
+    { id: 990105, p: 'Environment', local: true, sample: true, img: 'assets/events/environment-climate-policy-discussion.jpg', date: addDays(DAYS[0].date, 2), s: '19:00', e: '20:00', where: 'Littauer 116',
       title: 'Climate policy discussion', host: 'Program for Environmental Politics', desc: 'This week’s discussion in the climate policy series.' },
-    { id: 990106, p: 'Policy', aud: 'members', local: true, sample: true, date: addDays(DAYS[0].date, 3), s: '19:30', e: '21:00', where: 'IOP Conference Room',
+    { id: 990106, p: 'Policy', aud: 'members', local: true, sample: true, img: 'assets/events/policy-policy-team-work-session.jpg', date: addDays(DAYS[0].date, 3), s: '19:30', e: '21:00', where: 'IOP Student Office',
       title: 'Policy team work session', host: 'The Policy Program', desc: 'Teams meet to work on their proposals. Bring your laptop.' },
-    { id: 990107, p: 'HPOP', local: true, sample: true, date: addDays(DAYS[0].date, 5), s: '15:00', e: '16:00', where: 'IOP Conference Room',
+    { id: 990107, p: 'HPOP', local: true, sample: true, img: 'assets/events/hpop-youth-poll-info-session.jpg', date: addDays(DAYS[0].date, 5), s: '15:00', e: '16:00', where: 'IOP Conference Room',
       title: 'Youth Poll info session', host: 'Harvard Public Opinion Project', desc: 'Learn how the Harvard Youth Poll is made and how to join the team.' },
-    { id: 990108, p: 'RSG', aud: 'members', local: true, sample: true, date: addDays(DAYS[0].date, 5), s: '17:00', e: '18:00', where: 'IOP Library',
+    { id: 990108, p: 'RSG', aud: 'members', local: true, sample: true, img: 'assets/events/rsg-project-team-check-in.jpg', date: addDays(DAYS[0].date, 5), s: '17:00', e: '18:00', where: 'IOP Student Office',
       title: 'Project team check-in', host: 'Research & Strategy Group', desc: 'Teams share progress on this semester’s client projects.' },
-    { id: 990109, p: 'GovLab', local: true, sample: true, date: addDays(DAYS[0].date, 6), s: '13:00', e: '15:00', where: 'IOP Conference Room',
+    { id: 990109, p: 'GovLab', local: true, sample: true, img: 'assets/events/govlab-founder-workshop.jpg', date: addDays(DAYS[0].date, 6), s: '13:00', e: '15:00', where: 'IOP Conference Room',
       title: 'Founder workshop', host: 'Governance Lab', desc: 'A hands-on session on pitching a civic startup.' },
-    { id: 990110, p: 'Cit Tut', aud: 'members', local: true, sample: true, date: addDays(DAYS[0].date, 6), s: '10:00', e: '12:00', where: 'Off campus',
+    { id: 990110, p: 'Cit Tut', aud: 'members', local: true, sample: true, img: 'assets/events/cit-tut-tutoring-session.jpg', date: addDays(DAYS[0].date, 6), s: '10:00', e: '12:00', where: 'Off campus',
       title: 'Tutoring session', host: 'Citizenship Tutoring', desc: 'Tutoring with learners preparing for the citizenship test. Ride details are sent to tutors.' },
-    { id: 990111, p: 'HVC', local: true, sample: true, date: addDays(DAYS[0].date, 4), s: '18:30', e: '19:30', where: 'IOP Library',
+    { id: 990111, p: 'HVC', local: true, sample: true, img: 'assets/events/hvc-turnout-team-meeting.jpg', date: addDays(DAYS[0].date, 4), s: '18:30', e: '19:30', where: 'IOP Student Office',
       title: 'Turnout team meeting', host: 'Harvard Votes Challenge', desc: 'Planning the next registration push across houses and dorms.' },
-    { id: 990112, p: 'HPR', local: true, sample: true, date: addDays(DAYS[0].date, 1), s: '18:00', e: '19:00', where: 'IOP Conference Room',
+    { id: 990112, p: 'HPR', local: true, sample: true, img: 'assets/events/hpr-pitch-meeting.jpg', date: addDays(DAYS[0].date, 1), s: '18:00', e: '19:00', where: 'IOP Conference Room',
       title: 'Pitch meeting', host: 'Harvard Political Review', desc: 'Bring a story idea for the next issue. Writers and editors of every year welcome.' },
-    { id: 990113, p: 'CAP', local: true, sample: true, date: addDays(DAYS[0].date, 3), s: '17:00', e: '18:30', where: 'IOP Conference Room',
+    { id: 990113, p: 'CAP', local: true, sample: true, img: 'assets/events/cap-campaign-workshop.jpg', date: addDays(DAYS[0].date, 3), s: '17:00', e: '18:30', where: 'IOP Conference Room',
       title: 'Campaign workshop', host: 'Campaigns and Advocacy Program', desc: 'A hands-on workshop on running a campus campaign.' },
-    { id: 990114, p: 'Arts', local: true, sample: true, date: addDays(DAYS[0].date, 7), s: '19:00', e: '20:30', where: 'IOP Library',
+    { id: 990114, p: 'Arts', local: true, sample: true, img: 'assets/events/arts-art-and-politics-night.jpg', date: addDays(DAYS[0].date, 7), s: '19:00', e: '20:30', where: 'Littauer 116',
       title: 'Art and politics night', host: 'Coalition for the Arts', desc: 'An evening of student work on art and politics.' },
-    { id: 990115, p: 'Conservative', local: true, sample: true, date: addDays(DAYS[0].date, 4), s: '19:00', e: '20:00', where: 'IOP Conference Room',
+    { id: 990115, p: 'Conservative', local: true, sample: true, img: 'assets/events/conservative-speaker-and-discussion.jpg', date: addDays(DAYS[0].date, 4), s: '19:00', e: '20:00', where: 'IOP Conference Room',
       title: 'Speaker and discussion', host: 'Conservative Coalition', desc: 'A guest speaker and open Q&A.' },
-    { id: 990116, p: 'GSC', local: true, sample: true, date: addDays(DAYS[0].date, 5), s: '19:00', e: '20:00', where: 'IOP Library',
+    { id: 990116, p: 'GSC', local: true, sample: true, img: 'assets/events/gsc-community-conversation.jpg', date: addDays(DAYS[0].date, 5), s: '19:00', e: '20:00', where: 'Littauer 116',
       title: 'Community conversation', host: 'Gender & Sexuality Coalition', desc: 'An open conversation on gender, sexuality and politics.' },
-    { id: 990117, p: 'Service', local: true, sample: true, date: addDays(DAYS[0].date, 6), s: '09:00', e: '12:00', where: 'Off campus',
+    { id: 990117, p: 'Service', local: true, sample: true, img: 'assets/events/service-service-day.jpg', date: addDays(DAYS[0].date, 6), s: '09:00', e: '12:00', where: 'Off campus',
       title: 'Service day', host: 'Service Coalition', desc: 'Volunteering in Cambridge. Sign-up details are sent the week before.' },
   ];
   const refreshEvents = () => {
@@ -975,7 +984,7 @@
     const extra = SAMPLE_EVENTS()
       .filter((e) => !live || e.date > now.date || (e.date === now.date && min(e.e) > now.min))
       .map((e) => ({ ...e, day: dayOf(e.date) }));
-    EVENTS = [...BASE, ...extra].filter(canSee);
+    EVENTS = [...BASE, ...extra].filter(canSee).map((e) => ({ ...e, title: titleCase(e.title) }));
   };
   const allNews = () => NEWS;
   const newsFor = () => allNews().filter(canSee);
@@ -1074,12 +1083,16 @@
   const SLIDE_MS = 10000;
   const slides = () => {
     const out = [];
-    const add = (e, kick) => { if (e && out.length < 3 && !out.some((x) => x.e === e)) out.push({ e, kick }); };
-    const mine = EVENTS.filter((x) => following.has(x.p)).sort(byTime);
+    // Up to six events, one per program, so the gallery shows the range of the IOP, not just the busiest program
+    const add = (e, kick) => { if (e && e.img && out.length < 6 && !out.some((x) => x.e === e || x.e.p === e.p)) out.push({ e, kick }); };
+    const byProg = (list) => { const seen = new Set(); return list.filter((x) => !seen.has(x.p) && seen.add(x.p)); };
+    const mine = byProg(EVENTS.filter((x) => following.has(x.p)).sort(byTime));
     add(featured(), BANNER.event !== 'auto' ? BANNER.kicker : nextMine() ? 'Next up in your programs' : BANNER.kicker);
     add(EVENTS.filter((x) => x.p === 'Forum').sort(byTime)[0], 'Next in the Forum');
-    mine.forEach((e) => add(e, 'Coming up in your programs'));
-    [...EVENTS].sort(byTime).forEach((e) => add(e, 'Coming up at the IOP'));
+    // Mix in other programs: alternate between the soonest events and the rest of the week
+    const rest = mine.filter((x) => !out.some((o) => o.e.p === x.p));
+    for (let i = 0; rest.length && out.length < 6; i++) add(i % 2 ? rest.pop() : rest.shift(), following.size === PROGRAMS.length ? 'Coming up at the IOP' : 'Coming up in your programs');
+    byProg([...EVENTS].sort(byTime)).forEach((e) => add(e, 'Coming up at the IOP'));
     FEATURES.filter(canSee).forEach((f) => out.splice(Math.min(f.at || 0, out.length), 0, { f }));
     return out;
   };
@@ -1213,8 +1226,8 @@
         </div>`;
     },
     events() {
-      const cats = [['all', 'All'], ...(DEMO_ALL_PROGRAMS ? [] : [['foryou', 'Your programs']]), ['saved', 'Saved'], ['Forum', 'Forum'], ['FSG', 'Study groups']];
-      const list = EVENTS.filter((e) => state.evFilter === 'all' || (state.evFilter === 'foryou' ? following.has(e.p) : state.evFilter === 'saved' ? saved.has(e.id) : e.p === state.evFilter)).sort(byTime);
+      const cats = [['all', 'All'], ...(DEMO_ALL_PROGRAMS ? [] : [['foryou', 'Your programs']]), ['saved', 'Saved']];
+      const list = EVENTS.filter((e) => state.evFilter === 'all' || (state.evFilter === 'foryou' ? following.has(e.p) : state.evFilter === 'saved' ? saved.has(e.id) : true)).sort(byTime);
       const mode = state.evMode || (matchMedia('(max-width: 820px)').matches ? 'list' : 'week');
       const later = list.filter((e) => e.day >= DAYS.length).length;
       return `
@@ -1358,8 +1371,8 @@
     const q = state.dq.trim().toLowerCase();
     const list = STAFF.filter((s) => (state.dept === 'all' || (state.dept === 'mine' ? following.has(s.p) : s.dept === state.dept)) && (!q || [s.name, s.title, s.p || '', s.p ? prog(s.p).name : ''].join(' ').toLowerCase().includes(q)));
     if (state.dept === 'mine' && !list.length && !q) return '<div id="dir-list"><div class="card empty">None of your programs have chairs listed yet.</div></div>';
-    return `<div id="dir-list">${DEPTS.filter(([k]) => list.some((s) => s.dept === k)).map(([k, l, d]) => `
-      <section class="dept"><div class="dept-head"><h2>${esc(l)}</h2><p>${esc(d)}</p></div>
+    return `<div id="dir-list">${DEPTS.filter(([k]) => list.some((s) => s.dept === k)).map(([k, l]) => `
+      <section class="dept"><div class="dept-head"><h2>${esc(l)}</h2></div>
         <div class="staff">${list.filter((s) => s.dept === k).map(personCard).join('')}</div>
       </section>`).join('') || '<div class="card empty">No one matches that search.</div>'}</div>`;
   };
