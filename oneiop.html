@@ -726,35 +726,6 @@
   .pm-colors button:hover { border-color: var(--accent); }
   .pm-colors button[aria-pressed="true"] { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); background: var(--navy-tint); }
 
-  /* ====== IOP Passport ====== */
-  .pp-top { display: grid; gap: 18px; padding: 22px 24px; }
-  .pp-count { display: flex; align-items: flex-end; gap: 14px; }
-  .pp-count b { font-family: var(--display); font-size: 72px; font-weight: 900; line-height: .8; color: var(--red); }
-  .pp-count span { font-size: 14px; line-height: 1.4; color: var(--muted); }
-  .pp-count strong { color: var(--ink); }
-  .pp-meter { position: relative; height: 10px; border-radius: 99px; background: var(--well); }
-  .pp-meter > i { position: absolute; inset: 0 auto 0 0; width: var(--w); border-radius: inherit; background: var(--red); transition: width .6s var(--ease); }
-  .pp-meter u { position: absolute; top: -3px; bottom: -3px; left: var(--x); width: 3px; translate: -50% 0; background: var(--card); }
-  .perks { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; margin-top: 12px; }
-  .perk { display: grid; align-content: start; gap: 4px; padding: 14px; }
-  .perk .label { color: var(--faint); }
-  .perk b { font-size: 13.5px; line-height: 1.3; }
-  .perk small { font-size: 12px; line-height: 1.35; color: var(--muted); }
-  .perk.got { background: var(--navy); border-color: var(--navy); color: #fff; }
-  .perk.got .label, .perk.got small { color: rgba(255, 255, 255, .75); }
-  .stamps { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 14px; padding: 20px; }
-  .stamp { display: grid; place-items: center; align-content: center; gap: 3px; aspect-ratio: 1; padding: 10px; border-radius: 50%; border: 2px dashed var(--line-2); color: var(--faint); text-align: center; }
-  .stamp b { max-width: 100%; font-family: var(--display); font-weight: 900; line-height: .9; letter-spacing: .01em; text-transform: uppercase; white-space: nowrap; }
-  .stamp small { font: 600 9.5px/1.2 var(--mono); letter-spacing: .08em; text-transform: uppercase; }
-  .stamp svg { width: 14px; height: 14px; fill: currentColor; stroke: none; }
-  .stamp.got { --c: var(--accent); border: 3px solid var(--c); color: var(--c); box-shadow: inset 0 0 0 3px var(--card), inset 0 0 0 4.5px var(--c); rotate: var(--r); }
-  .stamp.got.coal { --c: var(--red); }
-  .stamp.fresh { animation: stamp-in .55s cubic-bezier(.2, 1.4, .4, 1) both; }
-  @keyframes stamp-in { from { transform: scale(1.9); opacity: 0; } 55% { opacity: 1; } }
-  .checkins { display: grid; gap: 8px; }
-  .ci { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 12px 14px; }
-  .ci h3 { font-size: 14px; line-height: 1.3; font-weight: 650; }
-  .ci p { font-size: 12.5px; color: var(--muted); }
 
   @media (max-width: 1100px) { .grid-2 { grid-template-columns: minmax(0, 1fr); gap: 0; } .sc-tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); } .pm { grid-template-columns: minmax(0, 1fr); } .pm-out { position: static; } }
   @media (max-width: 980px) { .banner { grid-template-columns: minmax(0, 1fr); } .banner-media { order: -1; } }
@@ -818,12 +789,6 @@
     .pm-guest { grid-template-columns: minmax(0, 1fr) auto; }
     .pm-guest input[name="role"] { grid-row: 2; }
     .pm-stage { padding: 12px; }
-    .pp-top { padding: 18px; }
-    .perks { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: 58%; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
-    .perks::-webkit-scrollbar { display: none; }
-    .stamps { grid-template-columns: repeat(auto-fill, minmax(84px, 1fr)); gap: 10px; padding: 14px; }
-    .ci { grid-template-columns: minmax(0, 1fr) auto; }
-    .ci > .tag { grid-column: 1 / -1; justify-self: start; }
   }
   @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
 </style>
@@ -842,7 +807,6 @@
       <button type="button" data-view="events"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Events</button>
       <button type="button" data-view="news"><svg class="i" viewBox="0 0 24 24"><path d="M4 5h16v14H4zM8 9h8M8 13h8M8 17h5"/></svg>Announcements<span class="count" id="news-count"></span></button>
       <button type="button" data-view="programs"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></svg>Programs</button>
-      <button type="button" data-view="passport"><svg class="i" viewBox="0 0 24 24"><path d="M6 3h11a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6z"/><path d="M6 3v18"/><circle cx="12.5" cy="10" r="3"/><path d="M10 16h5"/></svg>Passport</button>
       <button type="button" data-view="people"><svg class="i" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5M16 4.8a3.5 3.5 0 0 1 0 6.4M18.5 14.8c1.6.8 2.6 2.5 3 5.2"/></svg>Staff directory</button>
       <span class="label grp">For programs</span>
       <button type="button" data-view="request"><svg class="i" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Request comms help<span class="count" id="rq-count" hidden></span></button>
@@ -1798,18 +1762,7 @@
     ['The IOP Media Center', 'Shared cameras and editing space, open to every program.', 'prog', 'In progress'],
   ];
 
-  // ====== IOP Passport ======
-  const PASS_SAMPLE = [['Forum', 33], ['HPR', 26], ['HPU', 19], ['GAP', 12], ['WIL', 5]];
-  const PERKS = [[3, 'IOP sticker sheet', 'Pick it up at the front desk'], [6, 'IOP tote bag', 'Handed out at the next social'], [10, 'Members-only crewneck', 'Only for Passport holders'], [15, 'A reserved seat at a Forum event', 'Skip the line once'], [21, 'Your name on the Passport wall', 'Revealed at presentation night']];
-  let passMine = store.get('passport', []);
-  const stamps = () => {
-    const got = new Map(PASS_SAMPLE.map(([p, d]) => [p, Date.now() - d * 864e5]));
-    passMine.forEach(({ p, t }) => { if (!got.has(p)) got.set(p, t); });
-    return got;
-  };
-
-  // ====== Views ======
-  const state = { slide: 0, newsSel: null, evMode: store.get('evMode', null), view: 'home', day: TODAY, evFilter: 'all', newsFilter: 'following', progFilter: 'all', dept: 'all', dq: '', program: null, sent: null, reqTab: 'new', rqNew: null, passFresh: null, confirmDel: null, gateErr: false, postErr: '' };
+  const state = { slide: 0, newsSel: null, evMode: store.get('evMode', null), view: 'home', day: TODAY, evFilter: 'all', newsFilter: 'following', progFilter: 'all', dept: 'all', dq: '', program: null, sent: null, reqTab: 'new', rqNew: null, confirmDel: null, gateErr: false, postErr: '' };
 
   // The events for the picked day. Picking a day swaps only this column, so the page doesn't reload.
   const dayCol = () => {
@@ -2035,29 +1988,6 @@
             <div class="card sc-promises">${PROMISES().map(([t, d, cls, st, to, act]) => `<div class="sc-p"><b>${esc(t)}</b><span class="st ${cls}">${esc(st)}</span><p>${esc(d)}${to ? ` <button type="button" class="linkish" data-goto="${to}">${esc(act)} →</button>` : ''}</p></div>`).join('')}</div>
             ${secTitle('Spotlight queue', `${SPOT_QUEUE.length} to go`)}
             <ol class="card sc-queue">${SPOT_QUEUE.map(([id, d]) => `<li><button type="button" data-prog="${esc(id)}">${esc(prog(id).name)}</button><span>${esc(fmtDate(addDays(DAYS[0].date, d)))}</span></li>`).join('')}</ol>
-          </div>
-        </div>`;
-    },
-    passport() {
-      const got = stamps(), n = got.size, total = PROGRAMS.length, next = PERKS.find(([k]) => k > n);
-      const seen = new Set();
-      const picks = EVENTS.filter((e) => !got.has(e.p) && PROGRAMS.some((p) => p.id === e.p)).sort(byTime).filter((e) => !seen.has(e.p) && seen.add(e.p)).slice(0, 6);
-      return `
-        <header class="v-head"><h1>IOP Passport</h1><p>Get a stamp from every program whose event you go to. The more of the IOP you see, the better the perks.</p></header>
-        <section class="card pp-top">
-          <div class="pp-count"><b>${n}</b><span>of ${total} programs<br>${next ? `${plural(next[0] - n, 'more program')} until <strong>${esc(next[1].charAt(0).toLowerCase() + next[1].slice(1))}</strong>` : 'Passport complete'}</span></div>
-          <div class="pp-meter" aria-hidden="true"><i style="--w:${(n / total * 100).toFixed(1)}%"></i>${PERKS.slice(0, -1).map(([k]) => `<u style="--x:${(k / total * 100).toFixed(1)}%"></u>`).join('')}</div>
-        </section>
-        <div class="perks">${PERKS.map(([k, t, s]) => `<div class="card perk${n >= k ? ' got' : ''}"><span class="label">${n >= k ? 'Unlocked' : `At ${k} programs`}</span><b>${esc(t)}</b><small>${esc(s)}</small></div>`).join('')}</div>
-        <div class="grid-2">
-          <div>
-            ${secTitle('Your stamps', `${n} of ${total}`)}
-            <div class="card stamps">${PROGRAMS.map((p, i) => { const t = got.get(p.id); return `<div class="stamp${t ? ' got' : ''}${isCoal(p.id) ? ' coal' : ''}${state.passFresh === p.id ? ' fresh' : ''}" style="--r:${((i * 37) % 23) - 11}deg" title="${esc(p.name)}${t ? '' : ': no stamp yet'}">${t ? ICON.star : ''}<b style="font-size:${p.id.length > 9 ? 12.5 : p.id.length > 6 ? 15 : p.id.length > 4 ? 19 : 24}px">${esc(p.id)}</b><small>${t ? esc(monthDay(t)) : 'Not yet'}</small></div>`; }).join('')}</div>
-          </div>
-          <div>
-            ${secTitle('Get your next stamp', 'This week')}
-            <div class="checkins">${picks.map((e) => `<article class="card ci"><span class="tag${isCoal(e.p) ? ' coal' : ''}">${esc(e.p)}</span><div><h3>${esc(e.title)}</h3><p>${esc(dayName(e.day))} · ${esc(range(e))}</p></div><button type="button" class="btn" data-checkin="${esc(e.p)}">Check in</button></article>`).join('') || '<div class="card empty">You’ve been to every program with an event this week.</div>'}</div>
-            <p class="rq-note">At a real event, you’d scan the QR code at the door. In the demo, press Check in to try it.${passMine.length ? ' <button type="button" class="linkish" data-pass-reset>Start over</button>' : ''}</p>
           </div>
         </div>`;
     },
@@ -2370,14 +2300,6 @@
       go('request', { reqTab: 'track', rqNew: r.n });
       toast('Sent to comms and assigned to Aidan. Follow it here.');
     }
-    else if (t.dataset.checkin) {
-      const before = stamps().size, id = t.dataset.checkin;
-      passMine.push({ p: id, t: Date.now() }); store.set('passport', passMine);
-      const perk = PERKS.find(([k]) => k === before + 1);
-      state.passFresh = id; render(false, true); state.passFresh = null;
-      toast(perk ? `Unlocked: ${perk[1]}.` : `Stamp collected from ${prog(id).name}.`);
-    }
-    else if (t.hasAttribute('data-pass-reset')) { passMine = []; store.set('passport', passMine); render(false, true); }
   });
 
   viewEl.addEventListener('submit', async (ev) => {
