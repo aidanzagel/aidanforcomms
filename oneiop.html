@@ -759,6 +759,24 @@
     .ev { grid-template-columns: minmax(0, 1fr); gap: 4px; padding: 12px; }
     .ev-body { padding: 8px 6px 4px; }
   }
+  /* Phones: the sections live in a dropdown menu instead of a sideways-scrolling strip */
+  .nav-dd { display: none; }
+  @media (max-width: 820px) {
+    .side { overflow: visible; }
+    .nav-dd { display: inline-flex; align-items: center; gap: 8px; margin-left: auto; padding: 8px 12px 8px 14px; border: 1px solid var(--line-2); border-radius: 10px; background: var(--card); color: var(--ink); font-weight: 650; font-size: 14px; }
+    .nav-dd svg { width: 16px; height: 16px; color: var(--muted); transition: rotate .25s var(--ease); }
+    .nav-dd[aria-expanded="true"] { border-color: var(--accent); }
+    .nav-dd[aria-expanded="true"] svg { rotate: 180deg; }
+    .nav-dd-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--red); }
+    .views { position: absolute; top: calc(100% + 6px); left: max(12px, env(safe-area-inset-left, 0px)); right: max(12px, env(safe-area-inset-right, 0px)); z-index: 45; display: grid; gap: 1px; padding: 6px; border: 1px solid var(--line); border-radius: 14px; background: var(--card); box-shadow: var(--shadow-up);
+      opacity: 0; visibility: hidden; transform: translateY(-6px); transition: opacity .2s, transform .25s var(--ease), visibility 0s .25s; }
+    .side.open .views { opacity: 1; visibility: visible; transform: none; transition: opacity .2s, transform .25s var(--ease); }
+    .views .label { display: block; padding: 10px 12px 6px; }
+    .views .label.grp { margin-top: 4px; border-top: 1px solid var(--line); padding-top: 12px; }
+    .views button { padding: 11px 12px; font-size: 15px; white-space: normal; }
+    .views button svg { display: block; }
+    .me { margin-left: 0; }
+  }
   @media (max-width: 560px) {
     .demo-bar .label { display: none; }
     .week { grid-template-columns: repeat(8, minmax(44px, 1fr)); overflow-x: auto; scrollbar-width: none; }
@@ -790,10 +808,105 @@
     .pm-guest input[name="role"] { grid-row: 2; }
     .pm-stage { padding: 12px; }
   }
+  /* ====== Loading screen: every program's name, scattered around the screen, drifts in and gathers into OneIOP ====== */
+  .boot { position: fixed; inset: 0; z-index: 200; overflow: hidden; display: grid; place-items: center; background: #1b2384; color: #fff; }
+  .boot-glow { position: absolute; inset: 0; background: radial-gradient(ellipse 40% 36% at 50% 52%, rgba(255, 74, 82, .26), transparent 70%); opacity: 0; }
+  .boot-field { position: absolute; inset: 0; pointer-events: none; }
+  .boot-field span { position: absolute; left: 50%; top: 50%; opacity: 0; font-family: var(--display); font-weight: 900; line-height: 1; text-transform: uppercase; letter-spacing: .02em; color: #fff; white-space: nowrap; will-change: transform, opacity; }
+  .boot-field span.coal { color: #ff9aa0; }
+  .boot-center { position: relative; display: grid; justify-items: center; gap: 16px; text-align: center; }
+  .boot-we { opacity: 0; font: 800 clamp(15px, 2.1vw, 20px)/1 var(--sans); letter-spacing: .42em; padding-left: .42em; color: rgba(255, 255, 255, .82); }
+  .boot-mark { display: inline-flex; align-items: baseline; opacity: 0; font: italic 500 clamp(70px, 11.5vw, 132px)/1 "Newsreader", Georgia, serif; letter-spacing: -.01em; color: #fff; will-change: transform, opacity, filter; }
+  .boot-mark b { margin-left: .12em; font-family: var(--display); font-style: normal; font-size: 1.12em; font-weight: 900; line-height: .8; letter-spacing: .01em; text-transform: uppercase; color: #ff4a52; }
+  .boot-ring { position: absolute; left: 50%; top: 50%; width: 60px; height: 60px; margin: -30px 0 0 -30px; border: 2px solid #ff4a52; border-radius: 50%; opacity: 0; pointer-events: none; }
+  .boot-line { opacity: 0; font: 500 12px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: rgba(255, 255, 255, .62); }
   @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
 </style>
 </head>
 <body>
+<div class="boot" id="boot" aria-hidden="true">
+  <div class="boot-glow"></div>
+  <div class="boot-field" id="boot-field"></div>
+  <div class="boot-center">
+    <span class="boot-we">WE ARE</span>
+    <span class="boot-mark" id="boot-mark">One<b>IOP</b></span>
+    <span class="boot-line">21 programs and coalitions. One IOP.</span>
+  </div>
+  <span class="boot-ring" id="boot-ring"></span>
+</div>
+<script>
+  // Loading screen, once per visit. Every program's name appears around the edges of the screen,
+  // then they all glide into the middle and become OneIOP. Click anywhere to skip.
+  (() => {
+    const boot = document.getElementById('boot');
+    let seen = false;
+    try { seen = sessionStorage.getItem('oneiop:booted') === '1'; sessionStorage.setItem('oneiop:booted', '1'); } catch (e) {}
+    // Skip it on repeat visits, when the page opens in a background tab, or if the browser can't animate
+    if (seen || document.hidden || !boot.animate) { boot.remove(); return; }
+    const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const $b = (s) => boot.querySelector(s);
+    const mark = $b('#boot-mark'), we = $b('.boot-we'), line = $b('.boot-line'), ring = $b('#boot-ring'), glow = $b('.boot-glow'), field = $b('#boot-field');
+    let done = false;
+    const leave = (wait) => {
+      if (done) return; done = true;
+      // The fade is the animation; removing the screen runs on a plain timer, so the page always appears
+      setTimeout(() => { boot.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 600, easing: 'cubic-bezier(.4, 0, .2, 1)', fill: 'forwards' }); setTimeout(() => boot.remove(), 650); }, wait);
+    };
+    boot.addEventListener('click', () => leave(0));
+    const show = (el, from, ms, delay, easing = 'cubic-bezier(.2, .7, .2, 1)') => el.animate([from, { opacity: 1, transform: 'none', filter: 'blur(0)', letterSpacing: getComputedStyle(el).letterSpacing }], { duration: ms, delay, easing, fill: 'both' });
+    if (calm) { [we, mark, line].forEach((el) => { el.style.opacity = 1; }); leave(900); return; }
+
+    const IDS = ['Forum', 'HPU', 'GAP', 'CIVICS', 'HPR', 'WIL', 'PRE', 'Policy', 'HPOP', 'CAP', 'RSG', 'GovLab', 'FSG', 'HVC', 'PEP', 'Arts', 'Cit Tut', 'GSC', 'Service', 'Conservative', 'Conferences'];
+    const COAL = ['Arts', 'GSC', 'Service', 'Conservative'];
+    const W = innerWidth, H = innerHeight, rx = Math.min(W * .4, 600), ry = Math.min(H * .38, 360);
+    const rnd = (k) => { const x = Math.sin(k * 99.1) * 43758.5; return x - Math.floor(x); };
+    const m = mark.getBoundingClientRect(), mx = m.left + m.width / 2 - W / 2, my = m.top + m.height / 2 - H / 2;
+    // Keep the names clear of the middle (WE ARE, OneIOP, the line under it) and of each other
+    const c0 = $b('.boot-center').getBoundingClientRect();
+    const taken = [{ l: c0.left - 24, t: c0.top - 18, r: c0.right + 24, b: c0.bottom + 18 }];
+    const hits = (bx) => bx.l < 12 || bx.t < 12 || bx.r > W - 12 || bx.b > H - 12 || taken.some((o) => bx.l < o.r && bx.r > o.l && bx.t < o.b && bx.b > o.t);
+    const at = (px, py, sc) => `translate(-50%, -50%) translate(${px}px, ${py}px) scale(${sc})`;
+    IDS.forEach((id, i) => {
+      const el = document.createElement('span');
+      el.textContent = id; if (COAL.includes(id)) el.className = 'coal';
+      const small = W < 600, long = id.length > 7;
+      el.style.fontSize = `${Math.round((small ? 13 : 20) + rnd(i + 1) * (long ? (small ? 4 : 8) : (small ? 10 : 20)))}px`;
+      el.style.transform = at(0, 0, 1);
+      field.appendChild(el);
+      const w = el.offsetWidth, h = el.offsetHeight;
+      // Try spots around an oval, nudging the angle and distance until one is free
+      const base = (i / IDS.length) * Math.PI * 2 - Math.PI / 2;
+      let x = 0, y = 0, ok = false;
+      for (const rf of [1, .86, 1.12, .74, 1.24, .64, 1.36, .56]) {
+        for (const da of [0, .09, -.09, .18, -.18, .27, -.27]) {
+          const a = base + da;
+          x = Math.cos(a) * rx * rf; y = Math.sin(a) * ry * rf;
+          const bx = { l: W / 2 + x - w / 2 - 8, t: H / 2 + y - h / 2 - 6, r: W / 2 + x + w / 2 + 8, b: H / 2 + y + h / 2 + 6 };
+          if (!hits(bx)) { taken.push(bx); ok = true; break; }
+        }
+        if (ok) break;
+      }
+      if (!ok) { el.remove(); return; }
+      // 1. Appear in place, drifting slightly inward
+      el.animate([{ opacity: 0, transform: at(x * 1.1, y * 1.1, .9) }, { opacity: .55, transform: at(x, y, 1) }], { duration: 900, delay: 60 + i * 32, easing: 'cubic-bezier(.2, .7, .2, 1)', fill: 'forwards' });
+      // 2. Gather into the middle, shrinking and fading as they arrive
+      el.animate([{ opacity: .55, transform: at(x, y, 1) }, { opacity: .9, offset: .55, transform: at(x * .35, y * .35 + my * .5, .8) }, { opacity: 0, transform: at(mx, my, .25) }],
+        { duration: 1000, delay: 1350 + rnd(i + 11) * 160, easing: 'cubic-bezier(.55, 0, .35, 1)', fill: 'forwards' });
+    });
+    // "WE ARE" tracks in while the names appear
+    show(we, { opacity: 0, letterSpacing: '1.1em' }, 1300, 250);
+    // OneIOP forms as the names arrive, with one soft ring rippling out
+    const T = 2250;
+    show(mark, { opacity: 0, transform: 'scale(.9)', filter: 'blur(10px)' }, 800, T);
+    glow.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 1200, delay: T - 100, easing: 'ease-out', fill: 'forwards' });
+    ring.style.transform = `translate(${mx}px, ${my}px)`;
+    ring.animate([{ opacity: .9, transform: `translate(${mx}px, ${my}px) scale(.6)` }, { opacity: 0, transform: `translate(${mx}px, ${my}px) scale(9)` }], { duration: 1300, delay: T + 60, easing: 'cubic-bezier(.15, .6, .3, 1)', fill: 'forwards' });
+    show(line, { opacity: 0, transform: 'translateY(6px)' }, 700, T + 350);
+    leave(T + 1500);
+    // Never hold the page for long, whatever happens
+    setTimeout(() => leave(0), 5500);
+  })();
+</script>
 
 <div class="demo-bar">
   <a href="index.html">← Back to Aidan for Comms</a>
@@ -802,7 +915,8 @@
 <div class="app" id="app" hidden>
   <aside class="side">
     <div class="brand"><span class="brand-word" aria-label="OneIOP">One<b>IOP</b></span></div>
-    <nav class="views" aria-label="OneIOP sections">
+    <button type="button" class="nav-dd" id="nav-dd" aria-expanded="false" aria-controls="views-nav"><span id="nav-dd-label">This week</span><i class="nav-dd-dot" id="nav-dd-dot" hidden></i><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+    <nav class="views" id="views-nav" aria-label="OneIOP sections">
       <button type="button" data-view="home" aria-current="page"><svg class="i" viewBox="0 0 24 24"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg>This week</button>
       <button type="button" data-view="events"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Events</button>
       <button type="button" data-view="news"><svg class="i" viewBox="0 0 24 24"><path d="M4 5h16v14H4zM8 9h8M8 13h8M8 17h5"/></svg>Announcements<span class="count" id="news-count"></span></button>
@@ -920,7 +1034,9 @@
   const dayOf = (date) => Math.round((new Date(date + 'T12:00:00Z') - new Date(DAYS[0].date + 'T12:00:00Z')) / 864e5);
   const dayInfo = (i) => DAYS[i] || (() => { const date = addDays(DAYS[0].date, i), d = new Date(date + 'T12:00:00Z'); return { i, date, d: WD[d.getUTCDay()], n: d.getUTCDate(), m: MONTHS[d.getUTCMonth()] }; })();
   loadEvents(DATA);
-  const imgSrc = (e) => e.img;
+  // Sample events use a graphic drawn from their program's Make a graphic template (see genSampleArt); real IOP events keep their own
+  const GEN_ART = {};
+  const imgSrc = (e) => (e.sample && GEN_ART[e.id]) || e.img;
   // Events without an IOP graphic (members-only and posted ones) get a simple title card
   const art = (e) => e.img ? `<img src="${esc(imgSrc(e))}" alt="${esc(e.title)} event graphic" loading="lazy">`
     : `<span class="poster"><span>${esc(prog(e.p).name)}${e.aud === 'members' ? ' · Members only' : ''}</span><b>${esc(e.title)}</b><span>${esc(dayName(e.day))} · ${esc(fmt(e.s))}</span></span>`;
@@ -1649,7 +1765,21 @@
   // The HKS IOP logo, in a dark version for light backgrounds and a white version for colored ones
   const IOP_LOGO = { dark: new Image(), white: new Image() };
   IOP_LOGO.dark.src = 'assets/brand/iop-logo-dark.png'; IOP_LOGO.white.src = 'assets/brand/iop-logo-white.png';
-  Promise.all(Object.values(IOP_LOGO).map((im) => im.decode().catch(() => {}))).then(() => { Object.keys(galCache).forEach((k) => delete galCache[k]); drawMaker(); drawGallery(); });
+  const imgReady = (im) => (im.complete ? Promise.resolve() : new Promise((ok) => { im.addEventListener('load', ok, { once: true }); im.addEventListener('error', ok, { once: true }); }));
+  Promise.all(Object.values(IOP_LOGO).map(imgReady)).then(() => { Object.keys(galCache).forEach((k) => delete galCache[k]); drawMaker(); drawGallery(); });
+  // Draw every sample event's graphic with its program's template, once the fonts and logo are ready
+  const genSampleArt = () => {
+    const cv = document.createElement('canvas'), t = document.createElement('canvas'); t.width = 1200; t.height = 675;
+    let made = 0;
+    EVENTS.filter((e) => e.sample && !GEN_ART[e.id]).forEach((e) => {
+      drawPoster(cv, { p: e.p, fmt: 'wide', title: e.title, date: e.date, s: e.s, e: e.e, where: e.where, members: e.aud === 'members', ghost: false });
+      t.getContext('2d').drawImage(cv, 0, 0, 1200, 675);
+      GEN_ART[e.id] = t.toDataURL('image/jpeg', .86); made++;
+    });
+    // Swap them into whatever is on screen, but don't redraw a page someone is typing into
+    if (made && !appEl.hidden && state.view !== 'maker' && state.view !== 'request') render(false, true);
+  };
+  Promise.all([posterFonts(), ...Object.values(IOP_LOGO).map(imgReady)]).then(() => genSampleArt());
   const isDarkAcc = (hex) => { const n = parseInt(hex.slice(1), 16); return ((n >> 16) * 299 + ((n >> 8) & 255) * 587 + (n & 255) * 114) / 1000 < 150; };
   const thumbOf = (cv) => { const t = document.createElement('canvas'), s = 480 / cv.width; t.width = 480; t.height = Math.round(cv.height * s); t.getContext('2d').drawImage(cv, 0, 0, t.width, t.height); return t.toDataURL('image/jpeg', .82); };
 
@@ -2173,6 +2303,10 @@
     if (!term && state.view === 'maker') { drawMaker(); document.fonts?.status === 'loaded' ? drawGallery() : posterFonts().then(drawGallery); }
     if (!term && state.view === 'news' && state.newsSel) { const id = state.newsSel; state.newsSel = null; setTimeout(() => openNews(id), 0); }
     document.querySelectorAll('.views button').forEach((b) => { if (!term && b.dataset.view === state.view) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current'); });
+    // The phone dropdown shows where you are, and a red dot when something is waiting (unread posts, drafts to approve)
+    const curBtn = document.querySelector(`.views [data-view="${state.view}"]`);
+    $('#nav-dd-label').textContent = term ? 'Search' : curBtn ? [...curBtn.childNodes].filter((n) => n.nodeType === 3).map((n) => n.textContent).join('').trim() : 'Menu';
+    $('#nav-dd-dot').hidden = ![...document.querySelectorAll('.views .count')].some((c) => !c.hidden && +c.textContent);
     if (scroll) scrollTo({ top: 0, behavior: 'instant' });
     // On phones the section tabs scroll sideways, so keep the current one in view
     const cur = document.querySelector('.views [aria-current="page"]'), bar = document.querySelector('.side');
@@ -2195,6 +2329,13 @@
   const updateCount = () => { const n = newsFor().filter((x) => forYou(x) && !read.has(x.id)).length; const c = $('#news-count'); c.textContent = n; c.hidden = !n; c.setAttribute('aria-label', `${n} unread`); };
   const saveProfile = () => { profile.programs = [...following]; store.set('profile', profile); };
 
+  // Phone section menu: open and close the dropdown
+  const sideEl = $('.side'), ddBtn = $('#nav-dd');
+  const setMenu = (open) => { sideEl.classList.toggle('open', open); ddBtn.setAttribute('aria-expanded', open); };
+  ddBtn.addEventListener('click', (ev) => { ev.stopPropagation(); setMenu(!sideEl.classList.contains('open')); });
+  addEventListener('click', (ev) => { if (sideEl.classList.contains('open') && !ev.target.closest('.views, #nav-dd')) setMenu(false); });
+  addEventListener('keydown', (ev) => { if (ev.key === 'Escape' && sideEl.classList.contains('open')) { setMenu(false); ddBtn.focus(); } });
+  document.querySelectorAll('.views button').forEach((b) => b.addEventListener('click', () => setMenu(false)));
   document.querySelectorAll('.views button').forEach((b) => b.addEventListener('click', () => go(b.dataset.view, b.dataset.view === 'request' ? { reqTab: rqWaiting() ? 'track' : 'new', rqNew: null } : {})));
   q.addEventListener('input', () => render(false));
   addEventListener('keydown', (ev) => { if (ev.key === '/' && !appEl.hidden && !/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)) { ev.preventDefault(); q.focus(); } });
@@ -2365,6 +2506,7 @@
     .then((d) => {
       if (!d || !Array.isArray(d.events) || (d.updated || '') < (DATA.updated || '')) return;
       loadEvents(d); buildNews(); updateCount();
+      if (document.fonts?.status === 'loaded' && IOP_LOGO.white.complete) genSampleArt();
       if (!appEl.hidden) render();
     })
     .catch(() => {});
