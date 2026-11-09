@@ -270,6 +270,9 @@
   .vid-frame::before { top: -12px; left: -26px; rotate: -32deg; }
   .vid-frame::after { bottom: -12px; right: -26px; rotate: -32deg; }
   .vid-frame video { width: 100%; height: 100%; display: block; background: var(--ink); }
+  .vid-plays { display: flex; align-items: center; gap: 10px; margin: 26px 0 0; font: 600 16px/1.2 var(--sans); color: var(--muted); font-variant-numeric: tabular-nums; }
+  .vid-plays svg { width: 11px; height: 13px; fill: var(--red); }
+  .vid-plays b { color: var(--ink); font-weight: 800; }
   .vid-ph {
     position: absolute; inset: 0; z-index: 2; overflow: hidden; isolation: isolate;
     display: grid; place-content: center; justify-items: center; gap: 16px; text-align: center; padding: 16px;
@@ -1009,6 +1012,7 @@
         <h3 class="disp">Video coming soon</h3>
       </div>
     </div>
+    <p class="vid-plays" id="vid-plays" hidden><svg viewBox="0 0 10 12" aria-hidden="true"><path d="M0 0l10 6-10 6z"/></svg><span><b id="vid-plays-n"></b> <span id="vid-plays-w">plays</span></span></p>
   </div>
 </section>
 
@@ -1751,6 +1755,25 @@
   const showVideo = () => document.getElementById('vid-ph')?.remove();
   if (video.readyState >= 1) showVideo();
   else video.addEventListener('loadedmetadata', showVideo);
+
+  // Play counter: shows the total under the video and adds one the first time someone presses play
+  const playsEl = document.getElementById('vid-plays');
+  const showPlays = (n) => {
+    if (!Number.isFinite(n) || n < 1) return;
+    document.getElementById('vid-plays-n').textContent = n.toLocaleString('en-US');
+    document.getElementById('vid-plays-w').textContent = n === 1 ? 'play' : 'plays';
+    playsEl.hidden = false;
+  };
+  const plays = (method) => fetch('/api/plays', { method }).then((r) => r.ok ? r.json() : null).then((d) => d && showPlays(d.plays)).catch(() => {});
+  plays('GET');
+  let counted = false;
+  try { counted = sessionStorage.getItem('video-played') === '1'; } catch (e) {}
+  video.addEventListener('play', () => {
+    if (counted) return;
+    counted = true;
+    try { sessionStorage.setItem('video-played', '1'); } catch (e) {}
+    plays('POST');
+  });
 
   // Once the headline has settled, the ballot gets checked
   loaderDone.then(() => setTimeout(() => castBallot(false), 1500));
