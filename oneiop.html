@@ -10,7 +10,7 @@
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 96'%3E%3Cpolygon fill='%23d7101b' points='50,3 61.5,37 97,37 68.5,58 79.5,92 50,71 20.5,92 31.5,58 3,37 38.5,37'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400..800&family=Sofia+Sans+Extra+Condensed:wght@700..900&family=IBM+Plex+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@1,6..72,400..600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400..800&family=Sofia+Sans+Extra+Condensed:wght@700..900&family=IBM+Plex+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..600&family=Oswald:wght@500;600&family=Montserrat:ital,wght@0,500;0,600;0,700;0,800;1,400;1,500;1,800&display=swap" rel="stylesheet">
 <style>
   /* Same campaign palette as the main site: one deliberate light look */
   :root {
@@ -703,6 +703,28 @@
   .pm-stage { display: grid; place-items: center; padding: 18px; border-radius: 16px; background: var(--well); }
   .pm-stage canvas { display: block; width: auto; height: auto; max-width: 100%; max-height: min(64vh, 640px); border-radius: 6px; box-shadow: var(--shadow-up); }
   .pm-acts { display: flex; flex-wrap: wrap; gap: 8px; }
+  .field > span small { margin-left: 6px; font-weight: 500; color: var(--faint); }
+  .pm-photos { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; font-size: 13px; color: var(--muted); }
+  .pm-photos label.btn { cursor: pointer; }
+  .pm-photos label.btn:focus-within { outline: 2px solid var(--red); outline-offset: 2px; }
+  .pm-colors { display: flex; flex-wrap: wrap; gap: 6px; }
+  .pm-guests { display: grid; gap: 8px; }
+  .pm-guest { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr) auto; gap: 8px; align-items: center; }
+  .pm-guest input { width: 100%; padding: 10px 12px; border: 1px solid var(--line-2); border-radius: 10px; background: var(--field); color: var(--ink); font-size: 14px; outline: none; transition: border-color .2s, box-shadow .2s; }
+  .pm-guest input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--navy-tint-2); }
+  .pm-rm { width: 36px; height: 36px; }
+  .pm-add { justify-self: start; margin-top: 2px; }
+  .pm-gal-note { max-width: 70ch; margin: -6px 0 14px; font-size: 13.5px; color: var(--muted); }
+  .pm-gal { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(200px, 42vw), 1fr)); gap: 12px; }
+  .pm-gal button { display: grid; gap: 7px; padding: 6px 6px 9px; border: 1px solid var(--line); border-radius: 12px; background: var(--card); text-align: left; transition: border-color .2s, box-shadow .2s; }
+  .pm-gal button:hover { border-color: var(--accent); }
+  .pm-gal button[aria-pressed="true"] { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+  .pm-gal img { width: 100%; aspect-ratio: 16 / 9; border-radius: 7px; background: var(--well); }
+  .pm-gal span { padding: 0 4px; font-size: 12.5px; font-weight: 600; line-height: 1.3; }
+  .pm-colors button { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px 6px 7px; border: 1px solid var(--line-2); border-radius: 99px; background: var(--card); font-size: 13px; font-weight: 600; color: var(--ink); }
+  .pm-colors button::before { content: ""; width: 18px; height: 18px; border-radius: 50%; background: var(--sw); box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .12); }
+  .pm-colors button:hover { border-color: var(--accent); }
+  .pm-colors button[aria-pressed="true"] { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); background: var(--navy-tint); }
 
   /* ====== IOP Passport ====== */
   .pp-top { display: grid; gap: 18px; padding: 22px 24px; }
@@ -793,6 +815,8 @@
     .pm-form { padding: 18px; }
     .pm-3 { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
     .pm-3 > :first-child { grid-column: 1 / -1; }
+    .pm-guest { grid-template-columns: minmax(0, 1fr) auto; }
+    .pm-guest input[name="role"] { grid-row: 2; }
     .pm-stage { padding: 12px; }
     .pp-top { padding: 18px; }
     .perks { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: 58%; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
@@ -1303,99 +1327,391 @@
   };
   const slugify = (s) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'graphic';
 
-  // ====== Graphics in the IOP look (Make a graphic, and drafts in the request tracker) ======
-  // The same layout as the event graphics on this page: navy, a faint IOP pattern, the red star,
-  // the program in a pill, the title in tall condensed caps, and the date, time and place in cream chips.
+  // ====== Graphics in the IOP's house style (Make a graphic, and drafts in the request tracker) ======
+  // Modeled on the IOP's own event graphics: a solid color with a faint IOP pattern, speaker photos in a thick
+  // frame, the series name, the title in tall caps, a "Featuring" block, a date/time/place row with icons,
+  // and the Harvard Kennedy School IOP sign-off at the bottom.
   const ROOMS = ['Wexner Commons', 'Littauer 163', 'Littauer 166', 'JFK Jr. Forum'];
-  const POSTER_SIZES = { post: [1080, 1350, 'Instagram post'], story: [1080, 1920, 'Story'], wide: [1600, 900, 'Screen'] };
-  const DISPLAY_FONT = '"Sofia Sans Extra Condensed", "Arial Narrow", sans-serif', TEXT_FONT = 'Archivo, "Helvetica Neue", Arial, sans-serif';
-  const posterFonts = () => Promise.all([`900 100px ${DISPLAY_FONT}`, `600 28px ${TEXT_FONT}`, `700 38px ${TEXT_FONT}`].map((f) => document.fonts ? document.fonts.load(f) : null)).catch(() => {});
+  const POSTER_SIZES = { wide: [1600, 900, 'Screen (16:9)'], post: [1080, 1350, 'Instagram post'], story: [1080, 1920, 'Story'] };
+  // Every program has its own template: its own color, header, title type, photo frame and an emblem
+  // drawn from what the program does (see EMBLEMS).
+  // What they all share is the IOP's identity: the IOP pattern, the centered layout, the date/time/place row
+  // with icons, and the Harvard Kennedy School IOP sign-off.
+  //   head:  forum | fsg | wordmark | stack | serif | masthead | pill | band | kicker
+  //   title: cond (tall caps) | geo (bold caps) | italic (bold italic) | serif
+  //   frame: white | accent | offset | rounded | circle
+  //   motif: underline (a short rule under the title) | (none)
+  const PSTYLE = {
+    Forum: { bg: '#c1173d', acc: '#ffffff', head: 'forum', title: 'cond', frame: 'white' },
+    FSG: { bg: '#1689c6', acc: '#ffffff', head: 'fsg', title: 'italic', frame: 'white' },
+    Conferences: { bg: '#0e5e6f', acc: '#f2c14e', head: 'kicker', title: 'geo', frame: 'accent' },
+    HPU: { bg: '#1d2b64', acc: '#e9573f', head: 'wordmark', top: 'HARVARD', big: 'POLITICAL UNION', title: 'serif', frame: 'white', motif: 'underline' },
+    WIL: { bg: '#7a2860', acc: '#f7b5c8', head: 'serif', title: 'italic', frame: 'circle' },
+    PRE: { bg: '#b6501c', acc: '#2b1a12', head: 'pill', title: 'cond', frame: 'offset' },
+    GAP: { bg: '#0d6466', acc: '#8fd3c9', head: 'kicker', title: 'geo', frame: 'white' },
+    Environment: { bg: '#2e6b3c', acc: '#c5e39a', head: 'stack', big: 'PEP', title: 'serif', frame: 'rounded' },
+    Policy: { bg: '#2f4858', acc: '#f6ae2d', head: 'band', title: 'geo', frame: 'white' },
+    HPOP: { bg: '#f4efe6', fg: '#1b2a4a', acc: '#d1495b', head: 'kicker', title: 'cond', frame: 'accent' },
+    RSG: { bg: '#24263b', acc: '#5fb0e6', head: 'band', title: 'geo', frame: 'rounded' },
+    GovLab: { bg: '#3c32b8', acc: '#9ef0c9', head: 'pill', title: 'geo', frame: 'rounded' },
+    CIVICS: { bg: '#f2b632', fg: '#1c1c1c', acc: '#1c3f94', head: 'stack', big: 'CIVICS', sub: 'Teaching civics in local classrooms', title: 'cond', frame: 'accent' },
+    'Cit Tut': { bg: '#127a6a', acc: '#ffe08a', head: 'serif', title: 'serif', frame: 'white' },
+    HVC: { bg: '#17337d', acc: '#e63946', head: 'band', title: 'geo', frame: 'white' },
+    HPR: { bg: '#161616', acc: '#e03c31', head: 'masthead', title: 'serif', frame: 'accent', motif: 'underline' },
+    CAP: { bg: '#c9252c', acc: '#ffd23f', head: 'kicker', title: 'cond', frame: 'white' },
+    Arts: { bg: '#d6496b', acc: '#2a1b3d', head: 'serif', title: 'italic', frame: 'offset' },
+    Conservative: { bg: '#13294b', acc: '#c8102e', head: 'band', title: 'cond', frame: 'white', motif: 'underline' },
+    GSC: { bg: '#6b3fa0', acc: '#ffb3d9', head: 'pill', title: 'italic', frame: 'circle' },
+    Service: { bg: '#2f7d4a', acc: '#ffffff', head: 'kicker', title: 'cond', frame: 'rounded' },
+  };
+  const styleOf = (id, light) => {
+    const b = { fg: '#ffffff', ...(PSTYLE[id] || PSTYLE.FSG) };
+    const dark = (hex) => { const n = parseInt(hex.slice(1), 16); return ((n >> 16) * 299 + ((n >> 8) & 255) * 587 + (n & 255) * 114) / 1000 < 140; };
+    // The light version: cream paper, dark type, and the program's color as the accent
+    if (light && dark(b.bg)) return { ...b, bg: '#f3f1ec', fg: '#151515', acc: b.bg, frameC: b.bg, pat: 'rgba(20,20,20,.045)' };
+    const onDark = b.fg === '#ffffff';
+    return { ...b, frameC: b.frame === 'accent' || b.frame === 'offset' && !onDark ? b.acc : onDark ? '#ffffff' : b.fg, pat: onDark ? 'rgba(255,255,255,.075)' : 'rgba(20,20,20,.05)' };
+  };
+  const COND = 'Oswald, "Arial Narrow", sans-serif', GEO = 'Montserrat, "Helvetica Neue", Arial, sans-serif', SERIF = 'Newsreader, Georgia, serif';
+  const posterFonts = () => Promise.all([`600 80px ${COND}`, `500 80px ${COND}`, `600 30px ${GEO}`, `800 30px ${GEO}`, `italic 500 30px ${GEO}`, `italic 800 30px ${GEO}`, `italic 500 50px ${SERIF}`, `500 70px ${SERIF}`, `600 70px ${SERIF}`]
+    .map((f) => document.fonts ? document.fonts.load(f) : null)).catch(() => {});
+  // Dates and times the way IOP graphics write them: "THURS., NOV. 12, 2026" and "4:30 - 5:45 PM"
+  const iopDate = (d) => {
+    if (!d) return '';
+    const x = new Date(d + 'T12:00:00Z');
+    return `${['SUN.', 'MON.', 'TUES.', 'WEDS.', 'THURS.', 'FRI.', 'SAT.'][x.getUTCDay()]}, ${['JAN.', 'FEB.', 'MARCH', 'APRIL', 'MAY', 'JUNE', 'JULY', 'AUG.', 'SEPT.', 'OCT.', 'NOV.', 'DEC.'][x.getUTCMonth()]} ${x.getUTCDate()}, ${x.getUTCFullYear()}`;
+  };
+  const iopTime = (s, e) => {
+    if (!s) return '';
+    const p = (t) => { const [h, m] = t.split(':').map(Number); return [`${h % 12 || 12}:${String(m).padStart(2, '0')}`, h < 12 ? 'AM' : 'PM']; };
+    const a = p(s); if (!e) return `${a[0]} ${a[1]}`;
+    const b = p(e); return a[1] === b[1] ? `${a[0]} - ${b[0]} ${b[1]}` : `${a.join(' ')} - ${b.join(' ')}`;
+  };
+  // ====== Program emblems ======
+  // One small line drawing per program, about what the program actually does, set in a round badge in the
+  // bottom-right corner. Each is drawn in a 100 x 100 box.
+  const circ = (c, x, y, r) => { c.moveTo(x + r, y); c.arc(x, y, r, 0, Math.PI * 2); };
+  const rbox = (c, x, y, w, h, r) => { c.moveTo(x + r, y); c.arcTo(x + w, y, x + w, y + h, r); c.arcTo(x + w, y + h, x, y + h, r); c.arcTo(x, y + h, x, y, r); c.arcTo(x, y, x + w, y, r); c.closePath(); };
+  const EMBLEMS = {
+    // The Forum: a lectern and microphone, for the speakers on its stage
+    Forum: (c) => { c.moveTo(30, 54); c.lineTo(70, 54); c.lineTo(64, 88); c.lineTo(36, 88); c.closePath(); c.moveTo(24, 54); c.lineTo(76, 54); c.moveTo(42, 72); c.lineTo(58, 72); c.moveTo(50, 54); c.lineTo(50, 36); c.moveTo(46, 36); c.lineTo(54, 36); circ(c, 50, 24, 9); },
+    // Study groups: an open book
+    FSG: (c) => { c.moveTo(50, 32); c.quadraticCurveTo(34, 22, 14, 28); c.lineTo(14, 74); c.quadraticCurveTo(34, 68, 50, 78); c.quadraticCurveTo(66, 68, 86, 74); c.lineTo(86, 28); c.quadraticCurveTo(66, 22, 50, 32); c.lineTo(50, 78); },
+    // Conferences: a name badge on a lanyard
+    Conferences: (c) => { c.moveTo(32, 10); c.lineTo(50, 38); c.lineTo(68, 10); rbox(c, 28, 38, 44, 50, 5); c.moveTo(44, 47); c.lineTo(56, 47); c.moveTo(37, 64); c.lineTo(63, 64); c.moveTo(37, 75); c.lineTo(55, 75); },
+    // HPU: two sides of a debate
+    HPU: (c) => { rbox(c, 10, 16, 48, 30, 8); c.moveTo(22, 46); c.lineTo(18, 58); c.lineTo(32, 46); rbox(c, 42, 50, 48, 30, 8); c.moveTo(78, 80); c.lineTo(82, 92); c.lineTo(68, 80); },
+    // WIL: steps up to a flag, for leadership
+    WIL: (c) => { c.moveTo(10, 88); c.lineTo(32, 88); c.lineTo(32, 70); c.lineTo(52, 70); c.lineTo(52, 52); c.lineTo(72, 52); c.lineTo(72, 88); c.lineTo(10, 88); c.moveTo(62, 52); c.lineTo(62, 12); c.lineTo(86, 20); c.lineTo(62, 30); },
+    // PRE: three overlapping circles, for many perspectives in one conversation
+    PRE: (c) => { circ(c, 38, 40, 22); circ(c, 62, 40, 22); circ(c, 50, 62, 22); },
+    // GAP: a globe
+    GAP: (c) => { circ(c, 50, 50, 36); c.moveTo(50, 14); c.ellipse(50, 50, 15, 36, 0, -Math.PI / 2, Math.PI * 1.5); c.moveTo(14, 50); c.lineTo(86, 50); c.moveTo(20, 32); c.lineTo(80, 32); c.moveTo(20, 68); c.lineTo(80, 68); },
+    // PEP: a leaf
+    Environment: (c) => { c.moveTo(24, 78); c.quadraticCurveTo(18, 24, 80, 18); c.quadraticCurveTo(84, 78, 24, 78); c.moveTo(24, 78); c.lineTo(64, 36); c.moveTo(24, 78); c.lineTo(14, 90); c.moveTo(40, 62); c.lineTo(40, 48); c.moveTo(52, 50); c.lineTo(52, 38); c.moveTo(40, 62); c.lineTo(54, 62); },
+    // Policy: a policy memo
+    Policy: (c) => { c.moveTo(24, 10); c.lineTo(60, 10); c.lineTo(76, 26); c.lineTo(76, 90); c.lineTo(24, 90); c.closePath(); c.moveTo(60, 10); c.lineTo(60, 26); c.lineTo(76, 26); c.moveTo(34, 42); c.lineTo(66, 42); c.moveTo(34, 54); c.lineTo(66, 54); c.moveTo(34, 66); c.lineTo(54, 66); c.moveTo(48, 80); c.lineTo(53, 85); c.lineTo(64, 74); },
+    // HPOP: poll results
+    HPOP: (c) => { c.rect(16, 58, 16, 28); c.rect(42, 38, 16, 48); c.rect(68, 20, 16, 66); c.moveTo(10, 86); c.lineTo(90, 86); },
+    // RSG: a magnifying glass over findings
+    RSG: (c) => { circ(c, 42, 42, 26); c.moveTo(61, 61); c.lineTo(86, 86); c.moveTo(32, 52); c.lineTo(32, 44); c.moveTo(42, 52); c.lineTo(42, 32); c.moveTo(52, 52); c.lineTo(52, 38); },
+    // GovLab: a lightbulb, for new ideas
+    GovLab: (c) => { c.moveTo(40, 66); c.bezierCurveTo(24, 54, 24, 18, 50, 18); c.bezierCurveTo(76, 18, 76, 54, 60, 66); c.lineTo(60, 74); c.lineTo(40, 74); c.closePath(); c.moveTo(42, 82); c.lineTo(58, 82); c.moveTo(46, 90); c.lineTo(54, 90); c.moveTo(50, 6); c.lineTo(50, 10); c.moveTo(14, 22); c.lineTo(19, 26); c.moveTo(86, 22); c.lineTo(81, 26); c.moveTo(46, 66); c.lineTo(46, 48); c.lineTo(54, 48); c.lineTo(54, 66); },
+    // CIVICS: a classroom chalkboard with the Capitol on it
+    CIVICS: (c) => { c.rect(10, 14, 80, 54); c.moveTo(28, 68); c.lineTo(20, 90); c.moveTo(72, 68); c.lineTo(80, 90); c.moveTo(34, 58); c.lineTo(66, 58); c.moveTo(38, 46); c.lineTo(62, 46); c.moveTo(42, 46); c.lineTo(42, 58); c.moveTo(50, 46); c.lineTo(50, 58); c.moveTo(58, 46); c.lineTo(58, 58); c.moveTo(40, 46); c.arc(50, 46, 10, Math.PI, 0); c.moveTo(50, 36); c.lineTo(50, 28); },
+    // Citizenship Tutoring: a certificate with a seal
+    'Cit Tut': (c) => { c.rect(10, 18, 66, 48); c.moveTo(20, 32); c.lineTo(58, 32); c.moveTo(20, 44); c.lineTo(48, 44); c.moveTo(20, 54); c.lineTo(42, 54); circ(c, 72, 64, 13); c.moveTo(66, 76); c.lineTo(62, 92); c.lineTo(68, 88); c.moveTo(78, 76); c.lineTo(82, 92); c.lineTo(76, 88); },
+    // HVC: a ballot going into a ballot box
+    HVC: (c) => { c.rect(16, 50, 68, 38); c.moveTo(16, 62); c.lineTo(84, 62); c.moveTo(34, 50); c.lineTo(34, 12); c.lineTo(66, 12); c.lineTo(66, 50); c.moveTo(42, 32); c.lineTo(48, 38); c.lineTo(58, 24); },
+    // HPR: a writer's quill
+    HPR: (c) => { c.moveTo(82, 10); c.bezierCurveTo(44, 16, 30, 50, 28, 80); c.bezierCurveTo(48, 66, 74, 46, 82, 10); c.moveTo(28, 80); c.lineTo(64, 34); c.moveTo(28, 80); c.lineTo(20, 92); c.moveTo(14, 92); c.lineTo(46, 92); },
+    // CAP: a megaphone, for campaigns and advocacy
+    CAP: (c) => { c.moveTo(16, 42); c.lineTo(30, 42); c.lineTo(70, 20); c.lineTo(70, 80); c.lineTo(30, 58); c.lineTo(16, 58); c.closePath(); c.moveTo(34, 60); c.lineTo(38, 80); c.lineTo(48, 80); c.lineTo(45, 64); c.moveTo(78, 38); c.lineTo(88, 32); c.moveTo(80, 50); c.lineTo(92, 50); c.moveTo(78, 62); c.lineTo(88, 68); },
+    // Arts: a painter's palette
+    Arts: (c) => { c.moveTo(50, 16); c.bezierCurveTo(80, 16, 92, 40, 86, 56); c.bezierCurveTo(80, 72, 62, 62, 60, 74); c.bezierCurveTo(58, 88, 22, 88, 14, 62); c.bezierCurveTo(8, 36, 24, 16, 50, 16); circ(c, 34, 38, 6); circ(c, 52, 30, 6); circ(c, 70, 40, 6); circ(c, 38, 64, 7); },
+    // Conservative Coalition: a classical column
+    Conservative: (c) => { c.moveTo(18, 18); c.lineTo(82, 18); c.moveTo(24, 28); c.lineTo(76, 28); c.moveTo(32, 28); c.lineTo(32, 78); c.moveTo(44, 28); c.lineTo(44, 78); c.moveTo(56, 28); c.lineTo(56, 78); c.moveTo(68, 28); c.lineTo(68, 78); c.moveTo(24, 78); c.lineTo(76, 78); c.moveTo(16, 88); c.lineTo(84, 88); c.moveTo(18, 18); c.lineTo(50, 6); c.lineTo(82, 18); },
+    // GSC: a rainbow
+    GSC: (c) => { [38, 28, 18].forEach((r) => { c.moveTo(50 - r, 76); c.arc(50, 76, r, Math.PI, 0); }); c.moveTo(6, 76); c.lineTo(94, 76); },
+    // Service Coalition: a heart held in a hand
+    Service: (c) => { c.moveTo(50, 40); c.bezierCurveTo(50, 32, 38, 20, 28, 30); c.bezierCurveTo(18, 40, 32, 52, 50, 62); c.bezierCurveTo(68, 52, 82, 40, 72, 30); c.bezierCurveTo(62, 20, 50, 32, 50, 40); c.moveTo(8, 66); c.lineTo(24, 66); c.bezierCurveTo(36, 80, 54, 86, 70, 82); c.lineTo(92, 74); c.moveTo(24, 66); c.lineTo(46, 66); c.quadraticCurveTo(54, 70, 48, 74); c.lineTo(36, 74); },
+  };
+  const drawEmblem = (c, id, cx, cy, r, color) => {
+    const draw = EMBLEMS[id]; if (!draw) return;
+    c.save();
+    c.strokeStyle = color; c.lineCap = 'round'; c.lineJoin = 'round';
+    c.lineWidth = r * .05; c.beginPath(); c.arc(cx, cy, r, 0, Math.PI * 2); c.stroke();
+    const k = (r * 1.16) / 100; c.translate(cx - 50 * k, cy - 50 * k); c.scale(k, k);
+    c.lineWidth = 6.5; c.beginPath(); draw(c); c.stroke();
+    c.restore();
+  };
   const drawPoster = (cv, o) => {
-    const [W, H] = POSTER_SIZES[o.fmt] || POSTER_SIZES.post;
+    const [W, H] = POSTER_SIZES[o.fmt] || POSTER_SIZES.wide;
     cv.width = W; cv.height = H;
     const c = cv.getContext('2d');
-    const wide = W > H, u = wide ? 1 : 1.12, m = wide ? 96 : 84;
-    const cream = '#f4f1ea', ink = '#10143d';
+    const wide = W > H, s = wide ? 1 : 1.08;
+    const th = styleOf(o.p, o.light);
+    const pg = prog(o.p);
+    const photos = (o.photos || []).slice(0, 3);
     const track = (px) => { if ('letterSpacing' in c) c.letterSpacing = `${px}px`; };
-    const rr = (x, y, w, h, r) => { c.beginPath(); c.moveTo(x + r, y); c.arcTo(x + w, y, x + w, y + h, r); c.arcTo(x + w, y + h, x, y + h, r); c.arcTo(x, y + h, x, y, r); c.arcTo(x, y, x + w, y, r); c.closePath(); };
-    c.fillStyle = '#1b2384'; c.fillRect(0, 0, W, H);
-    const g = c.createRadialGradient(W * .87, H * .13, 0, W * .87, H * .13, Math.max(W, H) * .6);
-    g.addColorStop(0, 'rgba(255,255,255,.10)'); g.addColorStop(1, 'rgba(255,255,255,0)');
-    c.fillStyle = g; c.fillRect(0, 0, W, H);
-    // Faint IOP pattern
-    c.save(); c.translate(W / 2, H / 2); c.rotate(-.18);
-    c.font = `900 150px ${DISPLAY_FONT}`; c.fillStyle = 'rgba(255,255,255,.05)'; c.textBaseline = 'top'; track(6);
-    const R = Math.hypot(W, H) / 2 + 160;
-    for (let y = -R, k = 0; y < R; y += 150, k++) c.fillText('IOP '.repeat(18), -R - 60 + (k % 2) * 140, y);
+    const font = (f) => { c.font = f; };
+    const rrect = (x, y, w, h, r) => { c.beginPath(); c.moveTo(x + r, y); c.arcTo(x + w, y, x + w, y + h, r); c.arcTo(x + w, y + h, x, y + h, r); c.arcTo(x, y + h, x, y, r); c.arcTo(x, y, x + w, y, r); c.closePath(); };
+    c.textAlign = 'center'; c.textBaseline = 'alphabetic';
+    // Background and the IOP pattern (the same on every program's graphics)
+    c.fillStyle = th.bg; c.fillRect(0, 0, W, H);
+    c.save(); c.translate(W / 2, H / 2); c.rotate(-.1);
+    font(`800 ${150 * s}px ${GEO}`); track(40 * s); c.fillStyle = th.pat;
+    const R = Math.hypot(W, H) / 2 + 200;
+    for (let y = -R, k = 0; y < R; y += 200 * s, k++) c.fillText('IOP IOP IOP IOP IOP IOP IOP IOP', (k % 2) * 210 * s, y);
     c.restore(); track(0);
-    // The red star
-    const [sx, sy, sr] = wide ? [1330, 500, 430] : o.fmt === 'story' ? [850, 1480, 560] : [870, 1050, 470];
-    c.save(); c.shadowColor = 'rgba(0,0,0,.28)'; c.shadowBlur = 50; c.shadowOffsetY = 18;
-    c.translate(sx, sy); c.rotate(8 * Math.PI / 180); c.beginPath();
-    for (let i = 0; i < 10; i++) { const a = -Math.PI / 2 + i * Math.PI / 5, r = i % 2 ? sr * .382 : sr; c[i ? 'lineTo' : 'moveTo'](Math.cos(a) * r, Math.sin(a) * r); }
-    c.closePath(); c.fillStyle = '#d7101b'; c.fill(); c.restore();
-    // Program and members-only pills
-    let x = m; const py = wide ? 92 : 100, ph = 60 * u;
-    const pill = (text, filled) => {
-      c.font = `600 ${28 * u}px ${TEXT_FONT}`; track(2.2 * u);
-      const label = text.toUpperCase(), w = c.measureText(label).width + 52 * u;
-      if (x + w > W - m) return;
-      rr(x, py, w, ph, ph / 2);
-      if (filled) { c.fillStyle = cream; c.fill(); } else { c.strokeStyle = 'rgba(244,241,234,.6)'; c.lineWidth = 2.5; c.stroke(); }
-      c.fillStyle = filled ? ink : cream; c.textBaseline = 'middle'; c.fillText(label, x + 26 * u, py + ph / 2 + 1);
-      x += w + 16;
+    // Photos
+    let col, area;
+    if (photos.length) {
+      const f = wide ? [40, 50, 700, 696] : [60, 64, W - 120, Math.round(H * (o.fmt === 'story' ? .46 : .43))];
+      const cover = (img, x, y, w, h) => { const r = Math.max(w / img.width, h / img.height), sw = w / r, sh = h / r; c.drawImage(img, (img.width - sw) / 2, Math.max(0, (img.height - sh) * .3), sw, sh, x, y, w, h); };
+      if (th.frame === 'circle') {
+        // Round portraits with a ring, side by side
+        const n = photos.length, d = Math.min((f[2] - (n - 1) * 24 * s) / n, f[3] * (n === 1 ? .86 : .7));
+        const total = n * d + (n - 1) * 24 * s, y0 = f[1] + (f[3] - d) / 2;
+        photos.forEach((img, i) => {
+          const x = f[0] + (f[2] - total) / 2 + i * (d + 24 * s);
+          c.save(); c.beginPath(); c.arc(x + d / 2, y0 + d / 2, d / 2, 0, Math.PI * 2); c.clip(); cover(img, x, y0, d, d); c.restore();
+          c.beginPath(); c.arc(x + d / 2, y0 + d / 2, d / 2, 0, Math.PI * 2); c.lineWidth = 12 * s; c.strokeStyle = th.acc; c.stroke();
+        });
+      } else {
+        const bw = 14 * s, gap = 10 * s, rad = th.frame === 'rounded' ? 30 * s : 0;
+        if (th.frame === 'offset') { c.fillStyle = th.acc; c.fillRect(f[0] + 22 * s, f[1] + 22 * s, f[2], f[3]); }
+        c.fillStyle = th.frame === 'offset' ? (th.fg === '#ffffff' ? '#ffffff' : th.fg) : th.frameC;
+        if (rad) { rrect(...f, rad); c.fill(); } else c.fillRect(...f);
+        const iw = (f[2] - 2 * bw - gap * (photos.length - 1)) / photos.length, ih = f[3] - 2 * bw;
+        photos.forEach((img, i) => {
+          const x = f[0] + bw + i * (iw + gap), y = f[1] + bw;
+          c.save(); if (rad) { rrect(x, y, iw, ih, Math.max(4, rad - bw)); c.clip(); } cover(img, x, y, iw, ih); c.restore();
+        });
+      }
+      col = wide ? [1170, 780] : [W / 2, W - 140];
+      area = wide ? [50, 762] : [f[1] + f[3] + 56 * s, H - 150 * s];
+    } else {
+      col = wide ? [W / 2, 1200] : [W / 2, W - 140];
+      area = wide ? [70, 770] : [140 * s, H - 170 * s];
+    }
+    const [cx, cw] = col;
+    // Text is a little larger when there are no photos to balance it
+    const z = s * (wide && !photos.length ? 1.22 : o.fmt === 'story' ? 1.24 : 1);
+    const wrap = (text, f, maxW) => {
+      font(f); const lines = []; let line = '';
+      for (const w of text.split(/\s+/).filter(Boolean)) { const t = line ? `${line} ${w}` : w; if (c.measureText(t).width <= maxW || !line) line = t; else { lines.push(line); line = w; } }
+      if (line) lines.push(line); return lines;
     };
-    // Use the program's short name when its full name and the members-only pill don't fit side by side
-    c.font = `600 ${28 * u}px ${TEXT_FONT}`; track(2.2 * u);
-    const pw = (t) => c.measureText(t.toUpperCase()).width + 52 * u;
-    const full = prog(o.p).name, fits = pw(full) + (o.members ? 16 + pw('Members only') : 0) <= W - 2 * m;
-    pill(fits ? full : o.p, false);
-    if (o.members) pill('Members only', true);
-    track(0);
-    // Date, time and place chips, laid out in rows from the bottom up
-    const chips = [o.date, o.time, o.where].filter(Boolean), ch = 78 * u, gap = 18, maxW = wide ? 1020 : W - 2 * m;
-    c.font = `700 ${38 * u}px ${TEXT_FONT}`;
-    const rows = [[]]; let rowW = 0;
-    chips.forEach((t) => { const w = c.measureText(t).width + 56 * u; if (rowW && rowW + w > maxW) { rows.push([]); rowW = 0; } rows[rows.length - 1].push([t, w]); rowW += w + gap; });
-    const chipsBottom = wide ? 790 : H - m - 64 * u;
-    const chipsTop = chips.length ? chipsBottom - rows.length * ch - (rows.length - 1) * gap : chipsBottom;
-    rows.forEach((row, ri) => {
-      let cx = m; const cy = chipsTop + ri * (ch + gap);
-      row.forEach(([t, w]) => { rr(cx, cy, w, ch, 16 * u); c.fillStyle = cream; c.fill(); c.fillStyle = ink; c.textBaseline = 'middle'; c.fillText(t, cx + 28 * u, cy + ch / 2 + 2); cx += w + gap; });
-    });
-    // Title: as large as fits between the pills and the chips
-    const top = py + ph + (wide ? 40 : 64), boxH = chipsTop - (wide ? 40 : 56) - top, boxW = wide ? 1020 : W - 2 * m;
-    const title = (o.title || 'Your event name').toUpperCase().trim();
-    const wrap = (size) => {
-      c.font = `900 ${size}px ${DISPLAY_FONT}`;
-      const lines = []; let line = '';
-      for (const word of title.split(/\s+/)) { const t = line ? line + ' ' + word : word; if (c.measureText(t).width <= boxW || !line) line = t; else { lines.push(line); line = word; } }
-      if (line) lines.push(line);
-      return lines;
+    const fit = (text, mk, start, min, maxW, maxLines, lhK, maxH = Infinity) => {
+      let size = start, lines;
+      while (true) { lines = wrap(text, mk(size), maxW); font(mk(size)); if ((lines.length <= maxLines && lines.length * size * lhK <= maxH && lines.every((l) => c.measureText(l).width <= maxW)) || size <= min) break; size -= 2; }
+      return { lines, size, f: mk(size), lh: size * lhK };
     };
-    let size = wide ? 176 : 210, lines = wrap(size), lh = size * .9;
-    while (size > 48 && (lines.length * lh > boxH || lines.some((l) => c.measureText(l).width > boxW))) { size -= 4; lines = wrap(size); lh = size * .9; }
-    const ty = wide ? top + (boxH - lines.length * lh) / 2 : top;
-    c.save(); c.shadowColor = 'rgba(0,0,0,.25)'; c.shadowBlur = 18; c.shadowOffsetY = 4;
-    c.fillStyle = cream; c.textBaseline = 'top'; track(.5);
-    lines.forEach((l, i) => c.fillText(l, m, ty + i * lh));
-    c.restore(); track(0);
-    // Sign-off
-    c.font = `700 ${26 * u}px ${TEXT_FONT}`; track(3 * u); c.fillStyle = 'rgba(244,241,234,.92)'; c.textBaseline = 'middle'; c.textAlign = 'right';
-    c.fillText('INSTITUTE OF POLITICS', W - m, wide ? 832 : H - m * .7);
-    c.textAlign = 'left'; track(0);
+    const blocks = [];
+    // Guests: up to three, each with a name and an optional title
+    // Anything left empty is drawn as a faint label saying what goes there (unless ghost is off, as for drafts)
+    const ghosts = o.ghost !== false, GA = .38;
+    const rows = o.guests ? o.guests : o.who ? [{ who: o.who, role: o.role }] : [];
+    const guests = rows.slice(0, 3).map((g) => { const who = (g.who || '').trim(), role = (g.role || '').trim();
+      return { who: who || 'Guest name', role: role || (who || !ghosts ? '' : 'Their title'), gw: !who, gr: !role && !who }; }).filter((g) => ghosts || !g.gw);
+    const fsg = th.head === 'fsg' && guests.length;
+    // Members-only tag
+    if (o.members) blocks.push({ h: 46 * z, gap: 28 * z, draw: (y) => {
+      font(`700 ${19 * z}px ${GEO}`); track(3 * z);
+      const w = c.measureText('MEMBERS ONLY').width + 40 * z;
+      c.fillStyle = th.acc; rrect(cx - w / 2, y, w, 46 * z, 23 * z); c.fill();
+      c.fillStyle = isDarkAcc(th.acc) ? '#ffffff' : '#151515';
+      c.textBaseline = 'middle'; c.fillText('MEMBERS ONLY', cx, y + 24 * z); c.textBaseline = 'alphabetic'; track(0);
+    } });
+    // Series header, different for every program
+    const name = pg.name, NAME = name.toUpperCase();
+    if (th.head === 'forum') blocks.push({ h: 96 * z, gap: 44 * z, draw: (y) => {
+      // The Forum lockup: FORUM in wide-spaced caps, with "JOHN F. KENNEDY JR." running up beside the F,
+      // exactly as tall as the capitals, and the pair centered as one unit
+      const fs = 124 * z, sp = 18 * z, capH = fs * .7, base = y + 92 * z;
+      font(`500 ${fs}px ${GEO}`); track(sp); const fw = c.measureText('FORUM').width - sp;
+      font(`700 ${10 * z}px ${GEO}`); track(1.4 * z); const vw = c.measureText('JOHN F. KENNEDY JR.').width;
+      const vs = 10 * z * capH / vw, gap = 12 * z, total = vs + gap + fw, x0 = cx - total / 2;
+      c.fillStyle = th.fg; c.textAlign = 'left';
+      c.save(); c.translate(x0 + vs * .82, base); c.rotate(-Math.PI / 2); font(`700 ${vs}px ${GEO}`); track(1.4 * z * capH / vw); c.fillText('JOHN F. KENNEDY JR.', 0, 0); c.restore();
+      font(`500 ${fs}px ${GEO}`); track(sp); c.fillText('FORUM', x0 + vs + gap, base);
+      c.textAlign = 'center'; track(0);
+    } });
+    else if (fsg) {
+      const real = guests.filter((g) => !g.gw).map((g) => g.who), ns = real.length ? real : ['Guest name'], nameGhost = !real.length;
+      const names = ns.length < 3 ? ns.join(' and ') : `${ns.slice(0, -1).join(', ')} and ${ns[ns.length - 1]}`;
+      const nm = fit(names, (q) => `500 ${q}px ${SERIF}`, 82 * z, 34, cw, 2, 1.1);
+      blocks.push({ h: 52 * z + nm.lines.length * nm.lh, gap: 26 * z, draw: (y) => {
+        c.fillStyle = th.fg; font(`italic 600 ${52 * z}px ${SERIF}`); c.fillText('Study Group with', cx, y + 46 * z);
+        font(nm.f); c.globalAlpha = nameGhost ? GA : 1; nm.lines.forEach((l, i) => c.fillText(l, cx, y + 52 * z + i * nm.lh + nm.size * .95)); c.globalAlpha = 1;
+      } });
+    } else if (th.head === 'wordmark') {
+      const big = fit(th.big, (q) => `700 ${q}px ${GEO}`, 76 * z, 30, cw, 1, 1);
+      blocks.push({ h: 30 * z + big.size, gap: 30 * z, draw: (y) => {
+        c.fillStyle = th.acc; font(`700 ${22 * z}px ${GEO}`); track(14 * z); c.fillText(th.top, cx + 7 * z, y + 20 * z);
+        c.fillStyle = th.fg; font(big.f); track(6 * z); c.fillText(th.big, cx + 3 * z, y + 30 * z + big.size * .82); track(0);
+      } });
+    } else if (th.head === 'stack') {
+      const big = fit(th.big, (q) => `800 ${q}px ${GEO}`, 130 * z, 40, cw, 1, 1);
+      const sub = (th.sub || name).toUpperCase();
+      blocks.push({ h: big.size * .8 + 46 * z, gap: 30 * z, draw: (y) => {
+        c.fillStyle = th.fg; font(big.f); track(4 * z); c.fillText(th.big, cx + 2 * z, y + big.size * .78);
+        c.fillStyle = th.acc; c.fillRect(cx - 40 * z, y + big.size * .8 + 12 * z, 80 * z, 5 * z);
+        c.fillStyle = th.fg; font(`600 ${19 * z}px ${GEO}`); track(5 * z); c.fillText(sub, cx + 2.5 * z, y + big.size * .8 + 44 * z); track(0);
+      } });
+    } else if (th.head === 'serif' || th.head === 'masthead') {
+      const mast = th.head === 'masthead';
+      const t = fit(name, (q) => `${mast ? '' : 'italic '}${mast ? 600 : 500} ${q}px ${SERIF}`, (mast ? 64 : 54) * z, 26, cw, 1, 1.1);
+      blocks.push({ h: t.size + (mast ? 22 * z : 0), gap: 26 * z, draw: (y) => {
+        c.fillStyle = th.fg; font(t.f); c.fillText(t.lines[0], cx, y + t.size * .85);
+        if (mast) { font(t.f); const w = c.measureText(t.lines[0]).width; c.fillStyle = th.acc; c.fillRect(cx - w / 2, y + t.size + 10 * z, w, 4 * z); c.fillRect(cx - w / 2, y + t.size + 18 * z, w, 1.5 * z); }
+      } });
+    } else if (th.head === 'pill') {
+      const t = fit(NAME, (q) => `700 ${q}px ${GEO}`, 24 * z, 14, cw - 80 * z, 1, 1);
+      blocks.push({ h: 58 * z, gap: 28 * z, draw: (y) => {
+        font(t.f); track(4 * z); const w = c.measureText(t.lines[0]).width + 56 * z;
+        c.strokeStyle = th.acc; c.lineWidth = 3 * z; rrect(cx - w / 2, y, w, 58 * z, 29 * z); c.stroke();
+        c.fillStyle = th.fg; c.textBaseline = 'middle'; c.fillText(t.lines[0], cx + 2 * z, y + 30 * z); c.textBaseline = 'alphabetic'; track(0);
+      } });
+    } else if (th.head === 'band') {
+      const t = fit(NAME, (q) => `800 ${q}px ${GEO}`, 26 * z, 14, cw - 70 * z, 1, 1);
+      blocks.push({ h: 60 * z, gap: 30 * z, draw: (y) => {
+        font(t.f); track(4 * z); const w = c.measureText(t.lines[0]).width + 60 * z;
+        c.fillStyle = th.acc; c.fillRect(cx - w / 2, y, w, 60 * z);
+        c.fillStyle = isDarkAcc(th.acc) ? '#ffffff' : '#151515'; c.textBaseline = 'middle'; c.fillText(t.lines[0], cx + 2 * z, y + 31 * z); c.textBaseline = 'alphabetic'; track(0);
+      } });
+    } else {
+      // kicker: the name in spaced caps between two rules
+      const t = fit(NAME, (q) => `600 ${q}px ${GEO}`, 28 * z, 14, cw - 180 * z, 1, 1);
+      blocks.push({ h: t.size, gap: 28 * z, draw: (y) => {
+        font(t.f); track(5 * z); const w = c.measureText(t.lines[0]).width;
+        c.fillStyle = th.fg; c.fillText(t.lines[0], cx + 2.5 * z, y + t.size * .85);
+        c.fillStyle = th.acc; const ry = y + t.size * .5; c.fillRect(cx - w / 2 - 80 * z, ry, 56 * z, 3 * z); c.fillRect(cx + w / 2 + 28 * z, ry, 56 * z, 3 * z); track(0);
+      } });
+    }
+    // Title (sized at the end, to fill the space the other blocks leave)
+    const titleAt = blocks.length;
+    // Featuring
+    const roleF = `italic 400 ${25 * z}px ${GEO}`;
+    if (guests.length > 1 && !fsg) {
+      // Two or three guests: side by side, each with their title underneath, all names the same size
+      const n = guests.length, colW = cw / n, inner = colW - 24 * z, roleS = `italic 400 ${21 * z}px ${GEO}`;
+      const size = Math.min(...guests.map((g) => fit(g.who, (q) => `500 ${q}px ${COND}`, 46 * z, 22, inner, 1, 1.1).size));
+      const roles = guests.map((g) => (g.role ? wrap(g.role, roleS, inner).slice(0, 3) : []));
+      const rl = Math.max(...roles.map((r) => r.length));
+      blocks.push({ h: 34 * z + size * 1.1 + rl * 28 * z, gap: 30 * z, draw: (y) => {
+        c.fillStyle = th.fg; font(`italic 500 ${28 * z}px ${GEO}`); c.fillText('Featuring:', cx, y + 26 * z);
+        guests.forEach((g, i) => {
+          const gx = cx - cw / 2 + colW * (i + .5);
+          font(`500 ${size}px ${COND}`); c.globalAlpha = g.gw ? GA : 1; c.fillText(g.who, gx, y + 34 * z + size * .95);
+          font(roleS); c.globalAlpha = g.gr ? GA : 1; roles[i].forEach((l, k) => c.fillText(l, gx, y + 34 * z + size * 1.1 + 24 * z + k * 28 * z)); c.globalAlpha = 1;
+        });
+      } });
+    } else if (guests.length && !fsg) {
+      const g0 = guests[0];
+      const nm = fit(g0.who, (q) => `500 ${q}px ${COND}`, 56 * z, 30, cw, 1, 1.1);
+      const role = g0.role ? wrap(g0.role, roleF, cw).slice(0, 2) : [];
+      blocks.push({ h: 34 * z + nm.lh + role.length * 34 * z, gap: 30 * z, draw: (y) => {
+        c.fillStyle = th.fg; font(`italic 500 ${28 * z}px ${GEO}`); c.fillText('Featuring:', cx, y + 26 * z);
+        c.fillStyle = th.fg; font(nm.f); c.globalAlpha = g0.gw ? GA : 1; c.fillText(nm.lines[0], cx, y + 34 * z + nm.size * .95);
+        font(roleF); c.globalAlpha = g0.gr ? GA : 1; role.forEach((l, i) => c.fillText(l, cx, y + 34 * z + nm.lh + 28 * z + i * 34 * z)); c.globalAlpha = 1;
+      } });
+    } else if (fsg && guests.length === 1 && guests[0].role) {
+      const role = wrap(guests[0].role, roleF, cw).slice(0, 2);
+      blocks.push({ h: role.length * 34 * z, gap: 30 * z, draw: (y) => { font(roleF); c.fillStyle = th.fg; c.globalAlpha = guests[0].gr ? GA : 1; role.forEach((l, i) => c.fillText(l, cx, y + 26 * z + i * 34 * z)); c.globalAlpha = 1; } });
+    }
+    // Date, time and place, with icons (the same on every program's graphics)
+    const meta = [['cal', iopDate(o.date), 'DATE'], ['clock', iopTime(o.s, o.e), 'TIME'], ['pin', (o.where || '').trim().toUpperCase(), 'LOCATION']]
+      .map(([ic, v, label]) => [ic, v || label, !v]).filter(([, , g]) => ghosts || !g);
+    if (meta.length) {
+      let ms = 26 * z; const iconW = 26 * z, ig = 12 * z, sep = 46 * z;
+      const rowW = () => { font(`600 ${ms}px ${GEO}`); track(1); return meta.reduce((a, [, v]) => a + iconW + ig + c.measureText(v).width, 0) + sep * (meta.length - 1); };
+      while (rowW() > cw && ms > 16) ms -= 1;
+      const totalW = rowW();
+      blocks.push({ h: 24 * z + ms, gap: 0, draw: (y) => {
+        c.fillStyle = th.fg; c.globalAlpha = .9; c.fillRect(cx - cw / 2, y, cw, 2.5 * z); c.globalAlpha = 1;
+        let x = cx - totalW / 2; const by = y + 24 * z + ms * .82;
+        c.strokeStyle = th.fg; c.lineWidth = 2.6 * z; c.lineCap = 'round'; c.lineJoin = 'round';
+        meta.forEach(([ic, v, g]) => {
+          c.globalAlpha = g ? GA : 1;
+          const ix = x, iy = by - ms * .78, q = iconW;
+          c.beginPath();
+          if (ic === 'cal') { c.rect(ix + q * .08, iy + q * .14, q * .84, q * .78); c.moveTo(ix + q * .08, iy + q * .38); c.lineTo(ix + q * .92, iy + q * .38); c.moveTo(ix + q * .3, iy); c.lineTo(ix + q * .3, iy + q * .24); c.moveTo(ix + q * .7, iy); c.lineTo(ix + q * .7, iy + q * .24); }
+          else if (ic === 'clock') { c.arc(ix + q / 2, iy + q / 2, q * .44, 0, Math.PI * 2); c.moveTo(ix + q / 2, iy + q * .24); c.lineTo(ix + q / 2, iy + q / 2); c.lineTo(ix + q * .68, iy + q * .62); }
+          else { c.moveTo(ix + q / 2, iy + q * .98); c.bezierCurveTo(ix + q * .12, iy + q * .56, ix + q * .1, iy + q * .4, ix + q * .1, iy + q * .36); c.arc(ix + q / 2, iy + q * .36, q * .4, Math.PI, 0); c.bezierCurveTo(ix + q * .9, iy + q * .4, ix + q * .88, iy + q * .56, ix + q / 2, iy + q * .98); c.moveTo(ix + q * .64, iy + q * .36); c.arc(ix + q / 2, iy + q * .36, q * .14, 0, Math.PI * 2); }
+          c.stroke();
+          c.fillStyle = th.fg; font(`600 ${ms}px ${GEO}`); track(1); c.textAlign = 'left'; c.fillText(v, x + iconW + ig, by); c.textAlign = 'center'; track(0);
+          x += iconW + ig + c.measureText(v).width + sep;
+        });
+        c.globalAlpha = 1;
+      } });
+    }
+    // Now size the title to the room that is left
+    const room = area[1] - area[0] - blocks.reduce((a, b) => a + b.h + b.gap, 0) - 30 * z - (th.motif === 'underline' ? 24 * z : 0);
+    const titleGhost = !(o.title || '').trim(), title = titleGhost ? 'Event title' : o.title.trim();
+    const TF = {
+      cond: [title.toUpperCase(), (q) => `600 ${q}px ${COND}`, 1.14, 0],
+      geo: [title.toUpperCase(), (q) => `800 ${q}px ${GEO}`, 1.14, 1],
+      italic: [title, (q) => `italic 800 ${q}px ${GEO}`, 1.18, 0],
+      serif: [title, (q) => `600 ${q}px ${SERIF}`, 1.08, 0],
+    }[th.title];
+    const start = (th.title === 'geo' ? .8 : th.title === 'italic' ? .84 : th.title === 'serif' ? 1.06 : 1) * (wide ? (photos.length ? 82 : 100) : 92) * z;
+    const t = fit(TF[0], TF[1], start, 30, cw, 4, TF[2], room);
+    const ul = th.motif === 'underline' ? 24 * z : 0;
+    blocks.splice(titleAt, 0, { h: t.lines.length * t.lh + ul, gap: 30 * z, draw: (y) => {
+      font(t.f); track(TF[3] * z); c.fillStyle = th.fg; c.globalAlpha = titleGhost && ghosts ? GA : 1; t.lines.forEach((l, i) => c.fillText(l, cx, y + i * t.lh + t.size * .9)); c.globalAlpha = 1; track(0);
+      if (ul) { c.fillStyle = th.acc; c.fillRect(cx - 60 * z, y + t.lines.length * t.lh + 10 * z, 120 * z, 6 * z); }
+    } });
+    // Stack the blocks in the middle of the text area
+    const total = blocks.reduce((a, b, i) => a + b.h + (i < blocks.length - 1 ? b.gap : 0), 0);
+    let y = area[0] + Math.max(0, (area[1] - area[0] - total) / 2);
+    blocks.forEach((b) => { b.draw(y); y += b.h + b.gap; });
+    // Sign-off: the Harvard Kennedy School Institute of Politics logo (the same on every program's graphics)
+    const logo = IOP_LOGO[th.fg === '#ffffff' ? 'white' : 'dark'];
+    if (logo.complete && logo.naturalWidth) {
+      // One rule for every template and size: centered at the bottom, 6% of the short side tall
+      const unit = Math.min(W, H), lh = unit * .06, lw = lh * logo.naturalWidth / logo.naturalHeight;
+      c.drawImage(logo, (W - lw) / 2, H - unit * .075 - lh / 2, lw, lh);
+    }
+    // The program's emblem, in its badge in the bottom-right corner
+    const er = wide ? 52 : 56 * s;
+    // Use the accent color, unless it's too close to the background to read; then use the text color
+    const lum = (hex) => { const n = parseInt(hex.slice(1), 16); return [n >> 16, (n >> 8) & 255, n & 255].map((v) => { v /= 255; return v <= .03928 ? v / 12.92 : ((v + .055) / 1.055) ** 2.4; }).reduce((t, v, i) => t + v * [.2126, .7152, .0722][i], 0); };
+    const contrast = (a, b) => { const x = lum(a), y = lum(b); return (Math.max(x, y) + .05) / (Math.min(x, y) + .05); };
+    drawEmblem(c, o.p, W - er - (wide ? 38 : 36 * s), H - er - (wide ? 30 : 32 * s), er, contrast(th.acc, th.bg) >= 3 ? th.acc : th.fg);
+    c.textAlign = 'center'; track(0);
   };
+  // The HKS IOP logo, in a dark version for light backgrounds and a white version for colored ones
+  const IOP_LOGO = { dark: new Image(), white: new Image() };
+  IOP_LOGO.dark.src = 'assets/brand/iop-logo-dark.png'; IOP_LOGO.white.src = 'assets/brand/iop-logo-white.png';
+  Promise.all(Object.values(IOP_LOGO).map((im) => im.decode().catch(() => {}))).then(() => { Object.keys(galCache).forEach((k) => delete galCache[k]); drawMaker(); drawGallery(); });
+  const isDarkAcc = (hex) => { const n = parseInt(hex.slice(1), 16); return ((n >> 16) * 299 + ((n >> 8) & 255) * 587 + (n & 255) * 114) / 1000 < 150; };
   const thumbOf = (cv) => { const t = document.createElement('canvas'), s = 480 / cv.width; t.width = 480; t.height = Math.round(cv.height * s); t.getContext('2d').drawImage(cv, 0, 0, t.width, t.height); return t.toDataURL('image/jpeg', .82); };
 
-  // Make a graphic: what's in the form, remembered in this browser
-  let pmData = null;
-  const pmState = () => pmData || (pmData = { p: 'HPU', title: 'Weekly debate', date: addDays(DAYS[0].date, 3), s: '19:30', e: '21:00', where: 'JFK Jr. Forum', members: false, fmt: 'post', ...store.get('pm', {}) });
+  // Make a graphic: what's in the form, remembered in this browser (photos stay only until you leave the page)
+  let pmData = null, pmPhotos = [];
+  const pmState = () => pmData || (pmData = { p: 'HPU', title: '', guests: [{ who: '', role: '' }], date: '', s: '', e: '', where: '', members: false, light: false, fmt: 'wide', ...store.get('pm', {}) }, pmData.guests || (pmData.guests = [{ who: pmData.who || '', role: pmData.role || '' }]), pmData);
   const drawMaker = () => {
     const cv = $('#pm-cv'); if (!cv) return;
-    const o = pmState();
-    drawPoster(cv, { p: o.p, fmt: o.fmt, members: o.members, title: o.title, date: o.date ? fmtDate(o.date) : '', time: o.s ? (o.e ? range(o) : fmt(o.s)) : '', where: o.where });
+    drawPoster(cv, { ...pmState(), photos: pmPhotos });
   };
-  posterFonts().then(() => drawMaker());
+  // The gallery of every program's template, drawn once per version and kept for the visit
+  const galCache = {};
+  const drawGallery = () => {
+    const imgs = viewEl.querySelectorAll('img[data-gal]'); if (!imgs.length) return;
+    const light = !!pmState().light, cv = document.createElement('canvas');
+    imgs.forEach((img) => {
+      const id = img.dataset.gal, key = id + light;
+      if (!galCache[key]) {
+        drawPoster(cv, { p: id, light, fmt: 'wide', guests: [{ who: '', role: '' }] });
+        const t = document.createElement('canvas'); t.width = 400; t.height = 225; t.getContext('2d').drawImage(cv, 0, 0, 400, 225);
+        galCache[key] = t.toDataURL('image/jpeg', .8);
+      }
+      img.src = galCache[key];
+    });
+  };
+  posterFonts().then(() => { drawMaker(); drawGallery(); });
 
   // ====== Comms requests, tracked step by step ======
   // The three samples show each stage. A request you send moves along on its own, sped up for the demo
@@ -1404,7 +1720,7 @@
   const SAMPLE_REQS = [
     { n: 2502, type: 'Video', p: 'CAP', title: 'Recap reel from the campaign workshop', who: 'Jordan', h: [20, 19.2, 6.5], img: 'assets/events/cap-campaign-workshop.jpg' },
     { n: 2490, type: 'Photographer', p: 'WIL', title: 'Photos at the speaker dinner', who: 'Priya', h: [30, 29.6, 27.5] },
-    { n: 2481, type: 'Graphic', p: 'HPU', title: 'Poster for this week’s debate', who: 'Maya', h: [52, 51.4, 43.1, 41, 40.6], img: 'assets/events/hpu-weekly-debate.jpg' },
+    { n: 2481, type: 'Graphic', p: 'HPU', title: 'Poster for this week’s debate', who: 'Aidan', h: [52, 51.4, 43.1, 41, 40.6], img: 'assets/events/hpu-weekly-debate.jpg' },
   ].map((r) => ({ ...r, sample: true }));
   const myReqs = store.get('requests', []);
   const approvals = store.get('rqApproved', {});
@@ -1412,7 +1728,9 @@
   const allReqs = () => [...myReqs, ...SAMPLE_REQS];
   const addRequest = (r) => {
     const n = Math.max(2502, ...myReqs.map((x) => x.n)) + 1 + Math.floor(Math.random() * 4);
-    const req = { ...r, n, who: COMMS_TEAM[n % COMMS_TEAM.length], created: Date.now() };
+    // Graphics go straight to Aidan, the Communications Director; everything else goes to the next person on the team
+    const graphic = r.type === 'Graphic' || r.type === 'Post on IOP channels';
+    const req = { ...r, n, who: graphic ? 'Aidan' : COMMS_TEAM[n % COMMS_TEAM.length], created: Date.now() };
     myReqs.unshift(req); saveReqs();
     return req;
   };
@@ -1431,7 +1749,7 @@
     if (k >= st) return photo ? ['', 'Usually within the hour', 'Within 24 hours', 'On the day of your event', 'Within 24 hours of your event'][k]
       : ['', 'Usually within the hour', 'Within 24 hours', 'Waiting for your OK', 'Right after you approve'][k];
     if (k === 0) return `Sent ${fmtWhen(r.sample ? Date.now() - r.h[0] * 36e5 : r.created)}`;
-    if (k === 1) return `${r.who} took it ${hrs(H[1])} later`;
+    if (k === 1) return r.who === 'Aidan' ? `Assigned to Aidan, ${hrs(H[1])} later` : `${r.who} took it ${hrs(H[1])} later`;
     if (k === 2) return `${hrs(H[2])} after you sent it`;
     if (k === 3) return H[3] != null ? `${hrs(H[3] - H[2])} after the draft` : 'You approved it';
     return H[4] != null ? `${hrs(H[4] - H[3])} after you approved` : '15 min after you approved';
@@ -1453,7 +1771,7 @@
         <footer class="rq-foot">${st >= 3
           ? `<span class="rq-clock ok">${ICON.check}${photo ? 'Photographer booked' : 'First draft'} in ${hrs(H[2])}, inside the 24-hour promise</span>`
           : `<span class="rq-clock">${ICON.clock}${photo ? 'Photographer confirmed' : 'First draft'} within 24 hours</span>`}
-          <span>${st >= 2 ? `Your contact: <b>${esc(r.who)}</b>, comms team` : 'Someone from comms will claim this soon'}</span></footer>
+          <span>${r.who === 'Aidan' ? 'Assigned to <b>Aidan</b>, Communications Director' : st >= 2 ? `Your contact: <b>${esc(r.who)}</b>, comms team` : 'Someone from comms will claim this soon'}</span></footer>
       </article>`;
   };
   // Re-draw the tracker only when a request moves to a new step
@@ -1659,15 +1977,30 @@
         <div class="pm">
           <form class="card pm-form" id="pm" novalidate>
             <label class="field"><span>Program</span><select name="p">${PROGRAMS.map((p) => `<option value="${esc(p.id)}"${p.id === o.p ? ' selected' : ''}>${esc(p.name)}</option>`).join('')}</select></label>
-            <label class="field"><span>Event name</span><input name="title" maxlength="70" value="${esc(o.title)}" placeholder="Weekly debate" autocomplete="off"></label>
+            <label class="field"><span>Event title</span><input name="title" maxlength="90" value="${esc(o.title)}" placeholder="Event title" autocomplete="off"></label>
+            <div class="field"><span>Guests <small>Optional, up to 3</small></span>
+              <div class="pm-guests"${o.guests.length ? '' : ' hidden'}>${o.guests.map((g, i) => `
+                <div class="pm-guest">
+                  <input name="who" maxlength="60" value="${esc(g.who)}" placeholder="Guest name" aria-label="Guest ${i + 1} name" autocomplete="off">
+                  <input name="role" maxlength="110" value="${esc(g.role)}" placeholder="Their title" aria-label="Guest ${i + 1} title" autocomplete="off">
+                  <button type="button" class="icon-btn pm-rm" data-pm-rmguest="${i}" aria-label="Remove guest ${i + 1}">${ICON.x}</button>
+                </div>`).join('')}</div>
+              ${o.guests.length < 3 ? `<button type="button" class="btn pm-add" data-pm-addguest>+ Add ${o.guests.length ? 'another' : 'a'} guest</button>` : ''}
+            </div>
             <div class="pm-3">
               <label class="field"><span>Date</span><input type="date" name="date" value="${esc(o.date)}"></label>
               <label class="field"><span>Starts</span><input type="time" name="s" value="${esc(o.s)}"></label>
               <label class="field"><span>Ends</span><input type="time" name="e" value="${esc(o.e)}"></label>
             </div>
-            <label class="field"><span>Place</span><input name="where" list="pm-rooms" value="${esc(o.where)}" autocomplete="off"><datalist id="pm-rooms">${ROOMS.map((r) => `<option value="${esc(r)}">`).join('')}</datalist></label>
+            <label class="field"><span>Place</span><input name="where" list="pm-rooms" placeholder="Location" value="${esc(o.where)}" autocomplete="off"><datalist id="pm-rooms">${ROOMS.map((r) => `<option value="${esc(r)}">`).join('')}</datalist></label>
+            <div class="field"><span>Photos <small>Optional, up to 3</small></span>
+              <div class="pm-photos"><label class="btn"><input type="file" id="pm-photos" accept="image/*" multiple hidden>${pmPhotos.length ? 'Change photos' : 'Add photos'}</label><span>${pmPhotos.length ? plural(pmPhotos.length, 'photo') : 'Speaker headshots look best'}</span>${pmPhotos.length ? '<button type="button" class="linkish" data-pm-clear>Remove</button>' : ''}</div>
+            </div>
+            <div class="field"><span>Version</span>
+              <div class="pm-colors" role="group" aria-label="Version"><button type="button" data-pmlight="0" aria-pressed="${!o.light}" style="--sw:${styleOf(o.p).bg}">Program colors</button><button type="button" data-pmlight="1" aria-pressed="${!!o.light}" style="--sw:#f3f1ec">Light</button></div>
+            </div>
             <label class="pm-check"><input type="checkbox" name="members"${o.members ? ' checked' : ''}>Members only</label>
-            <p class="pm-note">The colors, fonts and layout come from the Comms Playbook, so every program’s graphics look like the IOP.</p>
+            <p class="pm-note">Built on the IOP’s own event graphics: the same colors, pattern, type and sign-off, so every program’s graphics look like they came from the IOP.</p>
           </form>
           <div class="pm-out">
             <div class="pm-bar">
@@ -1676,7 +2009,10 @@
             </div>
             <div class="pm-stage"><canvas id="pm-cv" role="img" aria-label="Preview of your graphic"></canvas></div>
           </div>
-        </div>`;
+        </div>
+        ${secTitle('Every program’s template', `${PROGRAMS.length} programs`)}
+        <p class="pm-gal-note">Each program gets its own color, header, type and photo frame. The IOP pattern, the date and place row and the IOP sign-off stay the same, so they all read as the IOP. Pick one to use it.</p>
+        <div class="pm-gal">${PROGRAMS.map((p) => `<button type="button" data-pmpick="${esc(p.id)}" aria-pressed="${p.id === o.p}"><img alt="" data-gal="${esc(p.id)}"><span>${esc(p.name)}</span></button>`).join('')}</div>`;
     },
     scorecard() {
       const rows = PROGRAMS.map((p) => [p, POSTS_THIS_TERM[p.id] || 0]).sort((a, b) => b[1] - a[1]);
@@ -1904,7 +2240,7 @@
     refreshEvents();
     viewEl.innerHTML = `<div class="view"${still ? ' style="animation:none"' : ''}>${term ? views.search(term) : views[state.view]()}</div>`;
     updateCount(); updateRqCount();
-    if (!term && state.view === 'maker') drawMaker();
+    if (!term && state.view === 'maker') { drawMaker(); document.fonts?.status === 'loaded' ? drawGallery() : posterFonts().then(drawGallery); }
     if (!term && state.view === 'news' && state.newsSel) { const id = state.newsSel; state.newsSel = null; setTimeout(() => openNews(id), 0); }
     document.querySelectorAll('.views button').forEach((b) => { if (!term && b.dataset.view === state.view) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current'); });
     if (scroll) scrollTo({ top: 0, behavior: 'instant' });
@@ -1933,13 +2269,23 @@
   q.addEventListener('input', () => render(false));
   addEventListener('keydown', (ev) => { if (ev.key === '/' && !appEl.hidden && !/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)) { ev.preventDefault(); q.focus(); } });
 
+  // Make a graphic: speaker photos are read in the browser and never leave it
+  viewEl.addEventListener('change', async (ev) => {
+    if (ev.target.id !== 'pm-photos') return;
+    const files = [...ev.target.files].filter((f) => f.type.startsWith('image/')).slice(0, 3);
+    if (!files.length) return;
+    pmPhotos = (await Promise.all(files.map((f) => new Promise((ok) => { const img = new Image(); img.onload = () => ok(img); img.onerror = () => ok(null); img.src = URL.createObjectURL(f); })))).filter(Boolean);
+    render(false, true);
+  });
   // Staff search swaps only the list, so the field keeps focus while typing
   viewEl.addEventListener('input', (ev) => {
     const pmForm = ev.target.closest('#pm');
     if (pmForm) {
       const fd = new FormData(pmForm);
-      Object.assign(pmState(), { p: fd.get('p'), title: fd.get('title'), date: fd.get('date'), s: fd.get('s'), e: fd.get('e'), where: fd.get('where'), members: fd.has('members') });
+      const roles = fd.getAll('role');
+      Object.assign(pmState(), { p: fd.get('p'), title: fd.get('title'), guests: fd.getAll('who').map((who, i) => ({ who, role: roles[i] || '' })), date: fd.get('date'), s: fd.get('s'), e: fd.get('e'), where: fd.get('where'), members: fd.has('members') });
       store.set('pm', pmState()); drawMaker();
+      if (ev.target.name === 'p') { pmForm.querySelector('[data-pmlight="0"]').style.setProperty('--sw', styleOf(pmState().p).bg); viewEl.querySelectorAll('[data-pmpick]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.pmpick === pmState().p)); }
       return;
     }
     if (ev.target.id !== 'dq') return;
@@ -2001,6 +2347,19 @@
     else if (t.dataset.approve) { approvals[+t.dataset.approve] = Date.now(); saveReqs(); toast('Approved. It goes out next.'); render(false, true); }
     else if (t.dataset.changes) toast(`In the real OneIOP, this opens a note to ${t.dataset.changes}.`);
     else if (t.dataset.pmfmt) { pmState().fmt = t.dataset.pmfmt; store.set('pm', pmState()); t.parentElement.querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', b === t)); drawMaker(); }
+    else if (t.dataset.pmlight) { pmState().light = t.dataset.pmlight === '1'; store.set('pm', pmState()); t.parentElement.querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', b === t)); drawMaker(); drawGallery(); }
+    else if (t.dataset.pmpick) {
+      const o = pmState(); o.p = t.dataset.pmpick;
+      store.set('pm', o); render(false, true);
+      scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    else if (t.hasAttribute('data-pm-addguest')) {
+      const o = pmState(); if (o.guests.length < 3) o.guests.push({ who: '', role: '' });
+      store.set('pm', o); render(false, true);
+      const ins = viewEl.querySelectorAll('#pm input[name="who"]'); ins[ins.length - 1]?.focus();
+    }
+    else if (t.dataset.pmRmguest) { const o = pmState(); o.guests.splice(+t.dataset.pmRmguest, 1); store.set('pm', o); render(false, true); }
+    else if (t.hasAttribute('data-pm-clear')) { pmPhotos = []; render(false, true); }
     else if (t.hasAttribute('data-pm-dl')) {
       const o = pmState(), cv = $('#pm-cv');
       cv.toBlob((blob) => { const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `${slugify(o.p + ' ' + (o.title || 'event'))}-${o.fmt}.png`; document.body.append(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 5000); }, 'image/png');
@@ -2009,7 +2368,7 @@
     else if (t.hasAttribute('data-pm-send')) {
       const o = pmState(), r = addRequest({ type: 'Post on IOP channels', p: o.p, title: o.title || 'Event graphic', img: thumbOf($('#pm-cv')) });
       go('request', { reqTab: 'track', rqNew: r.n });
-      toast('Sent to comms. Follow it here.');
+      toast('Sent to comms and assigned to Aidan. Follow it here.');
     }
     else if (t.dataset.checkin) {
       const before = stamps().size, id = t.dataset.checkin;
@@ -2032,7 +2391,7 @@
     if (type !== 'Photographer') {
       const evImg = EVENTS.find((e) => e.p === p && e.img);
       if (type === 'Video' && evImg) img = imgSrc(evImg);
-      else { await posterFonts(); const cv = document.createElement('canvas'); drawPoster(cv, { p, title, fmt: 'wide' }); img = thumbOf(cv); }
+      else { await posterFonts(); const cv = document.createElement('canvas'); drawPoster(cv, { p, title, fmt: 'wide', ghost: false }); img = thumbOf(cv); }
     }
     const r = addRequest({ type, p, title, img });
     go('request', { reqTab: 'track', rqNew: r.n });
