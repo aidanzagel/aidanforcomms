@@ -82,18 +82,20 @@
   .mark svg { width: 20px; align-self: center; fill: var(--red); }
   .mark b { font-family: var(--display); font-weight: 900; font-size: 30px; letter-spacing: .01em; text-transform: uppercase; color: var(--navy); line-height: 1; }
   .mark i { font-family: var(--serif); font-size: 22px; color: var(--ink); line-height: 1; }
-  /* Section links sit in one soft track; the one under the pointer lifts out as a white chip */
-  .nav {
-    display: flex; gap: 2px; margin-left: auto; padding: 5px;
-    border: 1px solid var(--line); border-radius: 999px; background: var(--paper-2);
-  }
+  /* Section links: plain type with a red rule that draws in on hover and marks the section you're reading */
+  .nav { display: flex; align-items: center; gap: 2px; margin-left: auto; }
   .nav a {
-    padding: 9px 15px; border-radius: 999px; text-decoration: none; white-space: nowrap;
-    font-size: 11.5px; letter-spacing: .11em; color: var(--ink);
-    transition: background .2s, color .2s, box-shadow .2s;
+    position: relative; padding: 10px 13px; text-decoration: none; white-space: nowrap;
+    font: 600 15px/1 var(--sans); letter-spacing: -.005em; color: var(--ink);
+    transition: color .2s;
   }
-  .nav a:hover, .nav a:focus-visible { background: #fff; color: var(--navy); box-shadow: 0 1px 2px rgba(16, 20, 61, .12), 0 4px 12px rgba(16, 20, 61, .08); outline: none; }
-  .nav a:active { background: var(--navy); color: var(--paper); box-shadow: none; }
+  .nav a::after { content: ""; position: absolute; left: 13px; right: 13px; bottom: 2px; height: 2px; border-radius: 2px; background: var(--red); scale: 0 1; transition: scale .3s var(--ease); }
+  .nav a:hover, .nav a:focus-visible { color: var(--navy); outline: none; }
+  .nav a:hover::after, .nav a:focus-visible::after, .nav a[aria-current="true"]::after { scale: 1 1; }
+  .nav a[aria-current="true"] { color: var(--navy); }
+  .nav .nav-cta { margin-left: 12px; padding: 12px 18px; border-radius: 999px; background: var(--red); color: #fff; transition: background .2s, translate .2s var(--ease); }
+  .nav .nav-cta::after { display: none; }
+  .nav .nav-cta:hover, .nav .nav-cta:focus-visible { background: var(--navy); color: #fff; translate: 0 -1px; }
   .pill {
     display: inline-flex; align-items: center; gap: 8px; white-space: nowrap;
     padding: 9px 16px; border-radius: 999px; background: var(--navy); color: var(--paper);
@@ -110,21 +112,28 @@
   .top.open .menu-btn i::after { translate: 0; rotate: -45deg; }
   @media (max-width: 1100px) and (min-width: 860px) {
     .top .wrap { gap: 18px; }
-    .nav { gap: 0; padding: 4px; }
-    .nav a { padding: 8px 10px; font-size: 10.5px; letter-spacing: .08em; }
+    .nav { gap: 0; }
+    .nav a { padding: 10px 9px; font-size: 14px; }
+    .nav a::after { left: 9px; right: 9px; }
+    .nav .nav-cta { margin-left: 6px; padding: 11px 14px; }
   }
   @media (max-width: 859px) {
     .top .wrap { gap: 12px; }
     .menu-btn { display: inline-flex; }
     .nav {
       position: absolute; z-index: 10; left: 0; right: 0; top: 100%; display: grid; gap: 0; margin: 0;
-      padding: 6px max(18px, env(safe-area-inset-right, 0px)) 14px max(18px, env(safe-area-inset-left, 0px));
-      background: var(--paper); border: 0; border-bottom: 1px solid var(--line); border-radius: 0; box-shadow: 0 18px 30px rgba(16, 20, 61, .12);
+      padding: 10px max(20px, env(safe-area-inset-right, 0px)) 24px max(20px, env(safe-area-inset-left, 0px));
+      background: var(--ink); border-bottom: 3px solid var(--red); box-shadow: 0 24px 40px rgba(16, 20, 61, .35);
       opacity: 0; visibility: hidden; translate: 0 -8px; transition: opacity .25s, translate .25s var(--ease), visibility 0s .25s;
     }
-    .nav a { padding: 15px 0; border-radius: 0; border-top: 1px solid var(--line); font-size: 13px; color: var(--ink); }
-    .nav a:hover, .nav a:focus-visible { background: none; box-shadow: none; color: var(--red); }
+    .nav a { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; border-top: 1px solid rgba(244, 241, 234, .16); font: 900 34px/1 var(--display); text-transform: uppercase; letter-spacing: .01em; color: var(--paper); }
+    .nav a::after { position: static; content: "→"; width: auto; height: auto; background: none; scale: 1; font: 600 20px/1 var(--sans); color: rgba(244, 241, 234, .45); transition: translate .25s var(--ease), color .2s; }
+    .nav a:hover, .nav a:focus-visible, .nav a[aria-current="true"] { color: #fff; }
+    .nav a:hover::after, .nav a:focus-visible::after { translate: 4px 0; color: #fff; }
+    .nav a[aria-current="true"]::after { color: #ff5a63; }
     .nav a:first-child { border-top: 0; }
+    .nav .nav-cta { justify-content: center; margin: 18px 0 0; padding: 16px 20px; border-top: 0; font: 700 16px/1 var(--sans); text-transform: none; letter-spacing: 0; }
+    .nav .nav-cta:hover, .nav .nav-cta:focus-visible { background: #fff; color: var(--navy); translate: none; }
     .top.open .nav { opacity: 1; visibility: visible; translate: 0; transition: opacity .25s, translate .25s var(--ease); }
   }
   .progress { display: none; position: absolute; left: 0; bottom: -1px; height: 2px; width: 100%; background: var(--red); transform-origin: left; transform: scaleX(0); }
@@ -156,7 +165,7 @@
   .first3 a:hover { border-color: var(--paper); }
   .btn {
     display: inline-flex; align-items: center; gap: 12px; padding: 16px 26px;
-    background: var(--red); color: #fff; text-decoration: none; border: 0; cursor: pointer;
+    background: var(--red); color: #fff; text-decoration: none; border: 0; border-radius: 999px; cursor: pointer;
     font: 700 15px/1 var(--sans); letter-spacing: .02em; transition: transform .2s var(--ease), background .2s;
   }
   .btn:hover { transform: translateY(-2px); background: #ea1722; }
@@ -534,11 +543,24 @@
   /* ====== 06 Work ====== */
   .work { background: var(--paper-2); }
   /* The Work: one block per project, each with its own grid */
-  .projects { display: grid; gap: clamp(48px, 5vw, 72px); }
+  .projects { display: grid; gap: clamp(30px, 3.4vw, 48px); }
   .project { display: grid; gap: clamp(18px, 2vw, 24px); }
   .project-head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr); gap: 12px 32px; align-items: baseline; padding-top: 18px; border-top: 1px solid var(--line); }
   .project-head h3 { font-family: var(--display); font-weight: 900; text-transform: uppercase; font-size: clamp(34px, 3.6vw, 52px); line-height: .9; color: var(--navy); }
   .project-head p { max-width: 62ch; font-size: 16px; line-height: 1.5; color: var(--muted); }
+  /* Collapsible projects: the whole header toggles; the body slides open and shut */
+  .project { transition: row-gap .45s var(--ease); }
+  .project.closed { row-gap: 0; }
+  .project-head.toggles { position: relative; padding-right: 116px; cursor: pointer; }
+  .project-toggle { position: absolute; top: 18px; right: 0; display: inline-flex; align-items: center; gap: 8px; padding: 9px 14px 9px 16px; border: 1.5px solid var(--navy); border-radius: 999px; background: none; color: var(--navy); font: 600 14px/1 var(--sans); cursor: pointer; transition: background .2s, color .2s; }
+  .project-toggle i { width: 8px; height: 8px; margin-top: -3px; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; rotate: 45deg; transition: rotate .35s var(--ease), margin .35s var(--ease); }
+  .project:not(.closed) .project-toggle i { rotate: 225deg; margin-top: 4px; }
+  .project-head.toggles:hover .project-toggle, .project-toggle:focus-visible { background: var(--navy); color: var(--paper); }
+  .project-toggle:focus-visible { outline: 3px solid var(--red); outline-offset: 3px; }
+  .project-body { display: grid; grid-template-rows: 1fr; transition: grid-template-rows .45s var(--ease); }
+  .project.closed .project-body { grid-template-rows: 0fr; }
+  .project-body-in { display: grid; gap: clamp(18px, 2vw, 24px); min-height: 0; overflow: hidden; }
+  .project:not(.closed):not(.moving) .project-body-in { overflow: visible; }
   .project-grid { display: grid; gap: clamp(14px, 1.8vw, 24px); }
   .project-grid.wide, .project-grid.tall { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .project-grid.posts { grid-template-columns: repeat(6, minmax(0, 1fr)); }
@@ -594,24 +616,6 @@
   .project-more { justify-self: start; padding: 11px 18px; border: 1.5px solid var(--navy); border-radius: 999px; background: none; color: var(--navy); font: 600 14px/1 var(--sans); cursor: pointer; transition: background .2s, color .2s; }
   .project-more:hover { background: var(--navy); color: var(--paper); }
 
-  /* ====== 07 Questions ====== */
-  .faq { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 48px; align-items: start; }
-  .faq details { border-top: 1px solid var(--line); }
-  .faq details:nth-last-child(-n+2) { border-bottom: 1px solid var(--line); }
-  .faq summary {
-    list-style: none; cursor: pointer; position: relative; padding: 22px 48px 22px 0;
-    font-size: 21px; font-weight: 700; line-height: 1.25; color: var(--navy); transition: color .2s;
-  }
-  .faq summary::-webkit-details-marker { display: none; }
-  .faq p a { color: var(--red); font-weight: 700; text-decoration: none; }
-  .faq p a:hover { color: var(--navy); }
-  .faq summary:hover { color: var(--red); }
-  .faq summary::after {
-    content: "+"; position: absolute; right: 4px; top: 50%; translate: 0 -50%;
-    font-family: var(--serif); font-size: 38px; line-height: 1; color: var(--red); transition: rotate .35s var(--ease);
-  }
-  .faq details[open] summary::after { rotate: 45deg; }
-  .faq details p { padding: 0 48px 24px 0; color: var(--muted); font-size: 17px; }
 
   /* ====== Countdown to election day ====== */
   .countdown { background: var(--paper); border-bottom: 1px solid var(--line); }
@@ -700,6 +704,11 @@
   /* ====== Close-section actions ====== */
   .close-ctas { display: flex; flex-wrap: wrap; gap: 12px 14px; margin-top: 32px; }
   .close-ctas [hidden] { display: none; }
+  .book { margin-top: 36px; display: grid; gap: 12px; }
+  .book .label { opacity: .75; }
+  .book-frame { border-radius: 16px; overflow: hidden; background: var(--paper); box-shadow: 0 18px 40px rgba(16, 20, 61, .25); }
+  .book-frame iframe { display: block; width: 100%; height: 700px; border: 0; }
+  @media (max-width: 560px) { .book-frame iframe { height: 960px; } }
   .cta-light, .cta-ghost { display: inline-flex; align-items: center; gap: 10px; padding: 16px 24px; border-radius: 999px; font: 700 15.5px/1 var(--sans); text-decoration: none; cursor: pointer; transition: background .2s, color .2s, translate .25s var(--ease); }
   .cta-light { background: var(--paper); color: var(--red); border: 0; }
   .cta-light:hover { background: var(--navy); color: var(--paper); translate: 0 -2px; }
@@ -722,7 +731,7 @@
   .close-grid a, .close-grid .val { font-size: clamp(19px, 1.7vw, 24px); font-weight: 700; text-decoration: none; overflow-wrap: anywhere; }
   .close-grid a:hover { opacity: .75; }
   .share-row { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 16px; }
-  .copy { background: var(--paper); color: var(--red); border: 0; cursor: pointer; padding: 10px 16px; font: 700 14px/1 var(--sans); transition: background .2s, color .2s; }
+  .copy { background: var(--paper); color: var(--red); border: 0; border-radius: 999px; cursor: pointer; padding: 10px 16px; font: 700 14px/1 var(--sans); transition: background .2s, color .2s; }
   .copy:hover { background: var(--navy); color: var(--paper); }
 
   .foot { background: var(--ink); color: rgba(244, 241, 234, .7); }
@@ -759,7 +768,7 @@
     .ballot .b-row { font-size: 14px; gap: 9px; margin-top: 7px; padding-top: 7px; }
     .ballot svg { width: 24px; }
     .sig { width: 42%; right: 0; bottom: 6%; }
-    .meet-grid, .faq, .mem { grid-template-columns: minmax(0, 1fr); }
+    .meet-grid, .mem { grid-template-columns: minmax(0, 1fr); }
     .photos { flex-wrap: wrap; }
     .photos figure { flex: 1 1 100%; }
     .photos figure:nth-child(2) { aspect-ratio: 1; }
@@ -769,7 +778,6 @@
     .profile-roles { grid-template-columns: minmax(0, 1fr); }
     .profile-roles > div, .profile-roles > div + div { padding: 14px 0; border-left: 0; border-bottom: 1px solid var(--line); display: grid; grid-template-columns: 76px minmax(0, 1fr); align-items: baseline; }
     .mem-bridge { justify-self: center; margin: -18px 0; rotate: 90deg; }
-    .faq details:nth-last-child(2) { border-bottom: 0; }
     .stats .wrap { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .stat { padding: 26px 0 24px 20px; }
     .stat:nth-child(odd) { border-left: 0; padding-left: 0; }
@@ -786,6 +794,8 @@
     .vid-ph h3 { font-size: 40px; }
     .play { width: 76px; }
     .project-head { grid-template-columns: minmax(0, 1fr); }
+    .project-head.toggles { padding-right: 0; }
+    .project-head.toggles h3 { padding-right: 100px; }
     .project-grid.wide, .project-grid.tall, .project-grid.posts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .project-grid .work-item figcaption span { display: none; }
     .project-grid.photo { grid-template-columns: minmax(0, 1fr); }
@@ -894,14 +904,14 @@
       <img src="assets/brand/wordmark-color.png" alt="Aidan for Comms" width="1000" height="96">
     </a>
     <button type="button" class="menu-btn label" aria-expanded="false" aria-controls="site-nav"><i aria-hidden="true"></i>Menu</button>
-    <nav class="nav label" id="site-nav" aria-label="Sections">
+    <nav class="nav" id="site-nav" aria-label="Sections">
       <a href="#video">Video</a>
       <a href="#platform">Platform</a>
       <a href="#programs">Programs</a>
       <a href="#plan">90 Days</a>
       <a href="#photos">Photos</a>
       <a href="#work">Work</a>
-      <a href="#faq">Questions</a>
+      <a href="#contact" class="nav-cta">Let's Talk</a>
     </nav>
   </div>
   <div class="progress" aria-hidden="true"></div>
@@ -1483,41 +1493,6 @@
   <button type="button" class="v-btn v-next" aria-label="Next">→</button>
 </div>
 
-<section class="sec" id="faq">
-  <div class="wrap">
-    <header class="sec-head">
-      <h2 class="disp">Questions</h2>
-      <p>The short answers. Ask me for the long ones.</p>
-    </header>
-    <div class="faq">
-      <details>
-        <summary>What is OneIOP?</summary>
-        <p>One members-only site for every announcement, event, and contact, so emails can be fewer and shorter. Instagram stays the IOP's public face. <a href="oneiop.html">Try the demo</a>.</p>
-      </details>
-      <details>
-        <summary>What does my program get?</summary>
-        <p>Templates built on a shared brand, comms training, office hours, and the Media Center. Your chairs decide what to use, and your program's voice stays yours.</p>
-      </details>
-      <details>
-        <summary>Does HPR get special treatment?</summary>
-        <p>No. HPR gets the same support as every other program, nothing more.</p>
-      </details>
-      <details>
-        <summary>Why should I trust you with comms?</summary>
-        <p>I already do this work: I run marketing and the comp at HPR, and I shoot photos for HPU and other student orgs. Some of it is in The Work above.</p>
-      </details>
-      <details>
-        <summary>How will we know it's working?</summary>
-        <p>Fewer emails, faster photos, and programs telling me comms got easier. Mid-semester check-ins are built in so I hear it directly.</p>
-      </details>
-      <details>
-        <summary>How can I share an idea?</summary>
-        <p>Email or text me anytime. My first step in December is an audit of IOP comms, so tell me what's broken.</p>
-      </details>
-    </div>
-  </div>
-</section>
-
 <section class="sec close panel" id="contact">
   <div class="wrap">
     <h2 class="close-hl disp"><em>Let's</em>Shine.</h2>
@@ -1539,7 +1514,12 @@
     </div>
     <div class="close-ctas">
       <!-- Calendly: set data-calendly to your booking link, e.g. https://calendly.com/your-name/15min. The button stays hidden until it's set. -->
-      <a class="cta-light" id="calendly-link" data-calendly="" href="#contact" hidden>Book 15 minutes with me →</a>
+      <a class="cta-light" id="calendly-link" data-calendly="https://calendly.com/aidanzagel-college/iop-comms-office-hours-with-aidan" href="#contact" hidden>Book office hours with me →</a>
+    </div>
+    <!-- Calendly inline embed: shown when the site is the top-level page (Vercel, local). Inside the claude.ai artifact, embeds are blocked, so the button above is used instead. -->
+    <div class="book" id="book" hidden>
+      <span class="label">Book office hours</span>
+      <div class="book-frame" id="book-frame"></div>
     </div>
   </div>
 </section>
@@ -1861,6 +1841,21 @@
     cal.target = '_blank';
     cal.rel = 'noopener';
     cal.hidden = false;
+    // On a normally hosted page, show the scheduling page inline; the button stays as a fallback
+    let topLevel = false;
+    try { topLevel = window.self === window.top; } catch (e) {}
+    if (topLevel) {
+      const u = new URL(cal.dataset.calendly);
+      u.searchParams.set('hide_gdpr_banner', '1');
+      u.searchParams.set('primary_color', 'd7101b');
+      u.searchParams.set('embed_domain', location.hostname || 'localhost');
+      u.searchParams.set('embed_type', 'Inline');
+      const f = document.createElement('iframe');
+      f.src = u.href; f.title = 'Book office hours with Aidan'; f.loading = 'lazy';
+      document.getElementById('book-frame').appendChild(f);
+      document.getElementById('book').hidden = false;
+      cal.textContent = 'Open in a new tab →';
+    }
   }
 
   // 3D tilt: on a mouse or trackpad, cards lean toward the pointer, ease back when it leaves
@@ -1908,6 +1903,32 @@
     document.documentElement.style.overflow = '';
     lastFocus?.focus();
   };
+
+  // Work projects collapse: click a project's header to show or hide its pieces. The first starts open.
+  document.querySelectorAll('#work-grid .project').forEach((p, i) => {
+    const head = p.querySelector('.project-head');
+    const body = document.createElement('div');
+    const inner = document.createElement('div');
+    body.className = 'project-body'; body.id = 'project-body-' + i;
+    inner.className = 'project-body-in';
+    [...p.children].filter((c) => c !== head).forEach((c) => inner.appendChild(c));
+    body.appendChild(inner); p.appendChild(body);
+    const btn = document.createElement('button');
+    btn.type = 'button'; btn.className = 'project-toggle';
+    btn.setAttribute('aria-controls', body.id);
+    btn.innerHTML = '<span></span><i aria-hidden="true"></i>';
+    head.classList.add('toggles'); head.appendChild(btn);
+    let t;
+    const set = (open, animate) => {
+      p.classList.toggle('closed', !open);
+      btn.setAttribute('aria-expanded', open);
+      btn.firstChild.textContent = open ? 'Hide' : 'Show';
+      body.inert = !open;
+      if (animate) { p.classList.add('moving'); clearTimeout(t); t = setTimeout(() => p.classList.remove('moving'), 480); }
+    };
+    set(i === 0, false);
+    head.addEventListener('click', () => set(p.classList.contains('closed'), true));
+  });
 
   // Work viewer: click a piece to see it larger, arrow through the rest
   const viewer = document.getElementById('viewer');
@@ -1981,6 +2002,8 @@
   // The talk button books a call once Calendly is linked, otherwise it jumps to the contact section
   pdEl('pd-cta').addEventListener('click', (e) => {
     const cal = document.getElementById('calendly-link').dataset.calendly;
+    const book = document.getElementById('book');
+    if (book && !book.hidden) { e.preventDefault(); closeLayer(drawer); book.scrollIntoView({ behavior: calm ? 'auto' : 'smooth', block: 'start' }); return; }
     if (cal) { e.currentTarget.href = cal; e.currentTarget.target = '_blank'; e.currentTarget.rel = 'noopener'; closeLayer(drawer); return; }
     e.preventDefault();
     closeLayer(drawer);
@@ -2074,6 +2097,19 @@
     top.querySelectorAll('.nav a').forEach((a) => a.addEventListener('click', () => set(false)));
     addEventListener('keydown', (e) => { if (e.key === 'Escape') set(false); });
     addEventListener('click', (e) => { if (!top.contains(e.target)) set(false); });
+    // Mark the section currently in the middle of the screen
+    const links = [...top.querySelectorAll('.nav a:not(.nav-cta)')];
+    const byId = new Map(links.map((a) => [a.getAttribute('href').slice(1), a]));
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((en) => {
+          if (!en.isIntersecting) return;
+          links.forEach((a) => a.removeAttribute('aria-current'));
+          const a = byId.get(en.target.id); if (a) a.setAttribute('aria-current', 'true');
+        });
+      }, { rootMargin: '-45% 0px -54% 0px' });
+      document.querySelectorAll('main section[id]').forEach((sec) => io.observe(sec));
+    }
   })();
 </script>
 </body>

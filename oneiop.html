@@ -139,7 +139,9 @@
 
   /* ====== Featured banner (graphic or video) ====== */
   .banner { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.25fr); gap: clamp(20px, 3vw, 40px); align-items: center; padding: clamp(20px, 2.6vw, 32px); border-radius: 20px; background: var(--navy); color: #fff; position: relative; isolation: isolate; overflow: hidden; box-shadow: var(--shadow-up); }
-  .banner::before { content: ""; position: absolute; inset: 0; z-index: -1; background: radial-gradient(ellipse 60% 100% at 100% 0%, rgba(215, 16, 27, .35), transparent 60%), radial-gradient(ellipse 50% 80% at 0% 100%, rgba(83, 96, 255, .3), transparent 60%); }
+  .banner::before { content: ""; position: absolute; inset: 0; z-index: -1; background: radial-gradient(ellipse 50% 80% at 0% 100%, rgba(83, 96, 255, .3), transparent 60%); }
+  .banner::after { content: ""; position: absolute; inset: -40% -30%; z-index: -1; pointer-events: none; background: radial-gradient(ellipse 42% 60% at 78% 22%, rgba(215, 16, 27, .42), transparent 62%); animation: banner-glow 9s ease-in-out infinite alternate; }
+  @keyframes banner-glow { 0% { transform: translate(0, 0) scale(1); } 25% { transform: translate(-22%, 14%) scale(1.15); } 50% { transform: translate(-36%, 4%) scale(.95); } 75% { transform: translate(-14%, 20%) scale(1.12); } 100% { transform: translate(-28%, -4%) scale(1.05); } }
   .banner-body { display: grid; gap: 14px; padding: clamp(4px, 1vw, 12px); }
   .banner-kick { display: inline-flex; justify-self: start; align-items: center; gap: 8px; padding: 5px 10px; border-radius: 99px; background: rgba(255, 255, 255, .1); border: 1px solid rgba(255, 255, 255, .16); color: rgba(255, 255, 255, .88); font-size: 10px; }
   .banner-kick i { width: 6px; height: 6px; border-radius: 50%; background: #ff4a52; }
@@ -601,8 +603,6 @@
   .step > p { color: var(--muted); margin-top: -10px; }
   .sso { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 12px; border-radius: 11px; border: 1px solid var(--navy); background: var(--navy); color: #fff; font-weight: 650; font-size: 14.5px; transition: background .2s; }
   .sso:hover { background: var(--navy-2); }
-  .or { display: flex; align-items: center; gap: 12px; color: var(--faint); }
-  .or::before, .or::after { content: ""; flex: 1; height: 1px; background: var(--line-2); }
   .pick { display: grid; gap: 16px; max-height: min(46vh, 420px); overflow: auto; padding: 4px 2px; margin: -4px -2px; }
   .pick h3 { font-family: var(--mono); font-size: 10px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--faint); margin-bottom: 8px; }
   .pick .opts { display: flex; flex-wrap: wrap; gap: 6px; }
@@ -701,14 +701,9 @@
       <div class="steps-bar" aria-hidden="true"><i class="on"></i><i id="bar-2"></i></div>
       <div class="step" id="step-1">
         <h2>Sign in to OneIOP</h2>
-        <p>Members sign in with their Harvard email. In this demo, just tell us your name.</p>
+        <p>Members sign in with their Harvard email. In this demo, just press Continue.</p>
         <button type="button" class="sso" id="sso"><svg class="i" viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>Continue with Harvard sign-in</button>
-        <div class="or label">or, for the demo</div>
-        <div class="row">
-          <label class="field"><span>First name</span><input name="name" autocomplete="off" placeholder="Your first name" maxlength="24"></label>
-          <label class="field"><span>Class year</span><select name="year"><option>2027</option><option>2028</option><option selected>2029</option><option>2030</option></select></label>
-        </div>
-        <div class="login-note"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg><span>This is a demo. Nothing you enter is sent anywhere; it only stays in this browser so the page can personalize itself.</span></div>
+        <div class="login-note"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg><span>This is a demo. Nothing is sent anywhere; your settings only stay in this browser.</span></div>
         <div class="login-foot"><button type="button" class="linkish" id="guest">Look around as a guest →</button><button type="button" class="btn primary" id="next">Continue</button></div>
       </div>
       <div class="step" id="step-2" hidden>
@@ -1201,7 +1196,7 @@
       const h = new Date().getHours();
       const hi = h < 12 ? 'Good morning' : h < 18 ? 'Good afternoon' : 'Good evening';
       return `
-        <header class="hello"><div><h1>${hi}${profile.guest ? '' : ', ' + esc(profile.name)}.</h1><p>${DEMO_ALL_PROGRAMS ? `${plural(yours, 'event')} at the IOP this week.` : following.size ? `${plural(yours, 'event')} from your programs this week.` : 'Pick a few programs and OneIOP will put them first.'}</p></div></header>
+        <header class="hello"><div><h1>${hi}${profile.guest || !profile.name ? '' : ', ' + esc(profile.name)}.</h1><p>${DEMO_ALL_PROGRAMS ? `${plural(yours, 'event')} at the IOP this week.` : following.size ? `${plural(yours, 'event')} from your programs this week.` : 'Pick a few programs and OneIOP will put them first.'}</p></div></header>
         ${banner()}
         <div class="card week" role="group" aria-label="Pick a day">
           ${DAYS.map((d) => { const l = EVENTS.filter((e) => e.day === d.i).sort((a, b) => following.has(b.p) - following.has(a.p)).slice(0, 3); return `<button type="button" data-day="${d.i}" aria-pressed="${state.day === d.i}"><span class="label">${d.i === TODAY ? 'Today' : d.d}</span><b>${d.n}</b><small>${l.map((e) => `<i${following.has(e.p) ? '' : ' class="other"'}></i>`).join('')}</small></button>`; }).join('')}
@@ -1490,7 +1485,7 @@
           <p style="margin-top:0">Members-only posts and events from these programs show up for you.</p>`}
         </section>
         <div class="set-foot">
-          <span style="flex:1;font-size:13px;color:var(--muted)">Signed in as <b style="color:var(--ink)">${profile.guest ? 'a guest' : esc(profile.name)}</b>${profile.guest ? '' : ` · Class of ${esc(profile.year)}`}</span>
+          <span style="flex:1;font-size:13px;color:var(--muted)">Signed in as <b style="color:var(--ink)">${profile.guest ? 'a guest' : esc(profile.name || 'an IOP member')}</b>${profile.guest || !profile.year ? '' : ` · Class of ${esc(profile.year)}`}</span>
           <button type="button" class="btn" data-set="out">Sign out</button>
         </div>
       </div>`;
@@ -1625,7 +1620,6 @@
     $('#pick-wrap').classList.toggle('demo-off', DEMO_ALL_PROGRAMS);
     if (DEMO_ALL_PROGRAMS) $('#pick-sub').textContent = 'For the demo, everyone is a member of all ' + PROGRAMS.length + ' programs and coalitions.';
     $('#pick-wrap').setAttribute('aria-disabled', DEMO_ALL_PROGRAMS);
-    if (profile) { form.name.value = profile.guest ? '' : profile.name; form.year.value = profile.year; }
     setStep(step);
     countPicked();
     appEl.hidden = true; loginEl.hidden = false;
@@ -1634,12 +1628,11 @@
   const setStep = (n) => {
     $('#step-1').hidden = n !== 1; $('#step-2').hidden = n !== 2;
     $('#bar-2').classList.toggle('on', n === 2);
-    const nm = form.name.value.trim();
-    $('#pick-title').textContent = DEMO_ALL_PROGRAMS ? (nm ? `${nm}, you’re in every program` : 'You’re in every program') : nm ? `${nm}, pick your programs` : 'Pick your programs';
+    $('#pick-title').textContent = DEMO_ALL_PROGRAMS ? 'You’re in every program' : 'Pick your programs';
   };
   const enter = () => {
     loginEl.hidden = true; appEl.hidden = false;
-    $('#me-name').textContent = profile.guest ? 'a guest' : profile.name;
+    $('#me-name').textContent = profile.guest ? 'a guest' : profile.name || 'IOP member';
     $('#me-ini').textContent = profile.guest ? '?' : initials(profile.name) || '?';
     Object.assign(state, { view: 'home', day: TODAY, program: null, sent: null });
     q.value = '';
@@ -1647,16 +1640,12 @@
     render(true);
   };
 
-  $('#next').addEventListener('click', () => {
-    if (!form.name.value.trim()) { form.name.focus(); toast('Add your first name, or look around as a guest.'); return; }
-    setStep(2);
-  });
-  $('#sso').addEventListener('click', () => toast('On the real site this opens Harvard sign-in. For now, enter your name below.'));
-  form.name.addEventListener('keydown', (ev) => { if (ev.key === 'Enter') { ev.preventDefault(); $('#next').click(); } });
+  $('#next').addEventListener('click', () => setStep(2));
+  $('#sso').addEventListener('click', () => toast('On the real site this opens Harvard sign-in. For now, just press Continue.'));
   $('#back-1').addEventListener('click', () => setStep(1));
   $('#pick').addEventListener('change', countPicked);
   $('#guest').addEventListener('click', () => {
-    profile = { name: 'Guest', year: form.year.value, guest: true, programs: ['Forum', 'FSG', 'HPR'] };
+    profile = { name: 'Guest', year: '', guest: true, programs: ['Forum', 'FSG', 'HPR'] };
     syncFollowing();
     store.set('profile', profile);
     enter();
@@ -1665,12 +1654,11 @@
     ev.preventDefault();
     const picks = DEMO_ALL_PROGRAMS ? PROGRAMS.map((p) => p.id) : [...form.querySelectorAll('#pick input:checked')].map((i) => i.value);
     if (!picks.length) { toast('Pick at least one program.'); return; }
-    const nm = form.name.value.trim();
-    profile = { name: nm || 'Guest', year: form.year.value, guest: !nm, programs: picks };
+    profile = { name: '', year: '', guest: false, programs: picks };
     syncFollowing();
     store.set('profile', profile);
     enter();
-    toast(DEMO_ALL_PROGRAMS ? `Welcome${profile.guest ? '' : ', ' + profile.name}. You’re in every program for the demo.` : `Welcome${profile.guest ? '' : ', ' + profile.name}. OneIOP is set up for your ${plural(picks.length, 'program')}.`);
+    toast(DEMO_ALL_PROGRAMS ? 'Welcome. You’re in every program for the demo.' : `Welcome. OneIOP is set up for your ${plural(picks.length, 'program')}.`);
   });
 
   // Account menu
@@ -1679,7 +1667,7 @@
     ev.stopPropagation();
     const open = meMenu.hidden;
     if (open) meMenu.innerHTML = `
-      <header><b>${profile.guest ? 'Guest' : esc(profile.name)}</b><span>${profile.guest ? 'Looking around' : `Class of ${esc(profile.year)}`} · ${plural(following.size, 'program')}</span>
+      <header><b>${profile.guest ? 'Guest' : esc(profile.name || 'IOP member')}</b><span>${profile.guest ? 'Looking around' : profile.year ? `Class of ${esc(profile.year)}` : 'Member'} · ${plural(following.size, 'program')}</span>
         <div class="tags">${[...following].map((id) => tag(id)).join('')}</div></header>
       <button type="button" role="menuitem" data-m="edit">${ICON.star}Edit my programs</button>
       <button type="button" role="menuitem" data-m="settings"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg>Settings</button>
