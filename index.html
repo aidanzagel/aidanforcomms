@@ -704,11 +704,16 @@
   /* ====== Close-section actions ====== */
   .close-ctas { display: flex; flex-wrap: wrap; gap: 12px 14px; margin-top: 32px; }
   .close-ctas [hidden] { display: none; }
-  .book { margin-top: 36px; display: grid; gap: 12px; }
-  .book .label { opacity: .75; }
-  .book-frame { border-radius: 16px; overflow: hidden; background: var(--paper); box-shadow: 0 18px 40px rgba(16, 20, 61, .25); }
-  .book-frame iframe { display: block; width: 100%; height: 700px; border: 0; }
-  @media (max-width: 560px) { .book-frame iframe { height: 960px; } }
+  /* Booking: big "Let's Talk" on the left, the calendar on the right */
+  .book { margin-top: clamp(56px, 7vw, 96px); padding-top: clamp(32px, 4vw, 48px); border-top: 1px solid rgba(244, 241, 234, .4); display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 640px); gap: clamp(28px, 4vw, 64px); align-items: center; }
+  .book-copy { display: grid; gap: 22px; }
+  .book-hl { font-size: clamp(88px, 12vw, 190px); line-height: .8; }
+  .book-hl em { display: block; font-family: var(--serif); font-weight: 400; font-style: italic; text-transform: none; font-size: .4em; line-height: 1; margin-bottom: .05em; }
+  .book-copy p { max-width: 30ch; font-family: var(--serif); font-size: clamp(20px, 1.9vw, 26px); line-height: 1.3; }
+  .book-frame { border-radius: 14px; overflow: hidden; box-shadow: 0 22px 50px rgba(16, 20, 61, .3); }
+  .book-frame iframe { display: block; width: 100%; height: 640px; border: 0; background: #fff; }
+  @media (max-width: 900px) { .book { grid-template-columns: minmax(0, 1fr); align-items: start; } }
+  @media (max-width: 560px) { .book-frame iframe { height: 620px; } }
   .cta-light, .cta-ghost { display: inline-flex; align-items: center; gap: 10px; padding: 16px 24px; border-radius: 999px; font: 700 15.5px/1 var(--sans); text-decoration: none; cursor: pointer; transition: background .2s, color .2s, translate .25s var(--ease); }
   .cta-light { background: var(--paper); color: var(--red); border: 0; }
   .cta-light:hover { background: var(--navy); color: var(--paper); translate: 0 -2px; }
@@ -1518,7 +1523,10 @@
     </div>
     <!-- Calendly inline embed: shown when the site is the top-level page (Vercel, local). Inside the claude.ai artifact, embeds are blocked, so the button above is used instead. -->
     <div class="book" id="book" hidden>
-      <span class="label">Book office hours</span>
+      <div class="book-copy">
+        <h3 class="book-hl disp"><em>Let's</em>Talk.</h3>
+        <p>Fifteen minutes in the Quincy House Dining Hall. Bring an idea, a question, or something about IOP comms you'd fix. Pick a time that works.</p>
+      </div>
       <div class="book-frame" id="book-frame"></div>
     </div>
   </div>
@@ -1847,7 +1855,10 @@
     if (topLevel) {
       const u = new URL(cal.dataset.calendly);
       u.searchParams.set('hide_gdpr_banner', '1');
+      u.searchParams.set('hide_event_type_details', '1');
+      u.searchParams.set('hide_landing_page_details', '1');
       u.searchParams.set('primary_color', 'd7101b');
+      u.searchParams.set('background_color', 'ffffff');
       u.searchParams.set('embed_domain', location.hostname || 'localhost');
       u.searchParams.set('embed_type', 'Inline');
       const f = document.createElement('iframe');
