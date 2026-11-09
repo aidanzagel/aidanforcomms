@@ -6,6 +6,18 @@
 <title>Aidan for Comms</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="description" content="Aidan Zagel for IOP Communications Director. Programs First. OneIOP. Comms Playbook. Member Perks.">
+<!-- Link previews (iMessage, social, Slack) -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Aidan for Comms">
+<meta property="og:title" content="Aidan for Comms">
+<meta property="og:description" content="Aidan Zagel for IOP Communications Director. Programs First. OneIOP. Comms Playbook. Member Perks.">
+<meta property="og:url" content="https://aidanforcomms.com/">
+<meta property="og:image" content="https://aidanforcomms.com/assets/share-card.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Aidan Zagel in front of a red star: Aidan for Comms, Harvard IOP Communications Director">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://aidanforcomms.com/assets/share-card.jpg">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 96'%3E%3Cpolygon fill='%23d7101b' points='50,3 61.5,37 97,37 68.5,58 79.5,92 50,71 20.5,92 31.5,58 3,37 38.5,37'/%3E%3C/svg%3E">
 <link rel="icon" type="image/png" sizes="64x64" href="assets/brand/favicon-star-64.png">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/brand/favicon-star-32.png">
@@ -575,6 +587,9 @@
   .posts .work-frame { aspect-ratio: 4 / 5; border-radius: 8px; }
   .project-grid.photo { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .photo .work-frame { aspect-ratio: 3 / 2; }
+  .project-grid.heads { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .heads .work-frame { aspect-ratio: 2 / 3; }
+  .heads .work-frame img { object-position: 47% 30%; }
   .work-frame img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform .5s var(--ease); }
   .work-item:hover .work-frame img { transform: scale(1.02); }
   .work-item:hover .work-frame, .work-item:focus-visible .work-frame { box-shadow: 0 0 0 2px var(--navy), 0 14px 34px rgba(16, 20, 61, .14); }
@@ -1464,6 +1479,23 @@
         </figure>
         <figure class="work-item" tabindex="0" role="button" aria-label="View Floor speech larger">
           <div class="work-frame"><img src="assets/work/hpu-westpoint-4.jpg" alt="A West Point cadet gesturing mid-speech in front of a whiteboard" width="1600" height="1066" loading="lazy"></div>
+        </figure>
+        </div>
+      </article>
+      <article class="project">
+        <header class="project-head">
+          <h3>HMC Board Headshots</h3>
+          <p>Portrait photography for the HMC board.</p>
+        </header>
+        <div class="project-grid heads">
+        <figure class="work-item" tabindex="0" role="button" aria-label="View headshot 1 larger">
+          <div class="work-frame"><img src="assets/work/hmc-headshot-1.jpg" alt="Headshot of an HMC board member in a green blouse, standing in front of stone columns" width="1600" height="1066" loading="lazy"></div>
+        </figure>
+        <figure class="work-item" tabindex="0" role="button" aria-label="View headshot 2 larger">
+          <div class="work-frame"><img src="assets/work/hmc-headshot-2.jpg" alt="Headshot of an HMC board member in a navy suit and blue tie, standing in front of stone columns" width="1066" height="1600" loading="lazy"></div>
+        </figure>
+        <figure class="work-item" tabindex="0" role="button" aria-label="View headshot 3 larger">
+          <div class="work-frame"><img src="assets/work/hmc-headshot-3.jpg" alt="Headshot of an HMC board member in a blue plaid suit and red patterned tie" width="1066" height="1600" loading="lazy"></div>
         </figure>
         </div>
       </article>

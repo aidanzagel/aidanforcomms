@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Buzzword</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="robots" content="noindex">
+<meta name="description" content="Buzzword: make as many words as you can from seven campaign buttons. A puzzle from Aidan for Comms.">
+<link rel="icon" type="image/png" sizes="64x64" href="assets/brand/favicon-star-64.png">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/brand/favicon-star-32.png">
+<link rel="apple-touch-icon" href="assets/brand/icon-star-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400..800&family=Sofia+Sans+Extra+Condensed:wght@700..900&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #1b2384;
+    --red: #d7101b;
+    --paper: #f4f1ea;
+    --ink: #10143d;
+    --muted: #5d607c;
+    --line: rgba(16, 20, 61, .2);
+    --pin: #fbf8f1;
+    --pin-ring: #1b2384;
+    --honey: #f4d77f;
+    --track: #e2dbcb;
+
+    --sans: "Archivo", "Helvetica Neue", Arial, sans-serif;
+    --display: "Sofia Sans Extra Condensed", "Arial Narrow", "Helvetica Neue", sans-serif;
+    --serif: "Newsreader", Georgia, "Times New Roman", serif;
+    --ease: cubic-bezier(.2, .8, .2, 1);
+    color-scheme: light;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  [hidden] { display: none !important; }
+  body { min-height: 100vh; background: var(--paper); color: var(--ink); font-family: var(--sans); font-size: 16px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+  button { font: inherit; color: inherit; }
+
+  .wrap { width: 100%; max-width: 980px; margin-inline: auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+
+  .top { border-bottom: 1px solid var(--line); }
+  .top .wrap { max-width: 1320px; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-block: 14px; }
+  .brand { display: flex; align-items: center; min-width: 0; }
+  .brand img { display: block; height: 26px; width: auto; max-width: 100%; }
+  @media (max-width: 560px) { .brand img { height: 20px; } }
+  .top a.back { flex: none; font-size: 14.5px; font-weight: 600; color: var(--navy); text-decoration: none; padding: 8px 16px; border-radius: 999px; border: 1.5px solid var(--navy); transition: background .2s, color .2s; }
+  .top a.back:hover { background: var(--navy); color: #fff; }
+
+  main { padding-block: 28px 56px; }
+  .intro { display: grid; gap: 6px; margin-bottom: 24px; text-align: center; }
+  h1 { font-family: var(--display); font-weight: 900; text-transform: uppercase; font-size: clamp(54px, 13vw, 86px); line-height: .84; color: var(--navy); }
+  h1 span { color: var(--red); }
+  .intro p { font-family: var(--serif); font-style: italic; font-size: 20px; color: var(--muted); text-wrap: balance; }
+
+  .layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 40px; align-items: start; }
+  @media (max-width: 780px) {
+    .layout { grid-template-columns: minmax(0, 1fr); gap: 18px; } .side { order: -1; gap: 12px; }
+    main { padding-block: 20px 40px; } .intro { margin-bottom: 16px; } h1 { font-size: clamp(48px, 12vw, 70px); } .intro p { font-size: 18px; }
+    .play { gap: 12px; } .entry { min-height: 44px; font-size: 38px; } .pins { width: min(100%, 268px); } .next { display: none; }
+  }
+
+  .play { display: grid; justify-items: center; gap: 22px; }
+
+  /* What you're typing */
+  .entry { min-height: 52px; display: flex; align-items: center; justify-content: center; font-family: var(--display); font-weight: 900; font-size: 44px; line-height: 1; text-transform: uppercase; letter-spacing: .03em; }
+  .entry .c { color: var(--red); }
+  .entry .x { color: #b3ac9c; }
+  .entry::after { content: ""; width: 2px; height: 40px; margin-left: 3px; background: var(--red); animation: blink 1s steps(1) infinite; }
+  .entry.shake { animation: shake .4s; }
+  @keyframes blink { 50% { opacity: 0; } }
+  @keyframes shake { 20%, 60% { transform: translateX(-7px); } 40%, 80% { transform: translateX(7px); } }
+
+  /* Seven campaign buttons */
+  .pins { position: relative; width: min(100%, 300px); aspect-ratio: 1; }
+  .pin {
+    position: absolute; left: 50%; top: 50%; width: 27%; aspect-ratio: 1; translate: -50% -50%;
+    display: grid; place-items: center; border-radius: 50%; border: 0; cursor: pointer; user-select: none;
+    background: var(--pin); color: var(--navy);
+    box-shadow: inset 0 0 0 5px var(--pin-ring), inset 0 0 0 7px var(--pin), inset 0 0 0 8.5px rgba(27, 35, 132, .25), 0 3px 0 rgba(16, 20, 61, .12), 0 8px 18px rgba(16, 20, 61, .1);
+    font-family: var(--display); font-weight: 900; font-size: clamp(30px, 8.5vw, 40px); line-height: 1; text-transform: uppercase;
+    transition: transform .35s var(--ease), left .45s var(--ease), top .45s var(--ease);
+  }
+  .pin:active { transform: scale(.92); }
+  .pin:focus-visible { outline: 2px solid var(--red); outline-offset: 3px; }
+  .pin.center { background: var(--red); color: #fff; box-shadow: inset 0 0 0 5px #fff, inset 0 0 0 7px var(--red), 0 3px 0 rgba(16, 20, 61, .15), 0 10px 22px rgba(215, 16, 27, .22); }
+  .pin.out { transform: scale(.4); opacity: 0; transition: transform .2s, opacity .2s; }
+
+  .controls { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; }
+  .btn { padding: 12px 22px; border-radius: 999px; border: 1.5px solid var(--ink); background: transparent; font-size: 15.5px; font-weight: 600; cursor: pointer; text-decoration: none; color: inherit; transition: background .2s, color .2s; }
+  .btn:hover { background: var(--ink); color: var(--paper); }
+  .btn.primary { background: var(--red); border-color: var(--red); color: #fff; }
+  .btn.primary:hover { background: #b80d17; border-color: #b80d17; }
+  .btn.icon { display: grid; place-items: center; width: 50px; padding: 0; }
+  .btn.icon svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+  /* Rank and words */
+  .side { display: grid; gap: 18px; }
+  .rank { display: grid; gap: 10px; }
+  .rank-top { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+  .rank-top b { font-family: var(--display); font-weight: 900; font-size: 30px; line-height: 1; text-transform: uppercase; color: var(--navy); }
+  .rank-top span { font-size: 15px; color: var(--muted); }
+  .rank-top span strong { color: var(--ink); }
+  .ladder { position: relative; display: flex; align-items: center; justify-content: space-between; height: 22px; }
+  .ladder::before { content: ""; position: absolute; left: 0; right: 0; height: 3px; border-radius: 3px; background: var(--track); }
+  .ladder .fill { position: absolute; left: 0; height: 3px; border-radius: 3px; background: var(--red); transition: width .5s var(--ease); }
+  .ladder i { position: relative; width: 11px; height: 11px; border-radius: 50%; background: var(--track); transition: background .3s, transform .3s; }
+  .ladder i.on { background: var(--red); }
+  .ladder i.now { transform: scale(1.6); box-shadow: 0 0 0 3px var(--paper); }
+  .next { font-size: 14.5px; color: var(--muted); }
+
+  .found { border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; background: rgba(255, 255, 255, .35); }
+  .found summary { display: flex; justify-content: space-between; gap: 10px; cursor: pointer; font-weight: 600; list-style: none; }
+  .found summary::-webkit-details-marker { display: none; }
+  .found summary em { font-style: normal; color: var(--muted); font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+  .found ul { list-style: none; display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 6px 16px; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--line); }
+  .found li { text-transform: capitalize; font-size: 15px; }
+  .found li.pg { font-weight: 700; color: var(--red); }
+  .found .empty { color: var(--muted); font-size: 15px; margin-top: 12px; }
+
+  .ranks { max-width: 460px; margin: 36px auto 0; font-size: 14.5px; color: var(--muted); }
+  .ranks summary { cursor: pointer; font-weight: 600; color: var(--ink); }
+  .ranks ol { list-style: none; display: grid; gap: 4px; margin-top: 10px; }
+  .ranks li { display: flex; justify-content: space-between; gap: 12px; }
+  .ranks li.me { color: var(--red); font-weight: 700; }
+
+  .toast {
+    position: fixed; left: 50%; top: calc(env(safe-area-inset-top, 0px) + 90px); z-index: 10;
+    padding: 10px 18px; border-radius: 999px; background: var(--ink); color: var(--paper);
+    font-weight: 600; font-size: 15px; translate: -50% 0; opacity: 0; pointer-events: none; transition: opacity .2s;
+  }
+  .toast.show { opacity: 1; }
+  .toast.good { background: var(--navy); }
+  .toast.big { background: var(--red); }
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="/"><img src="assets/brand/wordmark-color.png" alt="Aidan for Comms" width="1000" height="96"></a>
+    <a class="back" href="comm-petition.html">All games</a>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="intro">
+    <h1><span>Buzz</span>word</h1>
+    <p>Make words of four or more letters. Every word uses the red button.</p>
+  </div>
+
+  <div class="layout">
+    <div class="play">
+      <div class="entry" id="entry" aria-live="polite"></div>
+      <div class="pins" id="pins"></div>
+      <div class="controls">
+        <button class="btn" id="del" type="button">Delete</button>
+        <button class="btn icon" id="shuffle" type="button" aria-label="Shuffle letters"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8 8 0 0 0-14.7-4.3L4 8"/><path d="M4 4v4h4"/><path d="M4 13a8 8 0 0 0 14.7 4.3L20 16"/><path d="M20 20v-4h-4"/></svg></button>
+        <button class="btn primary" id="enter" type="button">Enter</button>
+      </div>
+    </div>
+
+    <div class="side">
+      <div class="rank">
+        <div class="rank-top"><b id="rank-name"></b><span><strong id="score">0</strong> points</span></div>
+        <div class="ladder" id="ladder"><span class="fill" id="fill"></span></div>
+        <div class="next" id="next"></div>
+      </div>
+
+      <details class="found" id="found">
+        <summary><span id="found-count">You have found 0 words</span><em id="found-peek"></em></summary>
+        <ul id="found-list"></ul>
+        <p class="empty" id="found-empty">Nothing yet. Start with the red button.</p>
+      </details>
+
+    </div>
+  </div>
+
+  <details class="ranks">
+    <summary>How scoring works</summary>
+    <p style="margin-top:10px">Four-letter words are worth 1 point. Longer words get 1 point per letter. A word that uses all seven letters earns 7 bonus points.</p>
+    <ol id="rank-list"></ol>
+  </details>
+</main>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+  const CENTER = 'o';
+  const OUTER = ['c', 'a', 'l', 'i', 't', 'n'];
+  // Hand-picked so every everyday word counts and nothing obscure is needed to finish
+  const WORDS = `action allocation allot alto annotation anoint atoll atonal cacao calico cannoli cannon cannot canon
+    canto canton citation clot coal coalition coat cocoa cocoon coil coin cola colic collation colon colonial colt
+    conciliation conic conical connotation contact contain cool coolant coot cotton cottontail icon iconic inaction
+    incantation initiation intonation into iota ionic laconic lactation lion loan local location loci loco loin loll
+    loon loot lotion lotto nation national notation notion notional onion onto taco talon tattoo toil toll tonal tonic
+    tool toot total`.split(/\s+/);
+  const ALL = new Set([CENTER, ...OUTER]);
+  const isPangram = (w) => [...ALL].every((l) => w.includes(l));
+  const points = (w) => (w.length === 4 ? 1 : w.length) + (isPangram(w) ? 7 : 0);
+  const MAX = WORDS.reduce((s, w) => s + points(w), 0);
+
+  // Ranks climb the campaign ladder
+  const RANKS = [['Intern', 0], ['Volunteer', .03], ['Canvasser', .08], ['Staffer', .15], ['Organizer', .25],
+    ['Spokesperson', .38], ['Comms Director', .55], ['Landslide', 1]].map(([n, p]) => [n, Math.round(p * MAX)]);
+
+  const $ = (id) => document.getElementById(id);
+  const KEY = 'buzzword-coalition';
+  let found = [], typed = '', outer = [...OUTER];
+  try { found = (JSON.parse(localStorage.getItem(KEY)) || []).filter((w) => WORDS.includes(w)); } catch {}
+  const save = () => { try { localStorage.setItem(KEY, JSON.stringify(found)); } catch {} };
+
+  let toastTimer;
+  const toast = (msg, kind = '') => {
+    const t = $('toast'); t.textContent = msg; t.className = `toast show ${kind}`;
+    clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('show'), 1500);
+  };
+
+  // Buttons: center plus six around it
+  const placePins = () => {
+    const html = [`<button type="button" class="pin center" data-l="${CENTER}">${CENTER}</button>`];
+    outer.forEach((l, i) => {
+      const a = (-90 + i * 60) * Math.PI / 180;
+      html.push(`<button type="button" class="pin" data-l="${l}" style="left:${50 + 36 * Math.cos(a)}%;top:${50 + 36 * Math.sin(a)}%">${l}</button>`);
+    });
+    $('pins').innerHTML = html.join('');
+  };
+
+  const drawEntry = () => {
+    $('entry').innerHTML = [...typed].map((l) => `<span class="${l === CENTER ? 'c' : ALL.has(l) ? '' : 'x'}">${l}</span>`).join('');
+  };
+
+  const score = () => found.reduce((s, w) => s + points(w), 0);
+  const rankIdx = (s) => RANKS.reduce((r, [, min], i) => (s >= min ? i : r), 0);
+
+  const drawSide = () => {
+    const s = score(), r = rankIdx(s);
+    $('score').textContent = s;
+    $('rank-name').textContent = RANKS[r][0];
+    $('ladder').querySelectorAll('i').forEach((el) => el.remove());
+    RANKS.forEach((_, i) => {
+      const dot = document.createElement('i');
+      dot.className = (i <= r ? 'on' : '') + (i === r ? ' now' : '');
+      $('ladder').appendChild(dot);
+    });
+    $('fill').style.width = `${(r / (RANKS.length - 1)) * 100}%`;
+    $('next').textContent = r < RANKS.length - 1
+      ? `${RANKS[r + 1][1] - s} more points to ${RANKS[r + 1][0]}`
+      : 'You found every word. Landslide.';
+    const sorted = [...found].sort();
+    $('found-count').textContent = `You have found ${found.length} word${found.length === 1 ? '' : 's'}`;
+    $('found-peek').textContent = [...found].reverse().slice(0, 6).join(' ');
+    $('found-list').innerHTML = sorted.map((w) => `<li class="${isPangram(w) ? 'pg' : ''}">${w}</li>`).join('');
+    $('found-empty').hidden = found.length > 0;
+    $('rank-list').innerHTML = RANKS.map(([n, min], i) => `<li class="${i === r ? 'me' : ''}"><span>${n}</span><span>${min}</span></li>`).join('');
+  };
+
+  const reject = (msg) => {
+    toast(msg);
+    $('entry').classList.add('shake');
+    setTimeout(() => { $('entry').classList.remove('shake'); typed = ''; drawEntry(); }, 420);
+  };
+
+  const submit = () => {
+    const w = typed;
+    if (!w) return;
+    if (w.length < 4) return reject('Too short');
+    if ([...w].some((l) => !ALL.has(l))) return reject('Bad letters');
+    if (!w.includes(CENTER)) return reject('Missing the red letter');
+    if (found.includes(w)) return reject('Already found');
+    if (!WORDS.includes(w)) return reject('Not in word list');
+    const before = rankIdx(score());
+    found.push(w); save();
+    const p = points(w);
+    if (isPangram(w)) toast(`Coalition builder! +${p}`, 'big');
+    else toast(`${w.length === 4 ? 'Good' : w.length < 7 ? 'Nice' : 'Excellent'}! +${p}`, 'good');
+    const after = rankIdx(score());
+    if (after > before) setTimeout(() => toast(`New rank: ${RANKS[after][0]}`, 'big'), 1300);
+    typed = ''; drawEntry(); drawSide();
+  };
+
+  const add = (l) => { if (typed.length < 19) { typed += l; drawEntry(); } };
+
+  $('pins').addEventListener('click', (e) => { const p = e.target.closest('.pin'); if (p) add(p.dataset.l); });
+  $('del').addEventListener('click', () => { typed = typed.slice(0, -1); drawEntry(); });
+  $('enter').addEventListener('click', submit);
+  $('shuffle').addEventListener('click', () => {
+    const pins = [...$('pins').querySelectorAll('.pin:not(.center)')];
+    pins.forEach((p) => p.classList.add('out'));
+    setTimeout(() => {
+      for (let i = outer.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [outer[i], outer[j]] = [outer[j], outer[i]]; }
+      placePins();
+    }, 200);
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    if (e.key === 'Enter') { e.preventDefault(); submit(); }
+    else if (e.key === 'Backspace') { e.preventDefault(); typed = typed.slice(0, -1); drawEntry(); }
+    else if (e.key === ' ') { e.preventDefault(); $('shuffle').click(); }
+    else if (/^[a-z]$/i.test(e.key)) add(e.key.toLowerCase());
+  });
+
+  placePins(); drawEntry(); drawSide();
+</script>
+</body>
+</html>

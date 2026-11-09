@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Comm-nections</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="robots" content="noindex">
+<meta name="description" content="Comm-nections: find four groups of four. A puzzle from Aidan for Comms.">
+<link rel="icon" type="image/png" sizes="64x64" href="assets/brand/favicon-star-64.png">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/brand/favicon-star-32.png">
+<link rel="apple-touch-icon" href="assets/brand/icon-star-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400..800&family=Sofia+Sans+Extra+Condensed:wght@700..900&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #1b2384;
+    --red: #d7101b;
+    --paper: #f4f1ea;
+    --paper-2: #e9e4d8;
+    --tile: #e9e3d5;
+    --tile-hover: #e0d8c6;
+    --ink: #10143d;
+    --muted: #5d607c;
+    --line: rgba(16, 20, 61, .2);
+
+    /* Group colors, easiest to hardest */
+    --g1: #f4d77f;
+    --g2: #a9cdea;
+    --g3: #4f5fd6;
+    --g4: #e0353f;
+
+    --sans: "Archivo", "Helvetica Neue", Arial, sans-serif;
+    --display: "Sofia Sans Extra Condensed", "Arial Narrow", "Helvetica Neue", sans-serif;
+    --serif: "Newsreader", Georgia, "Times New Roman", serif;
+    --ease: cubic-bezier(.2, .8, .2, 1);
+    color-scheme: light;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    min-height: 100vh;
+    background: var(--paper); color: var(--ink);
+    font-family: var(--sans); font-size: 16px; line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  button { font: inherit; color: inherit; }
+  [hidden] { display: none !important; }
+
+  .wrap {
+    width: 100%; max-width: 620px; margin-inline: auto;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+  }
+
+  /* Header */
+  .top { border-bottom: 1px solid var(--line); }
+  .top .wrap { max-width: 1320px; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-block: 14px; }
+  .brand { display: flex; align-items: center; min-width: 0; }
+  .brand img { display: block; height: 26px; width: auto; max-width: 100%; }
+  @media (max-width: 560px) { .brand img { height: 20px; } }
+  .top a.back { font-size: 14.5px; font-weight: 600; color: var(--navy); text-decoration: none; padding: 8px 16px; border-radius: 999px; border: 1.5px solid var(--navy); transition: background .2s, color .2s; }
+  .top a.back:hover { background: var(--navy); color: #fff; }
+
+  main { padding-block: 36px 56px; }
+  .intro { display: grid; gap: 8px; margin-bottom: 22px; text-align: center; }
+  h1 { font-family: var(--display); font-weight: 900; text-transform: uppercase; font-size: clamp(54px, 13vw, 86px); line-height: .84; letter-spacing: .005em; color: var(--navy); text-wrap: balance; }
+  h1 span { color: var(--red); }
+  h1 em { font-family: var(--serif); font-style: italic; font-weight: 500; text-transform: none; font-size: .82em; color: var(--red); letter-spacing: -.01em; }
+  .intro p { font-family: var(--serif); font-style: italic; font-size: 20px; color: var(--muted); }
+
+  /* Board */
+  .board { display: grid; gap: 8px; }
+  .solved { display: grid; gap: 8px; }
+  .grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+
+  .tile {
+    position: relative;
+    display: grid; place-items: center; min-height: 78px; padding: 6px;
+    border: 0; border-radius: 10px; background: var(--tile); color: var(--ink); box-shadow: 0 1px 0 rgba(16, 20, 61, .08);
+    font-family: var(--display); font-weight: 900; font-size: clamp(19px, 5vw, 26px); line-height: .95; text-transform: uppercase; letter-spacing: .01em;
+    text-align: center; hyphens: none; cursor: pointer; user-select: none;
+    transition: background .15s, color .15s, transform .15s var(--ease);
+  }
+  .tile:hover { background: var(--tile-hover); }
+  .tile:active { transform: scale(.96); }
+  .tile:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
+  .tile.on { background: var(--navy); color: #fff; box-shadow: 0 4px 10px rgba(27, 35, 132, .25); }
+  .tile.hop { animation: hop .22s var(--ease); }
+  .grid.shake .tile.on { animation: shake .4s; }
+  @keyframes hop { 40% { transform: translateY(-8px); } }
+  @keyframes shake { 20%, 60% { transform: translateX(-5px); } 40%, 80% { transform: translateX(5px); } }
+
+  .group {
+    display: grid; place-items: center; align-content: center; gap: 2px; min-height: 78px; padding: 10px 14px;
+    border-radius: 10px; text-align: center; animation: pop .22s var(--ease);
+  }
+  .group h2 { font-family: var(--display); font-weight: 900; text-transform: uppercase; font-size: 23px; line-height: 1; letter-spacing: .02em; }
+  .group p { font-size: 14.5px; font-weight: 500; text-transform: uppercase; letter-spacing: .02em; }
+  .group.l1 { background: var(--g1); color: var(--ink); }
+  .group.l2 { background: var(--g2); color: var(--ink); }
+  .group.l3 { background: var(--g3); color: #fff; }
+  .group.l4 { background: var(--g4); color: #fff; }
+  @keyframes pop { from { transform: scale(.94); opacity: 0; } }
+
+  /* Mistakes and controls */
+  .status { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 18px; font-size: 15px; color: var(--muted); }
+  .stars { display: flex; gap: 6px; }
+  .stars svg { width: 17px; height: 17px; fill: var(--red); transition: opacity .3s, transform .3s; }
+  .stars svg.used { opacity: .18; transform: scale(.8); }
+
+  .controls { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+  .btn {
+    padding: 12px 22px; border-radius: 999px; border: 1.5px solid var(--ink); background: transparent;
+    font-size: 15.5px; font-weight: 600; cursor: pointer; transition: background .2s, color .2s, opacity .2s;
+  }
+  .btn:hover:not(:disabled) { background: var(--ink); color: var(--paper); }
+  .btn.primary { background: var(--red); border-color: var(--red); color: #fff; }
+  .btn.primary:hover:not(:disabled) { background: #b80d17; border-color: #b80d17; color: #fff; }
+  .btn:disabled { opacity: .35; cursor: default; }
+
+  .toast {
+    position: fixed; left: 50%; top: calc(env(safe-area-inset-top, 0px) + 90px); z-index: 10;
+    padding: 10px 18px; border-radius: 999px; background: var(--ink); color: var(--paper);
+    font-weight: 600; font-size: 15px; translate: -50% 0; opacity: 0; pointer-events: none; transition: opacity .2s;
+  }
+  .toast.show { opacity: 1; }
+
+  /* End card */
+  .end { display: grid; gap: 14px; justify-items: center; margin-top: 28px; padding: 26px 20px; border-top: 1px solid var(--line); text-align: center; }
+  .end h2 { font-family: var(--display); font-weight: 900; text-transform: uppercase; font-size: 46px; line-height: .9; color: var(--navy); }
+  .end > p { font-family: var(--serif); font-size: 19px; max-width: 34ch; text-wrap: balance; }
+  .end pre { font-family: inherit; font-size: 22px; line-height: 1.15; letter-spacing: 2px; }
+  .end .controls { margin-top: 4px; }
+  .end a.btn { text-decoration: none; color: inherit; }
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="/"><img src="assets/brand/wordmark-color.png" alt="Aidan for Comms" width="1000" height="96"></a>
+    <a class="back" href="comm-petition.html">All games</a>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="intro">
+    <h1><span>Comm</span>-nections</h1>
+    <p>Find four groups of four.</p>
+  </div>
+
+  <div class="board">
+    <div class="solved" id="solved"></div>
+    <div class="grid" id="grid" role="group" aria-label="Words"></div>
+  </div>
+
+  <div id="play">
+    <div class="status">Mistakes left <span class="stars" id="stars" aria-live="polite"></span></div>
+    <div class="controls">
+      <button class="btn" id="shuffle" type="button">Shuffle</button>
+      <button class="btn" id="clear" type="button" disabled>Deselect all</button>
+      <button class="btn primary" id="submit" type="button" disabled>Submit</button>
+    </div>
+  </div>
+
+  <section class="end" id="end" hidden>
+    <h2 id="end-hl"></h2>
+    <p id="end-msg"></p>
+    <pre id="grid-result" aria-label="Your guesses"></pre>
+    <div class="controls">
+      <button class="btn primary" id="share" type="button">Copy results</button>
+      <button class="btn" id="again" type="button">Play again</button>
+      <a class="btn" href="comm-petition.html">More games</a>
+    </div>
+  </section>
+</main>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+  // Each group's words come straight from the campaign. GAP, CAP and PRE are IOP acronyms that read
+  // like words, and HPR and HPU (Aidan's résumé) are IOP acronyms too, so "acronyms" is a trap.
+  const GROUPS = [
+    { level: 1, name: 'Member Perks', words: ['Merch', 'Welcome Kits', 'Door Drops', 'Socials'] },
+    { level: 2, name: 'Comms ___', words: ['Director', 'Playbook', 'Training', 'Team'] },
+    { level: 3, name: 'IOP Acronyms That Are Also Words', words: ['GAP', 'CAP', 'PRE', 'PEP'] },
+    { level: 4, name: 'Aidan’s Résumé', words: ['HPR', 'HPU', 'Quincy', 'Econ'] },
+  ];
+  const MAX_MISTAKES = 4;
+  const SQUARES = { 1: '🟨', 2: '🟦', 3: '🟪', 4: '🟥' };
+  const STAR = '<svg viewBox="0 0 100 96" aria-hidden="true"><polygon points="50,3 61.5,37 97,37 68.5,58 79.5,92 50,71 20.5,92 31.5,58 3,37 38.5,37"/></svg>';
+
+  const $ = (id) => document.getElementById(id);
+  const gridEl = $('grid'), solvedEl = $('solved');
+  let words, picked, solved, mistakes, guesses, tried, busy;
+
+  const shuffle = (a) => {
+    for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
+    return a;
+  };
+  const groupOf = (w) => GROUPS.find((g) => g.words.includes(w));
+
+  let toastTimer;
+  const toast = (msg) => {
+    const t = $('toast');
+    t.textContent = msg; t.classList.add('show');
+    clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('show'), 1800);
+  };
+
+  // Shrink a tile's text only when its longest word would not fit the tile
+  const fitTiles = () => gridEl.querySelectorAll('.tile').forEach((t) => {
+    t.style.fontSize = '';
+    let size = parseFloat(getComputedStyle(t).fontSize);
+    while (t.scrollWidth > t.clientWidth && size > 11) t.style.fontSize = `${--size}px`;
+  });
+  addEventListener('resize', () => fitTiles());
+  document.fonts?.ready.then(() => fitTiles());
+
+  // Animate tiles from where they were to where a re-render puts them
+  const MOVE_MS = 300;
+  const flip = (change, fun = false) => {
+    const before = new Map([...gridEl.children].map((t) => [t.dataset.w, t.getBoundingClientRect()]));
+    change();
+    [...gridEl.children].forEach((t, i) => {
+      const b = before.get(t.dataset.w), a = t.getBoundingClientRect();
+      if (!b || (b.left === a.left && b.top === a.top)) return;
+      const from = `translate(${b.left - a.left}px, ${b.top - a.top}px)`;
+      if (!fun) {
+        t.animate([{ transform: from }, { transform: 'none' }], { duration: MOVE_MS, easing: 'cubic-bezier(.2, .8, .2, 1)' });
+        return;
+      }
+      // Shuffle: each tile lifts, tilts and lands with a little bounce, one after another
+      const tilt = (Math.random() * 16 - 8).toFixed(1);
+      const midX = (b.left - a.left) / 2, midY = (b.top - a.top) / 2;
+      t.style.zIndex = 1 + Math.round(Math.random() * 10);
+      t.animate([
+        { transform: from, boxShadow: '0 0 0 rgba(16,20,61,0)' },
+        { transform: `translate(${midX}px, ${midY - 18}px) rotate(${tilt}deg) scale(1.08)`, boxShadow: '0 14px 24px rgba(16,20,61,.22)', offset: .5 },
+        { transform: 'none', boxShadow: '0 0 0 rgba(16,20,61,0)' },
+      ], { duration: 520, delay: i * 22, easing: 'cubic-bezier(.34, 1.45, .5, 1)', fill: 'backwards' })
+        .finished.then(() => { t.style.zIndex = ''; }, () => {});
+    });
+  };
+
+  const renderGrid = () => {
+    gridEl.innerHTML = words.map((w) =>
+      `<button type="button" class="tile${picked.has(w) ? ' on' : ''}" aria-pressed="${picked.has(w)}" data-w="${w}">${w}</button>`
+    ).join('');
+    fitTiles();
+    $('submit').disabled = picked.size !== 4 || busy;
+    $('clear').disabled = picked.size === 0 || busy;
+  };
+
+  const renderStars = () => {
+    $('stars').innerHTML = Array.from({ length: MAX_MISTAKES }, (_, i) =>
+      STAR.replace('<svg', `<svg class="${i < MAX_MISTAKES - mistakes ? '' : 'used'}"`)).join('');
+    $('stars').setAttribute('aria-label', `${MAX_MISTAKES - mistakes} mistakes left`);
+  };
+
+  const addSolved = (g) => {
+    solved.push(g);
+    const el = document.createElement('div');
+    el.className = `group l${g.level}`;
+    el.innerHTML = `<h2>${g.name}</h2><p>${g.words.join(', ')}</p>`;
+    solvedEl.appendChild(el);
+    words = words.filter((w) => !g.words.includes(w));
+  };
+
+  const finish = (won) => {
+    $('play').hidden = true;
+    $('end').hidden = false;
+    $('end-hl').textContent = won ? (mistakes === 0 ? 'Perfect.' : 'Nicely done.') : 'Next time.';
+    $('end-msg').textContent = won
+      ? 'You made every connection. That’s the whole idea: every program, one IOP.'
+      : 'Every program has something in common. Here’s how it all fits together.';
+    $('grid-result').textContent = guesses.map((row) => row.map((l) => SQUARES[l]).join('')).join('\n');
+  };
+
+  const revealRest = () => {
+    const rest = GROUPS.filter((g) => !solved.includes(g)).sort((a, b) => a.level - b.level);
+    rest.forEach((g, i) => setTimeout(() => {
+      addSolved(g); picked.clear(); renderGrid();
+      if (i === rest.length - 1) setTimeout(() => finish(false), 500);
+    }, 700 * (i + 1)));
+  };
+
+  const submit = () => {
+    if (picked.size !== 4 || busy) return;
+    const sel = [...picked];
+    const key = [...sel].sort().join('|');
+    if (tried.has(key)) { toast('Already guessed!'); return; }
+    tried.add(key);
+    guesses.push(sel.map((w) => groupOf(w).level));
+
+    busy = true; renderGrid();
+    // Tiles hop in turn, like a vote being counted
+    const tiles = [...gridEl.querySelectorAll('.tile.on')];
+    tiles.forEach((t, i) => setTimeout(() => t.classList.add('hop'), i * 40));
+
+    setTimeout(() => {
+      const g = groupOf(sel[0]);
+      if (sel.every((w) => g.words.includes(w))) {
+        // Slide the four tiles into the top row, then merge them into the bar
+        flip(() => { words = [...sel, ...words.filter((w) => !picked.has(w))]; renderGrid(); });
+        setTimeout(() => {
+          picked.clear(); busy = false;
+          addSolved(g); renderGrid();
+          if (solved.length === GROUPS.length) setTimeout(() => finish(true), 450);
+        }, MOVE_MS + 40);
+        return;
+      }
+      const counts = {};
+      sel.forEach((w) => { const l = groupOf(w).level; counts[l] = (counts[l] || 0) + 1; });
+      if (Object.values(counts).includes(3)) toast('One away…');
+      mistakes++; renderStars();
+      gridEl.classList.add('shake');
+      setTimeout(() => {
+        gridEl.classList.remove('shake'); busy = false;
+        if (mistakes >= MAX_MISTAKES) { picked.clear(); renderGrid(); revealRest(); }
+        else renderGrid();
+      }, 450);
+    }, tiles.length * 40 + 200);
+  };
+
+  gridEl.addEventListener('click', (e) => {
+    const t = e.target.closest('.tile');
+    if (!t || busy) return;
+    const w = t.dataset.w;
+    if (picked.has(w)) picked.delete(w);
+    else if (picked.size < 4) picked.add(w);
+    renderGrid();
+  });
+  $('shuffle').addEventListener('click', () => { if (!busy) flip(() => { shuffle(words); renderGrid(); }, true); });
+  $('clear').addEventListener('click', () => { picked.clear(); renderGrid(); });
+  $('submit').addEventListener('click', submit);
+  $('again').addEventListener('click', () => start());
+  $('share').addEventListener('click', async () => {
+    const text = `Comm-nections, an Aidan for Comms puzzle\n${$('grid-result').textContent}\n${location.origin}${location.pathname}`;
+    try { await navigator.clipboard.writeText(text); toast('Copied!'); }
+    catch {
+      const r = document.createRange(); r.selectNodeContents($('grid-result'));
+      const s = getSelection(); s.removeAllRanges(); s.addRange(r);
+      toast('Select and copy');
+    }
+  });
+
+  function start() {
+    words = shuffle(GROUPS.flatMap((g) => g.words));
+    picked = new Set(); solved = []; mistakes = 0; guesses = []; tried = new Set(); busy = false;
+    solvedEl.innerHTML = '';
+    $('play').hidden = false; $('end').hidden = true;
+    renderStars(); renderGrid();
+  }
+  start();
+</script>
+</body>
+</html>

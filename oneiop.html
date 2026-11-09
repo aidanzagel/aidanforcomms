@@ -159,15 +159,15 @@
   .g-track { display: flex; transition: transform .7s cubic-bezier(.65, 0, .35, 1); }
   .g-track > .banner { flex: 0 0 100%; min-width: 0; border-radius: 0; }
   .g-nav { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 10px; }
-  .g-dots { display: flex; align-items: center; gap: 6px; }
-  .g-dots button { position: relative; width: 34px; height: 6px; padding: 0; border: 0; border-radius: 99px; background: var(--line-2); overflow: hidden; cursor: pointer; }
+  .g-dots { display: flex; align-items: center; gap: 6px; flex: 1 1 auto; min-width: 0; }
+  .g-dots button { position: relative; flex: 0 1 34px; min-width: 10px; height: 6px; padding: 0; border: 0; border-radius: 99px; background: var(--line-2); overflow: hidden; cursor: pointer; }
   .g-dots button i { position: absolute; inset: 0; border-radius: inherit; background: var(--accent); transform: scaleX(0); transform-origin: left; }
   /* The current slide's bar fills over the time it stays up (driven by the gallery clock below) */
   .g-dots button[aria-current="true"] i { transition: transform .1s linear; }
   .banner-media img.wide { aspect-ratio: auto; }
   .banner-text { font-size: 15px; line-height: 1.5; color: rgba(255, 255, 255, .82); max-width: 46ch; }
-  .g-label { font-size: 12.5px; color: var(--muted); }
-  .g-arrows { display: flex; gap: 6px; }
+  .g-label { flex: none; margin-left: 4px; font-size: 12.5px; color: var(--muted); white-space: nowrap; }
+  .g-arrows { display: flex; gap: 6px; flex: none; }
   .g-arrows button { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--line-2); background: var(--card); color: var(--ink); cursor: pointer; font-size: 15px; line-height: 1; }
   .g-arrows button:hover { border-color: var(--accent); color: var(--accent); }
 
@@ -184,19 +184,33 @@
   .btn.icon { padding: 9px; color: var(--muted); }
   .btn[aria-pressed="true"]:not(.glass) { background: var(--navy-tint-2); border-color: transparent; color: var(--accent); }
 
-  /* Day strip */
-  .week { display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 4px; padding: 6px; }
-  .week button { display: grid; gap: 3px; justify-items: center; padding: 10px 2px 9px; border: 0; border-radius: 11px; background: none; transition: background .2s, color .2s; }
-  .week button .label { font-size: 9.5px; color: var(--faint); }
-  .week button b { font-family: var(--display); font-weight: 900; font-size: 28px; line-height: 1; }
-  .week button small { display: flex; gap: 3px; height: 5px; }
-  .week button small i { width: 5px; height: 5px; border-radius: 50%; background: var(--red); }
+  /* Day strip: the chosen day is a tear-off calendar page that slides from day to day */
+  .week { position: relative; display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 4px; padding: 8px; }
+  .week-ind {
+    position: absolute; left: 0; top: 0; z-index: 0; border-radius: 12px; overflow: hidden; pointer-events: none;
+    background: var(--navy); box-shadow: 0 2px 0 var(--navy-2), 0 10px 22px rgba(27, 35, 132, .28);
+    transition: transform .45s cubic-bezier(.3, 1.35, .5, 1), width .3s var(--ease);
+  }
+  .week-ind::before { content: ""; position: absolute; inset: 0 0 auto; height: 26px; background: var(--red); }
+  .week.no-anim .week-ind { transition: none; }
+  .week button {
+    position: relative; z-index: 1; display: grid; grid-template-rows: 26px auto 8px; gap: 6px; justify-items: center; align-items: center;
+    padding: 0 2px 10px; border: 0; border-radius: 12px; background: none; transition: color .25s, transform .25s var(--ease);
+  }
+  .week button .label { font-size: 9.5px; color: var(--faint); transition: color .25s; }
+  .week button b { font-family: var(--display); font-weight: 900; font-size: 30px; line-height: 1; transition: transform .35s var(--ease); }
+  .week button small { display: flex; gap: 3px; align-items: center; height: 8px; }
+  .week button small i { width: 9px; height: 3px; border-radius: 2px; background: var(--red); transition: background .25s; }
   .week button small i.other { background: var(--line-2); }
-  .week button:hover { background: var(--navy-tint); }
-  .week button[aria-pressed="true"] { background: var(--navy); color: #fff; }
-  .week button[aria-pressed="true"] .label { color: rgba(255, 255, 255, .65); }
+  .week button:hover:not([aria-pressed="true"]) b { transform: translateY(-2px); }
+  .week button:hover:not([aria-pressed="true"]) .label { color: var(--ink); }
+  .week button.is-today:not([aria-pressed="true"]) .label { color: var(--red); font-weight: 700; }
+  .week button[aria-pressed="true"] { color: #fff; }
+  .week button[aria-pressed="true"] .label { color: #fff; font-weight: 700; }
+  .week button[aria-pressed="true"] b { transform: scale(1.12); }
   .week button[aria-pressed="true"] small i { background: #fff; }
-  .week button[aria-pressed="true"] small i.other { background: rgba(255, 255, 255, .35); }
+  .week button[aria-pressed="true"] small i.other { background: rgba(255, 255, 255, .4); }
+  .week button.weekend:not([aria-pressed="true"]) b { color: var(--muted); }
 
   /* ====== Event cards ====== */
   .events { display: grid; gap: 12px; }
@@ -218,13 +232,24 @@
   .week { margin-top: 24px; }
   .sec-title .see-all { padding: 0; border: 0; background: none; font: 600 12.5px/1 var(--sans); color: var(--accent); }
   .sec-title .see-all:hover { color: var(--red); }
-  .mini { padding: 6px; display: grid; }
-  .mini-row { display: grid; grid-template-columns: 32px minmax(0, 1fr); gap: 12px; align-items: center; padding: 12px; border: 0; border-radius: 10px; background: none; text-align: left; }
-  .mini-row + .mini-row { box-shadow: inset 0 1px 0 var(--line); }
+  /* Home: latest announcements as a simple digest */
+  .mini { display: grid; padding: 6px; }
+  .mini-row {
+    position: relative; display: grid; gap: 6px; padding: 16px 16px 17px; border: 0; border-radius: 12px;
+    background: none; color: var(--ink); text-align: left; cursor: pointer; transition: background .2s;
+  }
+  .mini-row + .mini-row::before { content: ""; position: absolute; left: 16px; right: 16px; top: 0; height: 1px; background: var(--line); transition: opacity .2s; }
+  .mini-row:hover::before, .mini-row:hover + .mini-row::before { opacity: 0; }
   .mini-row:hover { background: var(--navy-tint); }
-  .mini-row .post-from { margin: 0; }
-  .mini-row b { display: block; font-size: 13.5px; line-height: 1.35; font-weight: 650; }
-  .mini-row small { display: block; margin-top: 2px; font-size: 11.5px; color: var(--faint); }
+  .mini-row:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+  .mr-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .mr-prog { padding: 3px 9px; border-radius: 99px; background: var(--navy-tint-2); color: var(--accent); font-size: 11px; font-weight: 700; line-height: 1.3; letter-spacing: .05em; text-transform: uppercase; }
+  .mini-row.coal .mr-prog { background: var(--red-tint); color: var(--red); }
+  .mini-row.iop .mr-prog { background: var(--navy); color: #fff; }
+  .mr-top time { font-size: 12px; color: var(--faint); white-space: nowrap; }
+  .mini-row b { display: flex; align-items: baseline; gap: 8px; font-size: 15.5px; line-height: 1.3; font-weight: 650; letter-spacing: -.01em; }
+  .mr-dot { flex: none; width: 7px; height: 7px; border-radius: 50%; background: var(--red); translate: 0 -2px; }
+  .mr-body { font-size: 13.5px; line-height: 1.5; color: var(--muted); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
   .tags { display: flex; flex-wrap: wrap; gap: 5px; }
   .tag { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 99px; background: var(--navy-tint-2); color: var(--accent); font: 600 9.5px/1.6 var(--mono); letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; }
   .tag.coal { background: var(--red-tint); color: var(--red); }
@@ -633,6 +658,21 @@
 
   @media (max-width: 1100px) { .grid-2 { grid-template-columns: minmax(0, 1fr); gap: 0; } }
   @media (max-width: 980px) { .banner { grid-template-columns: minmax(0, 1fr); } .banner-media { order: -1; } }
+  /* Phones: keep the featured card short enough to see whole on one screen */
+  @media (max-width: 560px) {
+    .banner { gap: 12px; padding: 12px 12px 16px; }
+    .banner-media { padding: 0; border: 0; background: none; }
+    .banner-sound { right: 10px; bottom: 10px; }
+    .banner-body { gap: 8px; padding: 0 4px; }
+    .banner-kick { padding: 3px 9px; }
+    .banner h2 { font-size: 21px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+    .banner-host { margin-top: -4px; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .banner-meta { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 13px; }
+    .banner-meta span { gap: 6px; }
+    .banner-text { font-size: 14px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+    .banner-actions { margin-top: 4px; }
+    .banner-actions .btn { padding: 8px 13px; font-size: 13.5px; }
+  }
   @media (max-width: 900px) {
     .login { grid-template-columns: minmax(0, 1fr); }
     .login-art { gap: 18px; padding-block: 24px 28px; }
@@ -659,7 +699,7 @@
     .demo-bar .label { display: none; }
     .week { grid-template-columns: repeat(8, minmax(44px, 1fr)); overflow-x: auto; scrollbar-width: none; }
     .week::-webkit-scrollbar { display: none; }
-    .week button b { font-size: 23px; }
+    .week button b { font-size: 24px; }
     .row { grid-template-columns: minmax(0, 1fr); }
     .pp-hero { grid-template-columns: minmax(0, 1fr); padding: 22px; }
     .pp-hero .btn { justify-self: start; }
@@ -800,7 +840,7 @@
   // tools/update_events.py refreshes events.json and this built-in copy once a day.
   // Times are 24-hour Eastern. Past events are dropped when the page loads.
   const URL_BASE = 'https://iop.harvard.edu/events/';
-  let DATA = /*EVENTS*/{"updated": "2026-11-08T11:55-05:00", "source": "https://iop.harvard.edu/events", "events": [{"p": "FSG", "date": "2026-11-09", "s": "16:15", "e": "17:30", "where": "L-130", "img": "assets/iop/study-group-ambassador-nathalie-rayes-power-opportunity-educ.webp", "url": "study-group-ambassador-nathalie-rayes-power-opportunity-education-philanthropy-and-american", "title": "The Power of Opportunity: Education, Philanthropy, and the American Dream", "host": "Study group with Ambassador Nathalie Rayes", "desc": "With Mike Bezos, co-founder and chair of the Bezos Family Foundation.", "id": 1}, {"p": "FSG", "date": "2026-11-09", "s": "16:30", "e": "17:45", "where": "L-163", "img": "assets/iop/whipple.jpg", "url": "study-group-chris-whipple-diplomacy-and-spycraft-william-j-burns", "title": "Diplomacy and Spycraft", "host": "Study group with Chris Whipple", "desc": "Former CIA Director William J. Burns on leading the world’s most powerful spy agency.", "id": 2}, {"p": "Forum", "date": "2026-11-09", "s": "18:00", "e": "19:15", "where": "JFK Jr. Forum", "img": "assets/iop/latino.jpg", "url": "beyond-ballot-latino-voters-and-new-political-landscape", "title": "Beyond the Ballot: Latino Voters and the New Political Landscape", "host": "Sen. Rubén Gallego and panel, moderated by Ambassador Nathalie Rayes", "desc": "What the midterms revealed about Latino voters, and what to watch next.", "id": 3}, {"p": "IOP", "date": "2026-11-10", "s": "12:00", "e": "13:30", "where": "L-166", "img": "assets/iop/advocacy-public-service-building-coalitions-and-driving-chan.webp", "url": "advocacy-public-service-building-coalitions-and-driving-change-laphonza-butler-and", "title": "From Advocacy to Public Service: Building Coalitions and Driving Change with Laphonza Butler and Ambassador Nathalie Rayes", "host": "Laphonza Butler and Ambassador Nathalie Rayes", "desc": "How do leaders build coalitions, expand political representation, and turn public service into meaningful change?", "id": 4}, {"p": "FSG", "date": "2026-11-10", "s": "16:00", "e": "17:15", "where": "L-130", "img": "assets/iop/study-group-ambassador-nathalie-rayes-diplomacy-front-lines-.webp", "url": "study-group-ambassador-nathalie-rayes-diplomacy-front-lines-leadership-democracy-and-future", "title": "Diplomacy on the Front Lines: Leadership, Democracy, and the Future of the Transatlantic Alliance", "host": "Study group with Ambassador Nathalie Rayes", "desc": "What does it take to lead American diplomacy during a defining moment in European history?", "id": 5}, {"p": "FSG", "date": "2026-11-10", "s": "16:00", "e": "17:15", "where": "L-166", "img": "assets/iop/craft.jpg", "url": "study-group-ambassador-kelly-craft-trumps-foreign-policy-final-two-years-marc-thiessen", "title": "Trump’s Foreign Policy: The Final Two Years", "host": "Study group with Ambassador Kelly Craft", "desc": "With former White House chief speechwriter Marc Thiessen.", "id": 6}, {"p": "FSG", "date": "2026-11-10", "s": "16:30", "e": "17:45", "where": "L-163", "img": "assets/iop/study-group-chris-whipple-conclusion-all-presidents-men-and-.webp", "url": "study-group-chris-whipple-conclusion-all-presidents-men-and-women", "title": "Conclusion: All the President's Men and Women", "host": "Study group with Chris Whipple", "desc": "In the final Study Group Session, we’ll wrap up our themes. How important are the roles of the White House chiefs, CIA directors, and campaign managers? What makes them effective or not?", "id": 7}, {"p": "FSG", "date": "2026-11-12", "s": "16:00", "e": "17:15", "where": "L-166", "img": "assets/iop/study-group-ambassador-chris-lu-leadership-statehouse-world-.webp", "url": "study-group-ambassador-chris-lu-leadership-statehouse-world-stage-gary-locke", "title": "Leadership from the Statehouse to the World Stage with Gary Locke", "host": "Study group with Ambassador Chris Lu", "desc": "What does it take to lead effectively at home and abroad? Drawing on a career spanning the governor's office, the President's Cabinet, and diplomacy, we'll explore why the skills that make…", "id": 8}, {"p": "FSG", "date": "2026-11-12", "s": "16:30", "e": "17:45", "where": "L-163", "img": "assets/iop/study-group-honorable-alejandro-mayorkas-building-career-thr.webp", "url": "study-group-honorable-alejandro-mayorkas-building-career-through-uncertainty-and-winding", "title": "Building a Career through Uncertainty and the Winding Path of Life", "host": "Study group with the Honorable Alejandro Mayorkas", "desc": "Please join the Honorable Alejandro and Tanya Mayorkas for a study group session focused on building a career and all paths that a career can take.", "id": 9}, {"p": "FSG", "date": "2026-11-12", "s": "17:00", "e": "18:15", "where": "L-130", "img": "assets/iop/study-group-ambassador-nathalie-rayes-leadership-under-press.webp", "url": "study-group-ambassador-nathalie-rayes-leadership-under-pressure-lessons-los-angeles-city", "title": "Leadership Under Pressure: Lessons from Los Angeles City Hall with Jim Hahn", "host": "Study group with Ambassador Nathalie Rayes", "desc": "What does it take to lead one of America’s most complex cities?", "id": 10}, {"p": "Forum", "date": "2026-11-12", "s": "18:00", "e": "19:15", "where": "JFK Jr. Forum", "img": "assets/iop/military-service-city-hall-mayors-patrick-farrell-beach-pace.webp", "url": "military-service-city-hall-mayors-patrick-farrell-beach-pace-sly-james", "title": "From Military Service to City Hall with Mayors Patrick Farrell, Beach Pace, & Sly James", "host": "Mayor Patrick Farrell, Mayor Beach Pace and Mayor Sly James", "desc": "This Forum event will be held in honor of former Director of the Institute of Politics, Setti D. Warren.", "id": 11}, {"p": "IOP", "date": "2026-11-13", "s": "16:00", "e": "17:15", "where": "JFK Jr. Forum", "img": "assets/iop/our-narratives-fall-2026-showcase.webp", "url": "our-narratives-fall-2026-showcase", "title": "Our Narratives | Fall 2026 Showcase", "host": "Institute of Politics", "desc": "Join us on November 13 at 4:00pm for the Our Narratives Fall 2026 Showcase!", "id": 12}, {"p": "Forum", "date": "2026-11-16", "s": "18:00", "e": "19:15", "where": "JFK Jr. Forum", "img": "assets/iop/making-vision-venture-capital-creativity-and-power-story-dav.webp", "url": "making-vision-venture-capital-creativity-and-power-story-david-fialkow-oscar-winning", "title": "Making the Vision: Venture Capital, Creativity, and the Power of Story with David Fialkow, Oscar-Winning Filmmaker", "host": "David Fialkow, Reza R. Satchu and Amogh Ganjikunta", "desc": "David Fialkow joins us for a conversation that will explore the intersection of entrepreneurship, investing, and storytelling, drawing on his experience as a successful venture capitalist…", "id": 13}, {"p": "IOP", "date": "2026-11-18", "s": "12:00", "e": "13:30", "where": "Malkin Penthouse", "img": "assets/iop/inside-alliance-conversation-ambassadors-americas-nato-allie.webp", "url": "inside-alliance-conversation-ambassadors-americas-nato-allies", "title": "Inside the Alliance: A Conversation with Ambassadors from America's NATO Allies", "host": "Ángeles Moreno Bau, Jens Hanefeld and Svanhildur Hólm Valsdóttir", "desc": "Join IOP Fellows Ambassador Kelly Craft (former U.S. Ambassador to the United Nations and U.S. Ambassador to Canada) and Ambassador Nathalie Rayes (former U.S. Ambassador to Croatia) for a…", "id": 14}]}/*END*/;
+  let DATA = /*EVENTS*/{"updated": "2026-11-09T06:18-05:00", "source": "https://iop.harvard.edu/events", "events": [{"p": "FSG", "date": "2026-11-09", "s": "16:15", "e": "17:30", "where": "L-130", "img": "assets/iop/study-group-ambassador-nathalie-rayes-power-opportunity-educ.webp", "url": "study-group-ambassador-nathalie-rayes-power-opportunity-education-philanthropy-and-american", "title": "The Power of Opportunity: Education, Philanthropy, and the American Dream", "host": "Study group with Ambassador Nathalie Rayes", "desc": "With Mike Bezos, co-founder and chair of the Bezos Family Foundation.", "id": 1}, {"p": "FSG", "date": "2026-11-09", "s": "16:30", "e": "17:45", "where": "L-163", "img": "assets/iop/whipple.jpg", "url": "study-group-chris-whipple-diplomacy-and-spycraft-william-j-burns", "title": "Diplomacy and Spycraft", "host": "Study group with Chris Whipple", "desc": "Former CIA Director William J. Burns on leading the world’s most powerful spy agency.", "id": 2}, {"p": "IOP", "date": "2026-11-10", "s": "12:00", "e": "13:30", "where": "L-166", "img": "assets/iop/advocacy-public-service-building-coalitions-and-driving-chan.webp", "url": "advocacy-public-service-building-coalitions-and-driving-change-laphonza-butler-and", "title": "From Advocacy to Public Service: Building Coalitions and Driving Change with Laphonza Butler and Ambassador Nathalie Rayes", "host": "Laphonza Butler and Ambassador Nathalie Rayes", "desc": "How do leaders build coalitions, expand political representation, and turn public service into meaningful change?", "id": 3}, {"p": "FSG", "date": "2026-11-10", "s": "16:00", "e": "17:15", "where": "L-166", "img": "assets/iop/craft.jpg", "url": "study-group-ambassador-kelly-craft-trumps-foreign-policy-final-two-years-marc-thiessen", "title": "Trump’s Foreign Policy: The Final Two Years", "host": "Study group with Ambassador Kelly Craft", "desc": "With former White House chief speechwriter Marc Thiessen.", "id": 4}, {"p": "FSG", "date": "2026-11-10", "s": "16:30", "e": "17:45", "where": "L-163", "img": "assets/iop/study-group-chris-whipple-conclusion-all-presidents-men-and-.webp", "url": "study-group-chris-whipple-conclusion-all-presidents-men-and-women", "title": "Conclusion: All the President's Men and Women", "host": "Study group with Chris Whipple", "desc": "In the final Study Group Session, we’ll wrap up our themes. How important are the roles of the White House chiefs, CIA directors, and campaign managers? What makes them effective or not?", "id": 5}, {"p": "FSG", "date": "2026-11-12", "s": "16:30", "e": "17:45", "where": "L-163", "img": "assets/iop/study-group-honorable-alejandro-mayorkas-building-career-thr.webp", "url": "study-group-honorable-alejandro-mayorkas-building-career-through-uncertainty-and-winding", "title": "Building a Career through Uncertainty and the Winding Path of Life", "host": "Study group with the Honorable Alejandro Mayorkas", "desc": "Please join the Honorable Alejandro and Tanya Mayorkas for a study group session focused on building a career and all paths that a career can take.", "id": 6}, {"p": "FSG", "date": "2026-11-12", "s": "17:00", "e": "18:15", "where": "L-130", "img": "assets/iop/study-group-ambassador-nathalie-rayes-leadership-under-press.webp", "url": "study-group-ambassador-nathalie-rayes-leadership-under-pressure-lessons-los-angeles-city", "title": "Leadership Under Pressure: Lessons from Los Angeles City Hall with Jim Hahn", "host": "Study group with Ambassador Nathalie Rayes", "desc": "What does it take to lead one of America’s most complex cities?", "id": 7}, {"p": "Forum", "date": "2026-11-12", "s": "18:00", "e": "19:15", "where": "JFK Jr. Forum", "img": "assets/iop/military-service-city-hall-mayors-patrick-farrell-beach-pace.webp", "url": "military-service-city-hall-mayors-patrick-farrell-beach-pace-sly-james", "title": "From Military Service to City Hall with Mayors Patrick Farrell, Beach Pace, & Sly James", "host": "Mayor Patrick Farrell, Mayor Beach Pace and Mayor Sly James", "desc": "This Forum event will be held in honor of former Director of the Institute of Politics, Setti D. Warren.", "id": 8}, {"p": "IOP", "date": "2026-11-13", "s": "16:00", "e": "17:15", "where": "JFK Jr. Forum", "img": "assets/iop/our-narratives-fall-2026-showcase.webp", "url": "our-narratives-fall-2026-showcase", "title": "Our Narratives | Fall 2026 Showcase", "host": "Institute of Politics", "desc": "Join us on November 13 at 4:00pm for the Our Narratives Fall 2026 Showcase!", "id": 9}, {"p": "Forum", "date": "2026-11-16", "s": "18:00", "e": "19:15", "where": "JFK Jr. Forum", "img": "assets/iop/making-vision-venture-capital-creativity-and-power-story-dav.webp", "url": "making-vision-venture-capital-creativity-and-power-story-david-fialkow-oscar-winning", "title": "Making the Vision: Venture Capital, Creativity, and the Power of Story with David Fialkow, Oscar-Winning Filmmaker", "host": "David Fialkow, Reza R. Satchu and Amogh Ganjikunta", "desc": "David Fialkow joins us for a conversation that will explore the intersection of entrepreneurship, investing, and storytelling, drawing on his experience as a successful venture capitalist…", "id": 10}, {"p": "IOP", "date": "2026-11-18", "s": "12:00", "e": "13:30", "where": "Malkin Penthouse", "img": "assets/iop/inside-alliance-conversation-ambassadors-americas-nato-allie.webp", "url": "inside-alliance-conversation-ambassadors-americas-nato-allies", "title": "Inside the Alliance: A Conversation with Ambassadors from America's NATO Allies", "host": "Ángeles Moreno Bau, Jens Hanefeld and Svanhildur Hólm Valsdóttir", "desc": "Join IOP Fellows Ambassador Kelly Craft (former U.S. Ambassador to the United Nations and U.S. Ambassador to Canada) and Ambassador Nathalie Rayes (former U.S. Ambassador to Croatia) for a…", "id": 11}, {"p": "Forum", "date": "2026-11-18", "s": "18:00", "e": "19:15", "where": "JFK Jr. Forum", "img": "assets/iop/workforce-transition-ai-economy-and-what-it-means-our-future.webp", "url": "workforce-transition-ai-economy-and-what-it-means-our-future-secretary-gina-raimondo", "title": "A Workforce in Transition: The AI Economy and What it Means for Our Future with Secretary Gina Raimondo & Governor Eric Holcomb", "host": "Gina Raimondo, Eric Holcomb and David Deming", "desc": "With AI playing an increasing role in our economy and society, how does the workforce train and transition?", "id": 12}]}/*END*/;
   let EVENTS = [], DAYS = [];
   const TODAY = 0;
   const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -844,7 +884,6 @@
     NEWS = [
       { id: 2, p: null, pin: true, when: 'Today', title: 'Welcome to OneIOP', body: 'Every program’s updates now live here, so emails can get shorter: one digest every Sunday, with the details one click away. Events are on the Events page.' },
       { id: 10, p: null, pin: true, when: 'Today', title: 'Spring program applications are open', body: 'Most programs take new members at the start of each semester. Every program’s page now lists how to join and who to ask.', act: 'Browse programs', goto: 'programs' },
-      { id: 5, p: 'HPR', when: 'Today', title: 'The fall issue is out', body: 'The new issue of the Harvard Political Review is online now, with print copies at the IOP. Thank you to every writer, editor and designer who worked on it.', act: 'Read the issue' },
       { id: 11, p: 'Policy', when: 'Today', title: 'Proposal teams are set for the semester', body: 'Every team now has a topic and a faculty advisor. Teams present their final proposals at the end of the semester.', act: 'Policy page', go: 'Policy' },
       { id: 9, p: 'CIVICS', aud: 'members', when: 'Yesterday', title: 'New lesson plans are in the shared folder', body: 'This semester’s lesson plans and classroom materials are ready. Teaching teams, please review yours before your next school visit.', act: 'Open the folder' },
       { id: 4, p: 'HPOP', when: 'Yesterday', title: 'The Youth Poll team is recruiting', body: 'No experience needed. HPOP is adding members for the next Harvard Youth Poll, from survey design to the final release.', act: 'How to join', go: 'HPOP' },
@@ -939,42 +978,42 @@
     }).join(' ');
   };
   const SAMPLE_EVENTS = () => [
-    { id: 990001, p: 'CIVICS', aud: 'members', local: true, sample: true, img: 'assets/events/civics-civics-teachers-social.jpg', date: addDays(DAYS[0].date, 2), s: '18:00', e: '19:30', where: 'IOP Conference Room',
+    { id: 990001, p: 'CIVICS', aud: 'members', local: true, sample: true, img: 'assets/events/civics-civics-teachers-social.jpg', date: addDays(DAYS[0].date, 2), s: '18:00', e: '19:30', where: 'Wexner Commons',
       title: 'CIVICS teachers’ social', host: 'CIVICS chairs', desc: 'Dinner and a semester debrief for everyone teaching with CIVICS this fall.' },
     // Sample events so every program has something on the calendar in the demo. Real program events would come from each program's chairs.
-    { id: 990100, p: 'Conferences', local: true, sample: true, img: 'assets/events/conferences-spring-conference-planning-kickoff.jpg', date: addDays(DAYS[0].date, 1), s: '17:00', e: '18:00', where: 'IOP Conference Room',
+    { id: 990100, p: 'Conferences', local: true, sample: true, img: 'assets/events/conferences-spring-conference-planning-kickoff.jpg', date: addDays(DAYS[0].date, 1), s: '17:00', e: '18:00', where: 'Littauer 163',
       title: 'Spring conference planning kickoff', host: 'Conferences Committee', desc: 'Help pick the theme and speakers for the spring conference. New members welcome.' },
-    { id: 990101, p: 'HPU', local: true, sample: true, img: 'assets/events/hpu-weekly-debate.jpg', date: addDays(DAYS[0].date, 1), s: '19:30', e: '21:00', where: 'Littauer 116',
+    { id: 990101, p: 'HPU', local: true, sample: true, img: 'assets/events/hpu-weekly-debate.jpg', date: addDays(DAYS[0].date, 1), s: '19:30', e: '21:00', where: 'JFK Jr. Forum',
       title: 'Weekly debate', host: 'Harvard Political Union', desc: 'This week’s resolution is posted Monday. Come to argue or just to listen.' },
-    { id: 990102, p: 'WIL', local: true, sample: true, img: 'assets/events/wil-speaker-dinner-and-conversation.jpg', date: addDays(DAYS[0].date, 2), s: '17:30', e: '18:30', where: 'IOP Conference Room',
+    { id: 990102, p: 'WIL', local: true, sample: true, img: 'assets/events/wil-speaker-dinner-and-conversation.jpg', date: addDays(DAYS[0].date, 2), s: '17:30', e: '18:30', where: 'Wexner Commons',
       title: 'Speaker dinner and conversation', host: 'Women’s Initiative in Leadership', desc: 'Dinner and an informal conversation with this month’s guest speaker.' },
-    { id: 990103, p: 'PRE', local: true, sample: true, img: 'assets/events/pre-discussion-night.jpg', date: addDays(DAYS[0].date, 3), s: '18:00', e: '19:00', where: 'Littauer 116',
+    { id: 990103, p: 'PRE', local: true, sample: true, img: 'assets/events/pre-discussion-night.jpg', date: addDays(DAYS[0].date, 3), s: '18:00', e: '19:00', where: 'Littauer 166',
       title: 'Discussion night', host: 'Politics of Race and Ethnicity', desc: 'An open discussion on this week’s news. Snacks provided.' },
-    { id: 990104, p: 'GAP', local: true, sample: true, img: 'assets/events/gap-global-affairs-lunch.jpg', date: addDays(DAYS[0].date, 4), s: '12:00', e: '13:00', where: 'IOP Conference Room',
+    { id: 990104, p: 'GAP', local: true, sample: true, img: 'assets/events/gap-global-affairs-lunch.jpg', date: addDays(DAYS[0].date, 4), s: '12:00', e: '13:00', where: 'Wexner Commons',
       title: 'Global affairs lunch', host: 'Global Affairs Program', desc: 'Lunch and a conversation on summer internships abroad.' },
-    { id: 990105, p: 'Environment', local: true, sample: true, img: 'assets/events/environment-climate-policy-discussion.jpg', date: addDays(DAYS[0].date, 2), s: '19:00', e: '20:00', where: 'Littauer 116',
+    { id: 990105, p: 'Environment', local: true, sample: true, img: 'assets/events/environment-climate-policy-discussion.jpg', date: addDays(DAYS[0].date, 2), s: '19:00', e: '20:00', where: 'Littauer 166',
       title: 'Climate policy discussion', host: 'Program for Environmental Politics', desc: 'This week’s discussion in the climate policy series.' },
-    { id: 990106, p: 'Policy', aud: 'members', local: true, sample: true, img: 'assets/events/policy-policy-team-work-session.jpg', date: addDays(DAYS[0].date, 3), s: '19:30', e: '21:00', where: 'IOP Student Office',
+    { id: 990106, p: 'Policy', aud: 'members', local: true, sample: true, img: 'assets/events/policy-policy-team-work-session.jpg', date: addDays(DAYS[0].date, 3), s: '19:30', e: '21:00', where: 'Littauer 163',
       title: 'Policy team work session', host: 'The Policy Program', desc: 'Teams meet to work on their proposals. Bring your laptop.' },
-    { id: 990107, p: 'HPOP', local: true, sample: true, img: 'assets/events/hpop-youth-poll-info-session.jpg', date: addDays(DAYS[0].date, 5), s: '15:00', e: '16:00', where: 'IOP Conference Room',
+    { id: 990107, p: 'HPOP', local: true, sample: true, img: 'assets/events/hpop-youth-poll-info-session.jpg', date: addDays(DAYS[0].date, 5), s: '15:00', e: '16:00', where: 'Littauer 166',
       title: 'Youth Poll info session', host: 'Harvard Public Opinion Project', desc: 'Learn how the Harvard Youth Poll is made and how to join the team.' },
-    { id: 990108, p: 'RSG', aud: 'members', local: true, sample: true, img: 'assets/events/rsg-project-team-check-in.jpg', date: addDays(DAYS[0].date, 5), s: '17:00', e: '18:00', where: 'IOP Student Office',
+    { id: 990108, p: 'RSG', aud: 'members', local: true, sample: true, img: 'assets/events/rsg-project-team-check-in.jpg', date: addDays(DAYS[0].date, 5), s: '17:00', e: '18:00', where: 'Littauer 163',
       title: 'Project team check-in', host: 'Research & Strategy Group', desc: 'Teams share progress on this semester’s client projects.' },
-    { id: 990109, p: 'GovLab', local: true, sample: true, img: 'assets/events/govlab-founder-workshop.jpg', date: addDays(DAYS[0].date, 6), s: '13:00', e: '15:00', where: 'IOP Conference Room',
+    { id: 990109, p: 'GovLab', local: true, sample: true, img: 'assets/events/govlab-founder-workshop.jpg', date: addDays(DAYS[0].date, 6), s: '13:00', e: '15:00', where: 'Littauer 166',
       title: 'Founder workshop', host: 'Governance Lab', desc: 'A hands-on session on pitching a civic startup.' },
     { id: 990110, p: 'Cit Tut', aud: 'members', local: true, sample: true, img: 'assets/events/cit-tut-tutoring-session.jpg', date: addDays(DAYS[0].date, 6), s: '10:00', e: '12:00', where: 'Off campus',
       title: 'Tutoring session', host: 'Citizenship Tutoring', desc: 'Tutoring with learners preparing for the citizenship test. Ride details are sent to tutors.' },
-    { id: 990111, p: 'HVC', local: true, sample: true, img: 'assets/events/hvc-turnout-team-meeting.jpg', date: addDays(DAYS[0].date, 4), s: '18:30', e: '19:30', where: 'IOP Student Office',
+    { id: 990111, p: 'HVC', local: true, sample: true, img: 'assets/events/hvc-turnout-team-meeting.jpg', date: addDays(DAYS[0].date, 4), s: '18:30', e: '19:30', where: 'Littauer 163',
       title: 'Turnout team meeting', host: 'Harvard Votes Challenge', desc: 'Planning the next registration push across houses and dorms.' },
-    { id: 990112, p: 'HPR', local: true, sample: true, img: 'assets/events/hpr-pitch-meeting.jpg', date: addDays(DAYS[0].date, 1), s: '18:00', e: '19:00', where: 'IOP Conference Room',
+    { id: 990112, p: 'HPR', local: true, sample: true, img: 'assets/events/hpr-pitch-meeting.jpg', date: addDays(DAYS[0].date, 1), s: '18:00', e: '19:00', where: 'Littauer 163',
       title: 'Pitch meeting', host: 'Harvard Political Review', desc: 'Bring a story idea for the next issue. Writers and editors of every year welcome.' },
-    { id: 990113, p: 'CAP', local: true, sample: true, img: 'assets/events/cap-campaign-workshop.jpg', date: addDays(DAYS[0].date, 3), s: '17:00', e: '18:30', where: 'IOP Conference Room',
+    { id: 990113, p: 'CAP', local: true, sample: true, img: 'assets/events/cap-campaign-workshop.jpg', date: addDays(DAYS[0].date, 3), s: '17:00', e: '18:30', where: 'Littauer 166',
       title: 'Campaign workshop', host: 'Campaigns and Advocacy Program', desc: 'A hands-on workshop on running a campus campaign.' },
-    { id: 990114, p: 'Arts', local: true, sample: true, img: 'assets/events/arts-art-and-politics-night.jpg', date: addDays(DAYS[0].date, 7), s: '19:00', e: '20:30', where: 'Littauer 116',
+    { id: 990114, p: 'Arts', local: true, sample: true, img: 'assets/events/arts-art-and-politics-night.jpg', date: addDays(DAYS[0].date, 7), s: '19:00', e: '20:30', where: 'Wexner Commons',
       title: 'Art and politics night', host: 'Coalition for the Arts', desc: 'An evening of student work on art and politics.' },
-    { id: 990115, p: 'Conservative', local: true, sample: true, img: 'assets/events/conservative-speaker-and-discussion.jpg', date: addDays(DAYS[0].date, 4), s: '19:00', e: '20:00', where: 'IOP Conference Room',
+    { id: 990115, p: 'Conservative', local: true, sample: true, img: 'assets/events/conservative-speaker-and-discussion.jpg', date: addDays(DAYS[0].date, 4), s: '19:00', e: '20:00', where: 'JFK Jr. Forum',
       title: 'Speaker and discussion', host: 'Conservative Coalition', desc: 'A guest speaker and open Q&A.' },
-    { id: 990116, p: 'GSC', local: true, sample: true, img: 'assets/events/gsc-community-conversation.jpg', date: addDays(DAYS[0].date, 5), s: '19:00', e: '20:00', where: 'Littauer 116',
+    { id: 990116, p: 'GSC', local: true, sample: true, img: 'assets/events/gsc-community-conversation.jpg', date: addDays(DAYS[0].date, 5), s: '19:00', e: '20:00', where: 'Littauer 166',
       title: 'Community conversation', host: 'Gender & Sexuality Coalition', desc: 'An open conversation on gender, sexuality and politics.' },
     { id: 990117, p: 'Service', local: true, sample: true, img: 'assets/events/service-service-day.jpg', date: addDays(DAYS[0].date, 6), s: '09:00', e: '12:00', where: 'Off campus',
       title: 'Service day', host: 'Service Coalition', desc: 'Volunteering in Cambridge. Sign-up details are sent the week before.' },
@@ -1211,16 +1250,18 @@
       return `
         <header class="hello"><div><h1>${hi}${profile.guest || !profile.name ? '' : ', ' + esc(profile.name)}.</h1><p>${DEMO_ALL_PROGRAMS ? `${plural(yours, 'event')} at the IOP this week.` : following.size ? `${plural(yours, 'event')} from your programs this week.` : 'Pick a few programs and OneIOP will put them first.'}</p></div></header>
         ${banner()}
-        <div class="card week" role="group" aria-label="Pick a day">
-          ${DAYS.map((d) => { const l = EVENTS.filter((e) => e.day === d.i).sort((a, b) => following.has(b.p) - following.has(a.p)).slice(0, 3); return `<button type="button" data-day="${d.i}" aria-pressed="${state.day === d.i}"><span class="label">${d.i === TODAY ? 'Today' : d.d}</span><b>${d.n}</b><small>${l.map((e) => `<i${following.has(e.p) ? '' : ' class="other"'}></i>`).join('')}</small></button>`; }).join('')}
+        <div class="card week no-anim" role="group" aria-label="Pick a day"><span class="week-ind" aria-hidden="true"></span>
+          ${DAYS.map((d) => { const l = EVENTS.filter((e) => e.day === d.i).sort((a, b) => following.has(b.p) - following.has(a.p)).slice(0, 3); return `<button type="button" data-day="${d.i}" class="${d.i === TODAY ? 'is-today' : ''}${d.d === 'Sat' || d.d === 'Sun' ? ' weekend' : ''}" aria-pressed="${state.day === d.i}"><span class="label">${d.i === TODAY ? 'Today' : d.d}</span><b>${d.n}</b><small>${l.map((e) => `<i${following.has(e.p) ? '' : ' class="other"'}></i>`).join('')}</small></button>`; }).join('')}
         </div>
         <div class="grid-2">
           <div id="day-col">${dayCol()}</div>
           <div>
             ${secTitle('Announcements', `<button type="button" class="see-all" data-goto="news">See all</button>`)}
             <div class="card mini">${mine.map((n) => `
-              <button type="button" class="mini-row" data-goto="news" data-sel="${esc(n.id)}"><span class="post-from${!n.p ? ' iop' : isCoal(n.p) ? ' coal' : ''}"><i aria-hidden="true">${n.p ? esc(n.p.slice(0, 3).toUpperCase()) : 'IOP'}</i></span>
-                <span><b>${esc(n.title)}</b><small>${esc(n.from)} · ${n.when}</small></span></button>`).join('')}
+              <button type="button" class="mini-row${!n.p ? ' iop' : isCoal(n.p) ? ' coal' : ''}${read.has(n.id) ? '' : ' unread'}" data-goto="news" data-sel="${esc(n.id)}">
+                <span class="mr-top"><span class="mr-prog">${esc(n.p || 'IOP')}</span><time>${esc(n.when)}</time></span>
+                <b>${read.has(n.id) ? '' : '<i class="mr-dot" aria-label="Unread"></i>'}${esc(n.title)}</b>
+                <span class="mr-body">${esc(n.body)}</span></button>`).join('')}
             </div>
           </div>
         </div>`;
@@ -1539,7 +1580,18 @@
     if (!term && state.view === 'news' && state.newsSel) { const id = state.newsSel; state.newsSel = null; setTimeout(() => openNews(id), 0); }
     document.querySelectorAll('.views button').forEach((b) => { if (!term && b.dataset.view === state.view) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current'); });
     if (scroll) scrollTo({ top: 0, behavior: 'instant' });
+    placeWeek();
   };
+  // Move the calendar page behind whichever day is chosen
+  function placeWeek() {
+    const w = viewEl.querySelector('.week'); if (!w) return;
+    const b = w.querySelector('[aria-pressed="true"]'), ind = w.querySelector('.week-ind');
+    if (!b) { ind.style.opacity = 0; return; }
+    Object.assign(ind.style, { opacity: 1, width: `${b.offsetWidth}px`, height: `${b.offsetHeight}px`, transform: `translate(${b.offsetLeft}px, ${b.offsetTop}px)` });
+    if (w.classList.contains('no-anim')) requestAnimationFrame(() => requestAnimationFrame(() => w.classList.remove('no-anim')));
+   }
+  addEventListener('resize', () => { const w = viewEl.querySelector('.week'); if (w) { w.classList.add('no-anim'); placeWeek(); } });
+  document.fonts?.ready.then(() => placeWeek());
   const go = (view, extra = {}) => { q.value = ''; Object.assign(state, { view, program: null }, extra); render(true); };
   // The badge counts unread posts meant for you: pinned IOP-wide posts and posts from your programs.
   // Members-only posts from programs you're not in are never counted (newsFor() leaves them out).
@@ -1572,6 +1624,7 @@
       const col = document.getElementById('day-col');
       if (!col || q.value.trim()) { render(); return; }
       t.closest('.week').querySelectorAll('[data-day]').forEach((b) => b.setAttribute('aria-pressed', b === t));
+      placeWeek();
       col.innerHTML = dayCol();
       // New events drop in from the top, one after another
       col.querySelectorAll('.events > *, .empty').forEach((el, i) => { el.style.setProperty('--i', i); el.classList.add('drop-in'); });
