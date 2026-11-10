@@ -1,7 +1,8 @@
-// Play counter for the campaign video.
-// GET returns the current count; POST adds one play and returns the new count.
+// Play counters for the videos on the site.
+// GET /api/plays?v=pitch returns that video's count; POST adds one play and returns the new count.
 // Storage: Upstash Redis, connected through the Vercel dashboard (Storage → Upstash → Redis).
-const KEY = 'campaign-video:plays';
+// Only these videos have counters (the pitch keeps its original key, so its count carries over).
+const KEYS = { pitch: 'campaign-video:plays', film: 'oneiop-film:plays' };
 
 module.exports = async (req, res) => {
   res.setHeader('Cache-Control', 'no-store');
@@ -12,6 +13,9 @@ module.exports = async (req, res) => {
     res.setHeader('Allow', 'GET, POST');
     return res.status(405).json({ error: 'Method not allowed' });
   }
+  const v = new URL(req.url, 'http://x').searchParams.get('v') || 'pitch';
+  const KEY = KEYS[v];
+  if (!KEY) return res.status(400).json({ error: 'Unknown video' });
   try {
     const cmd = req.method === 'POST' ? 'incr' : 'get';
     const r = await fetch(`${url}/${cmd}/${encodeURIComponent(KEY)}`, {

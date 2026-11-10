@@ -270,6 +270,19 @@
   .vid-frame::before { top: -12px; left: -26px; rotate: -32deg; }
   .vid-frame::after { bottom: -12px; right: -26px; rotate: -32deg; }
   .vid-frame video { width: 100%; height: 100%; display: block; background: var(--ink); }
+  .vid-pick { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: 14px; margin-top: 30px; }
+  .vid-opt { display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 16px; align-items: center; padding: 10px; border: 1.5px solid var(--line); border-radius: 14px; background: var(--paper); color: var(--ink); text-align: left; cursor: pointer; transition: border-color .2s, box-shadow .2s, transform .2s var(--ease); }
+  .vid-opt:hover { border-color: var(--navy); transform: translateY(-2px); }
+  .vid-opt:focus-visible { outline: 3px solid var(--red); outline-offset: 3px; }
+  .vid-opt[aria-selected="true"] { border-color: var(--navy); box-shadow: inset 0 0 0 1px var(--navy), 0 10px 26px rgba(16, 20, 61, .1); }
+  .vid-opt-img { position: relative; display: block; aspect-ratio: 16 / 9; border-radius: 8px; overflow: hidden; background: var(--ink); }
+  .vid-opt-img img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .vid-len { position: absolute; right: 6px; bottom: 6px; padding: 2px 6px; border-radius: 5px; background: rgba(16, 20, 61, .82); color: #fff; font: 600 12px/1.3 var(--sans); font-variant-numeric: tabular-nums; }
+  .vid-opt-txt { display: grid; gap: 3px; min-width: 0; }
+  .vid-opt-txt b { font-size: 17px; line-height: 1.25; }
+  .vid-opt-txt small { font-size: 14px; color: var(--muted); }
+  .vid-now { display: none; font: 700 11px/1 var(--sans); letter-spacing: .12em; text-transform: uppercase; color: var(--red); }
+  .vid-opt[aria-selected="true"] .vid-now { display: block; }
   .vid-plays { display: flex; align-items: center; gap: 10px; margin: 26px 0 0; font: 600 16px/1.2 var(--sans); color: var(--muted); font-variant-numeric: tabular-nums; }
   .vid-plays svg { width: 11px; height: 13px; fill: var(--red); }
   .vid-plays b { color: var(--ink); font-weight: 800; }
@@ -999,18 +1012,27 @@
 <section class="sec video-sec" id="video">
   <div class="wrap">
     <header class="sec-head">
-      <h2 class="disp">Watch the Pitch</h2>
-      <p>The whole campaign in about a minute.</p>
+      <h2 class="disp" id="vid-title">Watch the Pitch</h2>
+      <p id="vid-sub">The whole campaign in about a minute.</p>
     </header>
     <div class="vid-frame reveal">
-      <video id="campaign-video" controls playsinline preload="metadata" poster="assets/video-thumb.jpg">
-        <source src="assets/campaign-video.mp4" type="video/mp4">
-      </video>
+      <video id="campaign-video" controls playsinline preload="metadata" poster="assets/video-thumb.jpg" src="assets/campaign-video.mp4"></video>
       <div class="vid-ph" id="vid-ph">
         <svg class="ghost-star" viewBox="0 0 100 96" aria-hidden="true"><polygon points="50,3 61.5,37 97,37 68.5,58 79.5,92 50,71 20.5,92 31.5,58 3,37 38.5,37"/></svg>
         <span class="play" aria-hidden="true"><svg viewBox="0 0 10 12"><path d="M0 0l10 6-10 6z"/></svg></span>
         <h3 class="disp">Video coming soon</h3>
       </div>
+    </div>
+    <!-- To add a video: add a button here and an entry in VIDEOS in the script below -->
+    <div class="vid-pick" role="tablist" aria-label="Choose a video">
+      <button type="button" role="tab" class="vid-opt" data-vid="pitch" aria-selected="true" aria-controls="campaign-video">
+        <span class="vid-opt-img"><img src="assets/video-thumb.jpg" alt="" width="1920" height="1080" loading="lazy"><span class="vid-len">1:10</span></span>
+        <span class="vid-opt-txt"><span class="vid-now">Now playing</span><b>The Pitch</b><small>The whole campaign</small></span>
+      </button>
+      <button type="button" role="tab" class="vid-opt" data-vid="film" aria-selected="false" aria-controls="campaign-video">
+        <span class="vid-opt-img"><img src="assets/film-thumb.jpg" alt="" width="1920" height="1080" loading="lazy"><span class="vid-len">0:56</span></span>
+        <span class="vid-opt-txt"><span class="vid-now">Now playing</span><b>OneIOP Demo Launch</b><small>Every program, one place</small></span>
+      </button>
     </div>
     <p class="vid-plays" id="vid-plays" hidden><svg viewBox="0 0 10 12" aria-hidden="true"><path d="M0 0l10 6-10 6z"/></svg><span><b id="vid-plays-n"></b> <span id="vid-plays-w">plays</span></span></p>
   </div>
@@ -1757,24 +1779,72 @@
   if (video.readyState >= 1) showVideo();
   else video.addEventListener('loadedmetadata', showVideo);
 
-  // Play counter: shows the total under the video and adds one the first time someone presses play
+  // Make sure the playback bar can always be dragged. If the browser got the video in a way it can't skip
+  // through (a server or cached copy without byte ranges), fetch the whole file once and play it from memory,
+  // keeping your place and whether it was playing.
+  const fixed = new Set(), blobs = new Map();
+  const ensureSeekable = () => {
+    const src = video.currentSrc || video.src;
+    if (!src || src.startsWith('blob:') || (fixed.has(src) && !blobs.has(src)) || !Number.isFinite(video.duration)) return;
+    const ok = video.seekable.length && video.seekable.end(video.seekable.length - 1) >= video.duration - 1;
+    if (ok) return;
+    const swap = (url) => {
+      const t = video.currentTime, wasPlaying = !video.paused;
+      video.src = url;
+      video.addEventListener('loadedmetadata', () => { video.currentTime = t; if (wasPlaying) video.play().catch(() => {}); }, { once: true });
+    };
+    if (blobs.has(src)) { swap(blobs.get(src)); return; } // already downloaded once: reuse it
+    fixed.add(src);
+    fetch(src).then((r) => (r.ok ? r.blob() : Promise.reject())).then((blob) => {
+      blobs.set(src, URL.createObjectURL(blob));
+      if ((video.currentSrc || video.src) === src) swap(blobs.get(src)); // unless they switched videos meanwhile
+    }).catch(() => {});
+  };
+  video.addEventListener('loadedmetadata', ensureSeekable);
+  video.addEventListener('canplay', ensureSeekable);
+  if (video.readyState >= 1) ensureSeekable();
+
+  // The videos you can pick under the player. `id` also names its play counter.
+  const VIDEOS = {
+    pitch: { title: 'Watch the Pitch', sub: 'The whole campaign in about a minute.', src: 'assets/campaign-video.mp4', poster: 'assets/video-thumb.jpg' },
+    film: { title: 'OneIOP Demo Launch', sub: 'How OneIOP brings every program, announcement and request into one place.', src: 'assets/oneiop-film.mp4', poster: 'assets/film-thumb.jpg' },
+  };
+  let current = 'pitch';
+
+  // Play counter: shows the total for the video that's up, and adds one the first time someone plays each video
   const playsEl = document.getElementById('vid-plays');
   const showPlays = (n) => {
-    if (!Number.isFinite(n) || n < 1) return;
+    if (!Number.isFinite(n) || n < 1) { playsEl.hidden = true; return; }
     document.getElementById('vid-plays-n').textContent = n.toLocaleString('en-US');
     document.getElementById('vid-plays-w').textContent = n === 1 ? 'play' : 'plays';
     playsEl.hidden = false;
   };
-  const plays = (method) => fetch('/api/plays', { method }).then((r) => r.ok ? r.json() : null).then((d) => d && showPlays(d.plays)).catch(() => {});
+  const plays = (method, id = current) => fetch(`/api/plays?v=${id}`, { method }).then((r) => r.ok ? r.json() : null).then((d) => { if (id === current) showPlays(d ? d.plays : NaN); }).catch(() => {});
   plays('GET');
-  let counted = false;
-  try { counted = sessionStorage.getItem('video-played') === '1'; } catch (e) {}
+  const playedKey = (id) => (id === 'pitch' ? 'video-played' : `video-played-${id}`);
   video.addEventListener('play', () => {
-    if (counted) return;
-    counted = true;
-    try { sessionStorage.setItem('video-played', '1'); } catch (e) {}
-    plays('POST');
+    const id = current;
+    try { if (sessionStorage.getItem(playedKey(id)) === '1') return; sessionStorage.setItem(playedKey(id), '1'); } catch (e) {}
+    plays('POST', id);
   });
+
+  // Switching videos: swap the source, the heading and the counter, and start playing (you just asked for it)
+  document.querySelectorAll('.vid-opt').forEach((btn) => btn.addEventListener('click', () => {
+    const id = btn.dataset.vid, v = VIDEOS[id];
+    if (!v || id === current) { if (id === current && video.paused) video.play().catch(() => {}); return; }
+    current = id;
+    document.querySelectorAll('.vid-opt').forEach((b) => b.setAttribute('aria-selected', b === btn));
+    document.getElementById('vid-title').textContent = v.title;
+    document.getElementById('vid-sub').textContent = v.sub;
+    video.pause();
+    video.poster = v.poster;
+    video.src = v.src;
+    video.load();
+    video.play().catch(() => {});
+    playsEl.hidden = true; plays('GET');
+    const frame = video.closest('.vid-frame').getBoundingClientRect();
+    if (frame.top < 60) scrollBy({ top: frame.top - 90, behavior: 'smooth' });
+  }));
 
   // Once the headline has settled, the ballot gets checked
   loaderDone.then(() => setTimeout(() => castBallot(false), 1500));
