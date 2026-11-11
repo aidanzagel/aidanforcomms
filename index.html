@@ -171,6 +171,15 @@
   .lede { max-width: 46ch; font-size: 18px; line-height: 1.55; color: rgba(244, 241, 234, .86); }
   .lede strong { color: var(--paper); }
   .ctas { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 26px; margin-top: 34px; }
+  /* The programs-first line and the two promises you'll be able to see */
+  .hero-vs { margin: 4px 0 20px; max-width: 34ch; padding-left: 14px; border-left: 4px solid var(--red); font: 800 clamp(19px, 1.9vw, 23px)/1.3 var(--sans); letter-spacing: -.01em; color: var(--paper); text-wrap: balance; }
+  .promises { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr)); gap: 10px; margin-top: 22px; max-width: 560px; }
+  .promise { display: grid; align-content: start; gap: 6px; padding: 14px 16px 15px; border: 1px solid rgba(244, 241, 234, .22); border-radius: 14px; background: rgba(255, 255, 255, .06); color: var(--paper); text-decoration: none; transition: background .2s, border-color .2s, transform .25s var(--ease); }
+  .promise:hover { background: rgba(255, 255, 255, .1); border-color: rgba(244, 241, 234, .45); transform: translateY(-2px); }
+  .promise b { font-family: var(--display); font-weight: 900; font-size: 46px; line-height: .9; text-transform: uppercase; letter-spacing: .01em; }
+  .promise b small { margin-left: 4px; font-size: .5em; letter-spacing: .04em; color: rgba(244, 241, 234, .75); }
+  .promise b.word { font-size: 34px; line-height: 1.05; }
+  .promise span { font-size: 14.5px; line-height: 1.4; color: rgba(244, 241, 234, .82); }
   .first3 { display: grid; gap: 8px; margin-top: 22px; max-width: 46ch; }
   .first3 li { position: relative; padding-left: 28px; font-size: 16px; line-height: 1.4; }
   .first3 li::before { content: ""; position: absolute; left: 0; top: .15em; width: 17px; height: 17px; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 96'%3E%3Cpolygon points='50,3 61.5,37 97,37 68.5,58 79.5,92 50,71 20.5,92 31.5,58 3,37 38.5,37' fill='%23d7101b'/%3E%3C/svg%3E") center / contain no-repeat; }
@@ -963,11 +972,14 @@
         <span class="line l2"><span>Shine,</span></span>
         <span class="line l3"><span>IOP<span class="dot">.</span></span></span>
       </h1>
+      <p class="hero-vs">Comms that work for the programs, not for SAC or Exec.</p>
       <p class="lede">The IOP is one of a kind. It's time our comms matched that. I'm in this race to make information easier to find when you need it, make collaboration between programs effortless, and make members feel celebrated for the work they do. <strong>Let's take the IOP further, together.</strong></p>
-      <ul class="first3" aria-label="What I'll do first">
+      <div class="promises" aria-label="Two promises you'll be able to see">
+        <a class="promise" href="#platform"><b>24<small>hrs</small></b><span>Photos and video back to every program, after every event</span></a>
+        <a class="promise" href="#platform"><b class="word">Media Center</b><span>A space on campus with cameras and editing gear, open to every program</span></a>
+      </div>
+      <ul class="first3" aria-label="What else I'll do first">
         <li><a href="#platform">OneIOP: every announcement, event, and contact in one place</a></li>
-        <li><a href="#platform">A Media Lab open to every program</a></li>
-        <li><a href="#platform">Photos and video back within 24 hours</a></li>
         <li><a href="#programs">Templates and comms training for every program</a></li>
       </ul>
       <div class="ctas">
@@ -1065,7 +1077,7 @@
         <p class="story-lead">I've always believed that the real value of the IOP stems from each and every one of our programs and coalitions, not from SAC or Exec.</p>
       </div>
       <div class="story-body">
-        <p>I know firsthand how difficult the current system is to work within. As the Marketing Director for the HPR, I've experienced how difficult it is to get even support from the IOP in promoting events and our journalism. I've spoken to many of our program chairs and members, so I know this is not an uncommon story within the IOP, especially for smaller programs that get less attention.</p>
+        <p>I know firsthand how difficult the current system is to work within. As the Marketing Director for the HPR, I've experienced how difficult it is to get support from the IOP in promoting events and our journalism. I've spoken to many of our program chairs and members, so I know this is not an uncommon story within the IOP, especially for smaller programs that get less attention.</p>
         <p>It is my experience, and the experience of my colleagues, that has pushed me to run for IOP Comms Director.</p>
         <p>I'm ready to do the work to realize a better IOP, and I want each and every one of you to join me on this journey. If you have bold ideas, please share them. If you haven't been heard in the past, speak up now. I believe that we can build a better IOP, but only if we do it together.</p>
         <img class="sig-dark" src="assets/signature.png" alt="Aidan Zagel's signature" width="900" height="270">
@@ -1093,7 +1105,7 @@
       <article class="pillar reveal">
         <div>
           <h3 class="disp"><span class="pillar-num">#1</span>Programs First</h3>
-          <p class="why">Every program does great work. Every program should be seen doing it.</p>
+          <p class="why">The IOP's best work happens in its programs, not in SAC or Exec. Comms should work for them first.</p>
         </div>
         <ul>
           <li>Spotlighting and providing comms for <strong>all programs equally</strong>, not just the Forum and IOP-hosted events</li>
@@ -1265,7 +1277,7 @@
         <ul>
           <li>Launch OneIOP + <strong>program collabs</strong></li>
           <li><strong>Launch new spotlights</strong> + brand identity</li>
-          <li>Begin working on the <strong>IOP Media Center</strong></li>
+          <li>Begin working on the <strong>Media Center</strong></li>
         </ul>
         <p class="notice"><b>What you'll notice</b>One place to find everything, and your program in the spotlight.</p>
       </article>
