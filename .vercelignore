@@ -1,0 +1,12 @@
+# Files kept in the repo but not published on the website
+.claude
+.github
+tools
+email
+*.md
+*.py
+*.zip
+aidan-for-comms
+aidan-v2.html
+.gitignore
+.vercelignore

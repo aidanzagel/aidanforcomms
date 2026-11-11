@@ -4,7 +4,6 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Aidan for Comms</title>
-<meta name="claude:viewport-fit-sides" content="cover">
 <meta name="description" content="Aidan Zagel for IOP Communications Director. Programs First. OneIOP. Comms Playbook. Member Perks.">
 <!-- Link previews (iMessage, social, Slack) -->
 <meta property="og:type" content="website">
@@ -967,6 +966,7 @@
       <p class="lede">The IOP is one of a kind. It's time our comms matched that. I'm in this race to make information easier to find when you need it, make collaboration between programs effortless, and make members feel celebrated for the work they do. <strong>Let's take the IOP further, together.</strong></p>
       <ul class="first3" aria-label="What I'll do first">
         <li><a href="#platform">OneIOP: every announcement, event, and contact in one place</a></li>
+        <li><a href="#platform">A Media Lab open to every program</a></li>
         <li><a href="#platform">Photos and video back within 24 hours</a></li>
         <li><a href="#programs">Templates and comms training for every program</a></li>
       </ul>
@@ -1012,11 +1012,11 @@
 <section class="sec video-sec" id="video">
   <div class="wrap">
     <header class="sec-head">
-      <h2 class="disp" id="vid-title">Watch the Pitch</h2>
-      <p id="vid-sub">The whole campaign in about a minute.</p>
+      <h2 class="disp" id="vid-title">OneIOP Demo Launch</h2>
+      <p id="vid-sub">How OneIOP brings every program, announcement and request into one place.</p>
     </header>
     <div class="vid-frame reveal">
-      <video id="campaign-video" controls playsinline preload="metadata" poster="assets/video-thumb.jpg" src="assets/campaign-video.mp4"></video>
+      <video id="campaign-video" controls playsinline preload="metadata" poster="assets/film-thumb.jpg" src="assets/oneiop-film.mp4"></video>
       <div class="vid-ph" id="vid-ph">
         <svg class="ghost-star" viewBox="0 0 100 96" aria-hidden="true"><polygon points="50,3 61.5,37 97,37 68.5,58 79.5,92 50,71 20.5,92 31.5,58 3,37 38.5,37"/></svg>
         <span class="play" aria-hidden="true"><svg viewBox="0 0 10 12"><path d="M0 0l10 6-10 6z"/></svg></span>
@@ -1025,13 +1025,13 @@
     </div>
     <!-- To add a video: add a button here and an entry in VIDEOS in the script below -->
     <div class="vid-pick" role="tablist" aria-label="Choose a video">
-      <button type="button" role="tab" class="vid-opt" data-vid="pitch" aria-selected="true" aria-controls="campaign-video">
-        <span class="vid-opt-img"><img src="assets/video-thumb.jpg" alt="" width="1920" height="1080" loading="lazy"><span class="vid-len">1:10</span></span>
-        <span class="vid-opt-txt"><span class="vid-now">Now playing</span><b>The Pitch</b><small>The whole campaign</small></span>
-      </button>
-      <button type="button" role="tab" class="vid-opt" data-vid="film" aria-selected="false" aria-controls="campaign-video">
+      <button type="button" role="tab" class="vid-opt" data-vid="film" aria-selected="true" aria-controls="campaign-video">
         <span class="vid-opt-img"><img src="assets/film-thumb.jpg" alt="" width="1920" height="1080" loading="lazy"><span class="vid-len">0:56</span></span>
         <span class="vid-opt-txt"><span class="vid-now">Now playing</span><b>OneIOP Demo Launch</b><small>Every program, one place</small></span>
+      </button>
+      <button type="button" role="tab" class="vid-opt" data-vid="pitch" aria-selected="false" aria-controls="campaign-video">
+        <span class="vid-opt-img"><img src="assets/video-thumb.jpg" alt="" width="1920" height="1080" loading="lazy"><span class="vid-len">1:10</span></span>
+        <span class="vid-opt-txt"><span class="vid-now">Now playing</span><b>The Pitch</b><small>The whole campaign</small></span>
       </button>
     </div>
     <p class="vid-plays" id="vid-plays" hidden><svg viewBox="0 0 10 12" aria-hidden="true"><path d="M0 0l10 6-10 6z"/></svg><span><b id="vid-plays-n"></b> <span id="vid-plays-w">plays</span></span></p>
@@ -1581,7 +1581,7 @@
       <!-- Calendly: set data-calendly to your booking link, e.g. https://calendly.com/your-name/15min. The button stays hidden until it's set. -->
       <a class="cta-light" id="calendly-link" data-calendly="https://calendly.com/aidanzagel-college/iop-comms-office-hours-with-aidan" href="#contact" hidden>Book office hours with me →</a>
     </div>
-    <!-- Calendly inline embed: shown when the site is the top-level page (Vercel, local). Inside the claude.ai artifact, embeds are blocked, so the button above is used instead. -->
+    <!-- Calendly inline embed: shown when the site is the top-level page (Vercel, local). When the page is shown inside another site, the embed is skipped and the button above is used instead. -->
     <div class="book" id="book" hidden>
       <div class="book-copy">
         <h3 class="book-hl disp"><em>Let's</em>Talk.</h3>
@@ -1809,7 +1809,7 @@
     pitch: { title: 'Watch the Pitch', sub: 'The whole campaign in about a minute.', src: 'assets/campaign-video.mp4', poster: 'assets/video-thumb.jpg' },
     film: { title: 'OneIOP Demo Launch', sub: 'How OneIOP brings every program, announcement and request into one place.', src: 'assets/oneiop-film.mp4', poster: 'assets/film-thumb.jpg' },
   };
-  let current = 'pitch';
+  let current = 'film';
 
   // Play counter: shows the total for the video that's up, and adds one the first time someone plays each video
   const playsEl = document.getElementById('vid-plays');
@@ -1828,23 +1828,32 @@
     plays('POST', id);
   });
 
-  // Switching videos: swap the source, the heading and the counter, and start playing (you just asked for it)
-  document.querySelectorAll('.vid-opt').forEach((btn) => btn.addEventListener('click', () => {
-    const id = btn.dataset.vid, v = VIDEOS[id];
-    if (!v || id === current) { if (id === current && video.paused) video.play().catch(() => {}); return; }
+  // Switching videos: swap the source, the heading and the counter
+  const selectVideo = (id) => {
+    const v = VIDEOS[id];
+    if (!v || id === current) return false;
     current = id;
-    document.querySelectorAll('.vid-opt').forEach((b) => b.setAttribute('aria-selected', b === btn));
+    document.querySelectorAll('.vid-opt').forEach((b) => b.setAttribute('aria-selected', b.dataset.vid === id));
     document.getElementById('vid-title').textContent = v.title;
     document.getElementById('vid-sub').textContent = v.sub;
     video.pause();
     video.poster = v.poster;
     video.src = v.src;
     video.load();
-    video.play().catch(() => {});
     playsEl.hidden = true; plays('GET');
+    return true;
+  };
+  // Clicking a video starts playing it (you just asked for it)
+  document.querySelectorAll('.vid-opt').forEach((btn) => btn.addEventListener('click', () => {
+    const id = btn.dataset.vid;
+    if (id === current) { if (video.paused) video.play().catch(() => {}); return; }
+    if (!selectVideo(id)) return;
+    video.play().catch(() => {});
     const frame = video.closest('.vid-frame').getBoundingClientRect();
     if (frame.top < 60) scrollBy({ top: frame.top - 90, behavior: 'smooth' });
   }));
+  // A link can pick the video: aidanforcomms.com/?v=pitch#video opens on the Pitch (the OneIOP film is the default)
+  try { selectVideo(new URLSearchParams(location.search).get('v')); } catch (e) {}
 
   // Once the headline has settled, the ballot gets checked
   loaderDone.then(() => setTimeout(() => castBallot(false), 1500));
