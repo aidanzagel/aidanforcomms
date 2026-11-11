@@ -176,7 +176,8 @@ def main():
     events.sort(key=lambda e: (e['date'], e['s']))
     for i, e in enumerate(events, 1):
         e['id'] = i
-    data = {'updated': datetime.now(ET).isoformat(timespec='minutes'), 'source': BASE + '/events', 'events': events}
+    # No source URL in the published data: the site doesn't link or point anywhere outside itself
+    data = {'updated': datetime.now(ET).isoformat(timespec='minutes'), 'events': events}
     OUT_JSON.write_text(json.dumps(data, indent=1, ensure_ascii=False) + '\n')
 
     # Keep the copy built into each page in sync, so the pages work even when opened as files
