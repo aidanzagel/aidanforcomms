@@ -313,6 +313,27 @@
 
   /* ====== Section scaffolding ====== */
   .sec { padding-block: clamp(56px, 6vw, 88px); }
+  /* Proof: the results and the work, before the promises */
+  .proof { padding-block: clamp(52px, 6vw, 84px); background: var(--paper); }
+  .proof-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 32px; margin-bottom: clamp(24px, 3vw, 36px); padding-top: 18px; border-top: 3px solid var(--navy); }
+  .proof-head h2 { font-size: clamp(44px, 6vw, 88px); line-height: .9; color: var(--navy); }
+  .proof-head p { max-width: 34ch; font-family: var(--serif); font-size: 21px; line-height: 1.25; color: var(--muted); }
+  .proof-grid { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.3fr); gap: clamp(24px, 4vw, 56px); align-items: start; }
+  .proof-stats { display: grid; gap: 0; }
+  .proof-stats li { display: grid; gap: 4px; padding: 18px 0; border-bottom: 1px solid var(--line); }
+  .proof-stats li:first-child { padding-top: 0; }
+  .proof-stats b { font-family: var(--display); font-weight: 900; font-size: clamp(52px, 6vw, 76px); line-height: .85; color: var(--red); text-transform: uppercase; }
+  .proof-stats span { max-width: 40ch; font-size: 16.5px; line-height: 1.45; color: var(--ink); }
+  .proof-shots { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .proof-shots a { position: relative; display: block; overflow: hidden; border-radius: 12px; background: var(--paper-2); box-shadow: 0 0 0 1px var(--line); text-decoration: none; }
+  .proof-shots .ps-wide { grid-column: 1 / -1; }
+  .proof-shots img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; transition: transform .5s var(--ease); }
+  .proof-shots .ps-wide img { aspect-ratio: 2000 / 889; }
+  .proof-shots a:hover img { transform: scale(1.03); }
+  .proof-shots span { position: absolute; left: 10px; bottom: 10px; max-width: calc(100% - 20px); padding: 5px 10px; border-radius: 8px; background: rgba(16, 20, 61, .82); color: #fff; font-size: 13px; font-weight: 600; line-height: 1.3; }
+  .proof-more { display: inline-flex; gap: 8px; margin-top: 24px; font-weight: 700; color: var(--navy); text-decoration: none; border-bottom: 2px solid var(--red); padding-bottom: 2px; }
+  .proof-more:hover { color: var(--red); }
+  @media (max-width: 820px) { .proof-grid { grid-template-columns: minmax(0, 1fr); } }
   /* Comm-nections: the puzzle, one click from the front page */
   .play-band { padding-block: clamp(36px, 4vw, 56px) 0; background: var(--paper); }
   .play-band + .video-sec { padding-top: clamp(32px, 4vw, 52px); }
@@ -919,6 +940,29 @@
 </section>
 
 <!-- Proof: what Aidan has already done, right after the opening -->
+
+<!-- Proof: what Aidan has already done, right after the opening -->
+<section class="proof" aria-labelledby="proof-title">
+  <div class="wrap">
+    <header class="proof-head">
+      <h2 class="disp" id="proof-title">Already Doing the Work</h2>
+      <p>I run marketing for the HPR. Here's what changed this fall.</p>
+    </header>
+    <div class="proof-grid">
+      <ul class="proof-stats">
+        <li><b>53K</b><span>views on HPR Instagram posts since August, after I redesigned the posts and rebuilt the marketing team</span></li>
+        <li><b>11,803</b><span>accounts reached in three months</span></li>
+        <li><b>Record</b><span>the HPR's largest comp class ever, recruited with posters and posts I designed</span></li>
+      </ul>
+      <div class="proof-shots">
+        <a class="ps-wide" href="#work"><img src="assets/hpr-battle-for-the-senate.webp" alt="Harvard Political Review Battle for the Senate graphic" width="2000" height="889" loading="lazy"><span>Battle for the Senate, a graphic for every 2026 race</span></a>
+        <a href="#work"><img src="assets/work/comp-join.jpg" alt="Join the HPR Fall Comp poster" width="800" height="1067" loading="lazy"><span>Fall comp posters</span></a>
+        <a href="#work"><img src="assets/work/hpu-westpoint-2.jpg" alt="A West Point cadet making his argument at the HPU debate" width="1600" height="1066" loading="lazy"><span>Event photos, HPU vs. West Point</span></a>
+      </div>
+    </div>
+    <a class="proof-more" href="#work">See all my work <span aria-hidden="true">→</span></a>
+  </div>
+</section>
 
 <section class="play-band" aria-labelledby="play-title">
   <div class="wrap">
