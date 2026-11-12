@@ -313,24 +313,7 @@
 
   /* ====== Section scaffolding ====== */
   .sec { padding-block: clamp(56px, 6vw, 88px); }
-  /* Proof: the results and the work, before the promises */
-  .proof { padding-block: clamp(52px, 6vw, 84px); background: var(--paper); }
-  .proof-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 32px; margin-bottom: clamp(24px, 3vw, 36px); padding-top: 18px; border-top: 3px solid var(--navy); }
-  .proof-head h2 { font-size: clamp(44px, 6vw, 88px); line-height: .9; color: var(--navy); }
-  .proof-head p { max-width: 34ch; font-family: var(--serif); font-size: 21px; line-height: 1.25; color: var(--muted); }
-  .proof-grid { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.3fr); gap: clamp(24px, 4vw, 56px); align-items: start; }
-  .proof-stats { display: grid; gap: 0; }
-  .proof-stats li { display: grid; gap: 4px; padding: 18px 0; border-bottom: 1px solid var(--line); }
-  .proof-stats li:first-child { padding-top: 0; }
-  .proof-stats b { font-family: var(--display); font-weight: 900; font-size: clamp(52px, 6vw, 76px); line-height: .85; color: var(--red); text-transform: uppercase; }
-  .proof-stats span { max-width: 40ch; font-size: 16.5px; line-height: 1.45; color: var(--ink); }
-  .proof-shots { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
-  .proof-shots a { position: relative; display: block; overflow: hidden; border-radius: 12px; background: var(--paper-2); box-shadow: 0 0 0 1px var(--line); text-decoration: none; }
-  .proof-shots .ps-wide { grid-column: 1 / -1; }
-  .proof-shots img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; transition: transform .5s var(--ease); }
-  .proof-shots .ps-wide img { aspect-ratio: 2000 / 889; }
-  .proof-shots a:hover img { transform: scale(1.03); }
-  .proof-shots span { position: absolute; left: 10px; bottom: 10px; max-width: calc(100% - 20px); padding: 5px 10px; border-radius: 8px; background: rgba(16, 20, 61, .82); color: #fff; font-size: 13px; font-weight: 600; line-height: 1.3; }
+  /* Underlined text link */
   .proof-more { display: inline-flex; gap: 8px; margin-top: 24px; font-weight: 700; color: var(--navy); text-decoration: none; border-bottom: 2px solid var(--red); padding-bottom: 2px; }
   .proof-more:hover { color: var(--red); }
   /* OneIOP screens under the platform */
@@ -346,7 +329,6 @@
   .built-shot:hover b { color: var(--red); }
   .built-shot span { font-size: 15.5px; line-height: 1.4; color: var(--muted); }
   @media (max-width: 820px) { .built-grid { grid-template-columns: minmax(0, 1fr); gap: 28px; } }
-  @media (max-width: 820px) { .proof-grid { grid-template-columns: minmax(0, 1fr); } }
   /* Comm-nections: the puzzle, one click from the front page */
   .play-band { padding-block: clamp(36px, 4vw, 56px) 0; background: var(--paper); }
   .play-band + .video-sec { padding-top: clamp(32px, 4vw, 52px); }
@@ -842,22 +824,6 @@
     .vid-frame::before, .vid-frame::after { width: 70px; height: 20px; }
   }
 
-  /* ====== Page loader: a quiet wordmark, a filling line, then a fade ====== */
-  .loading, .loading body { overflow: hidden; }
-  .loader {
-    position: fixed; inset: 0; z-index: 200; display: none; place-content: center; justify-items: center; gap: 22px;
-    background: var(--navy); color: var(--paper); transition: opacity .7s ease, visibility 0s linear .7s;
-  }
-  .loading .loader, .loader.out { display: grid; }
-  .loader.out { opacity: 0; visibility: hidden; }
-  .loading .hero *, .loading .hero *::before, .loading .hero *::after { animation-play-state: paused !important; }
-  .ld-mark { display: flex; align-items: center; gap: 14px; opacity: 0; translate: 0 10px; animation: ld-in .9s var(--ease) .1s forwards; }
-  .ld-mark img { display: block; width: min(300px, 62vw); height: auto; }
-  .ld-mark b { font-family: var(--display); font-weight: 900; font-size: clamp(54px, 9vw, 96px); line-height: .85; text-transform: uppercase; letter-spacing: .01em; }
-  .ld-mark i { font-family: var(--serif); font-style: italic; font-size: clamp(28px, 4.4vw, 46px); color: rgba(244, 241, 234, .8); }
-  .ld-bar { width: min(240px, 60vw); height: 2px; background: rgba(244, 241, 234, .18); border-radius: 2px; overflow: hidden; opacity: 0; animation: ld-in .6s ease .3s forwards; }
-  .ld-bar i { display: block; height: 100%; background: var(--red); transform-origin: left; transform: scaleX(0); transition: transform .5s var(--ease); }
-  @keyframes ld-in { to { opacity: 1; translate: 0 0; } }
 
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation: none !important; transition: none !important; }
@@ -896,18 +862,6 @@
 <script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
-<script>
-  // Always open at the top, and hold the page behind the loader (with a failsafe)
-  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
-  if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    document.documentElement.classList.add('loading');
-    setTimeout(() => document.documentElement.classList.remove('loading'), 5000);
-  }
-</script>
-<div class="loader" aria-hidden="true">
-  <div class="ld-mark"><img src="assets/brand/badge-white.png" alt="" width="800" height="658"></div>
-  <div class="ld-bar"><i></i></div>
-</div>
 
 <div class="masthead">
 <a class="announce" href="oneiop.html">
@@ -964,7 +918,7 @@
       <div class="rings" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
       <svg class="star s2" viewBox="0 0 100 96" aria-hidden="true"><polygon class="ghost" points="50,3 61.5,37 97,37 68.5,58 79.5,92 50,71 20.5,92 31.5,58 3,37 38.5,37"/></svg>
       <svg class="star s1" viewBox="0 0 100 96" aria-hidden="true"><polygon class="fill" points="50,3 61.5,37 97,37 68.5,58 79.5,92 50,71 20.5,92 31.5,58 3,37 38.5,37"/></svg>
-      <img class="portrait" src="assets/aidan.png" alt="Aidan Zagel" width="829" height="1000">
+      <img class="portrait" src="assets/aidan.png" fetchpriority="high" alt="Aidan Zagel" width="829" height="1000">
       <img class="sig" src="assets/signature.png" alt="Aidan Zagel's signature" width="900" height="270">
       <div class="ballot" role="button" tabindex="0" aria-label="Cast a vote for Aidan Zagel">
         <div class="b-top label"><span>Ballot</span><span>IOP</span></div>
@@ -981,27 +935,6 @@
 </section>
 
 <!-- Proof: what Aidan has already done, right after the opening -->
-<section class="proof" aria-labelledby="proof-title">
-  <div class="wrap">
-    <header class="proof-head">
-      <h2 class="disp" id="proof-title">Already Doing the Work</h2>
-      <p>I run marketing for the HPR. Here's what changed this fall.</p>
-    </header>
-    <div class="proof-grid">
-      <ul class="proof-stats">
-        <li><b>53K</b><span>views on HPR Instagram posts since August, after I redesigned the posts and rebuilt the marketing team</span></li>
-        <li><b>11,803</b><span>accounts reached in three months</span></li>
-        <li><b>Record</b><span>the HPR's largest comp class ever, recruited with posters and posts I designed</span></li>
-      </ul>
-      <div class="proof-shots">
-        <a class="ps-wide" href="#work"><img src="assets/hpr-battle-for-the-senate.webp" alt="Harvard Political Review Battle for the Senate graphic" width="2000" height="889" loading="lazy"><span>Battle for the Senate, a graphic for every 2026 race</span></a>
-        <a href="#work"><img src="assets/work/comp-join.jpg" alt="Join the HPR Fall Comp poster" width="800" height="1067" loading="lazy"><span>Fall comp posters</span></a>
-        <a href="#work"><img src="assets/work/hpu-westpoint-2.jpg" alt="A West Point cadet making his argument at the HPU debate" width="1600" height="1066" loading="lazy"><span>Event photos, HPU vs. West Point</span></a>
-      </div>
-    </div>
-    <a class="proof-more" href="#work">See all my work <span aria-hidden="true">→</span></a>
-  </div>
-</section>
 
 <section class="play-band" aria-labelledby="play-title">
   <div class="wrap">
@@ -1652,49 +1585,6 @@
 <script>
   const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // Start at the top even if the link carried a section anchor or the browser remembered a scroll spot.
-  // A section anchor (like #video from the campaign email) is remembered and scrolled to once the loader is gone.
-  const startHash = location.hash;
-  if (location.hash) history.replaceState(null, '', location.pathname + location.search);
-  scrollTo({ top: 0, behavior: 'instant' });
-
-  // Loader: the line fills as fonts and the portrait arrive, then the screen fades away
-  const root = document.documentElement;
-  const loader = document.querySelector('.loader');
-  const ldBar = loader.querySelector('.ld-bar i');
-  const loaderDone = new Promise((resolve) => {
-    if (!root.classList.contains('loading')) { loader.remove(); resolve(); return; }
-    const img = document.querySelector('.portrait');
-    const imgReady = img.complete ? Promise.resolve() : new Promise((r) => { img.onload = img.onerror = r; });
-    const steps = [document.fonts ? document.fonts.ready : Promise.resolve(), imgReady, new Promise((r) => setTimeout(r, 1200))];
-    let n = 0;
-    steps.forEach((st) => st.then(() => { ldBar.style.transform = `scaleX(${++n / steps.length})`; }));
-    const finish = () => {
-      if (!loader.isConnected) return;
-      ldBar.style.transform = 'scaleX(1)';
-      setTimeout(() => {
-        scrollTo({ top: 0, behavior: 'instant' });
-        loader.classList.add('out');
-        root.classList.remove('loading');
-        setTimeout(() => loader.remove(), 800);
-        resolve();
-      }, 350);
-    };
-    Promise.race([Promise.all(steps), new Promise((r) => setTimeout(r, 4200))]).then(finish);
-  });
-
-  // Linked straight to a section? Glide there after the loader fades
-  loaderDone.then(() => {
-    if (!startHash || startHash === '#top') return;
-    let target = null;
-    try { target = document.getElementById(decodeURIComponent(startHash.slice(1))); } catch (e) {}
-    if (!target) return;
-    setTimeout(() => {
-      target.scrollIntoView({ behavior: calm ? 'instant' : 'smooth', block: 'start' });
-      history.replaceState(null, '', location.pathname + location.search + startHash);
-    }, 250);
-  });
-
   // Reveal on scroll (rect checks rather than IntersectionObserver, which the preview pane drops)
   const reveals = [...document.querySelectorAll('.reveal')];
 
@@ -1877,8 +1767,8 @@
   // A link can pick the video: aidanforcomms.com/?v=pitch#video opens on the Pitch (the OneIOP film is the default)
   try { selectVideo(new URLSearchParams(location.search).get('v')); } catch (e) {}
 
-  // Once the headline has settled, the ballot gets checked
-  loaderDone.then(() => setTimeout(() => castBallot(false), 1500));
+  // A moment after the page opens, the ballot gets checked
+  setTimeout(() => castBallot(false), 1500);
 
   function dealCards() {}
   function maybeDeal() {
