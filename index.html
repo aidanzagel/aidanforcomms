@@ -291,6 +291,7 @@
   .vid-opt-txt small { font-size: 14px; color: var(--muted); }
   .vid-now { display: none; font: 700 11px/1 var(--sans); letter-spacing: .12em; text-transform: uppercase; color: var(--red); }
   .vid-opt[aria-selected="true"] .vid-now { display: block; }
+  .vid-plays[hidden] { display: none; }
   .vid-plays { display: flex; align-items: center; gap: 10px; margin: 26px 0 0; font: 600 16px/1.2 var(--sans); color: var(--muted); font-variant-numeric: tabular-nums; }
   .vid-plays svg { width: 11px; height: 13px; fill: var(--red); }
   .vid-plays b { color: var(--ink); font-weight: 800; }
@@ -324,6 +325,30 @@
 
   /* ====== Section scaffolding ====== */
   .sec { padding-block: clamp(56px, 6vw, 88px); }
+  /* Comm-nections: the puzzle, one click from the front page */
+  .play-band { padding-block: clamp(36px, 4vw, 56px) 0; background: var(--paper); }
+  .play-band + .video-sec { padding-top: clamp(32px, 4vw, 52px); }
+  .play-card { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: clamp(18px, 3vw, 36px); align-items: center; padding: clamp(18px, 2.4vw, 26px); border: 1.5px solid var(--line); border-radius: 20px; background: #fff; color: var(--ink); text-decoration: none; transition: border-color .25s, box-shadow .25s, transform .3s var(--ease); }
+  .play-card:hover { border-color: var(--navy); box-shadow: 0 18px 40px rgba(16, 20, 61, .12); transform: translateY(-3px); }
+  .play-card:focus-visible { outline: 3px solid var(--red); outline-offset: 4px; }
+  .play-grid { display: grid; grid-template-columns: repeat(4, 22px); gap: 4px; }
+  .play-grid i { aspect-ratio: 1; border-radius: 5px; }
+  .play-grid .t1 { background: #f4d77f; } .play-grid .t2 { background: #a9cdea; } .play-grid .t3 { background: #4f5fd6; } .play-grid .t4 { background: #e0353f; }
+  .play-card:hover .play-grid i { animation: play-pop .5s var(--ease) both; }
+  .play-card:hover .play-grid i:nth-child(4n+2) { animation-delay: .04s; } .play-card:hover .play-grid i:nth-child(4n+3) { animation-delay: .08s; } .play-card:hover .play-grid i:nth-child(4n) { animation-delay: .12s; }
+  @keyframes play-pop { 40% { transform: translateY(-4px) scale(1.06); } }
+  .play-copy { display: grid; gap: 4px; min-width: 0; }
+  .play-kick { font: 700 12px/1 var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--red); }
+  .play-copy b { font-family: var(--display); font-weight: 900; font-size: clamp(34px, 4vw, 48px); line-height: .95; text-transform: uppercase; color: var(--navy); }
+  .play-copy b span { color: var(--red); }
+  .play-sub { font-size: 16px; line-height: 1.4; color: var(--muted); }
+  .play-go { display: inline-flex; align-items: center; gap: 8px; padding: 12px 22px; border-radius: 999px; background: var(--navy); color: #fff; font-weight: 700; font-size: 16px; white-space: nowrap; transition: background .2s; }
+  .play-card:hover .play-go { background: var(--red); }
+  @media (max-width: 640px) {
+    .play-card { grid-template-columns: auto minmax(0, 1fr); }
+    .play-grid { grid-template-columns: repeat(4, 16px); gap: 3px; }
+    .play-go { grid-column: 1 / -1; justify-content: center; }
+  }
   .sec-head {
     display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 340px); align-items: end; gap: 24px;
     border-top: 2px solid currentColor; padding-top: 18px; margin-bottom: clamp(32px, 4vw, 56px);
@@ -1020,6 +1045,20 @@
 <div class="tape" aria-hidden="true">
   <div class="marquee"><div class="mq-track" id="mq"></div></div>
 </div>
+
+<section class="play-band" aria-labelledby="play-title">
+  <div class="wrap">
+    <a class="play-card" href="comm-nections.html">
+      <span class="play-grid" aria-hidden="true"><i class="t1"></i><i class="t1"></i><i class="t1"></i><i class="t1"></i><i class="t2"></i><i class="t2"></i><i class="t2"></i><i class="t2"></i><i class="t3"></i><i class="t3"></i><i class="t3"></i><i class="t3"></i><i class="t4"></i><i class="t4"></i><i class="t4"></i><i class="t4"></i></span>
+      <span class="play-copy">
+        <span class="play-kick">Out now</span>
+        <b id="play-title"><span>Comm</span>-nections</b>
+        <span class="play-sub">Play a game of NYT's Connections (what I call Comm-nections) and learn a little bit more about my platform.</span>
+      </span>
+      <span class="play-go">Play <span aria-hidden="true">→</span></span>
+    </a>
+  </div>
+</section>
 
 <section class="sec video-sec" id="video">
   <div class="wrap">

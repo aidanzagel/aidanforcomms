@@ -59,7 +59,7 @@
   .brand { display: flex; align-items: center; min-width: 0; }
   .brand img { display: block; height: 26px; width: auto; max-width: 100%; }
   @media (max-width: 560px) { .brand img { height: 20px; } }
-  .top a.back { font-size: 14.5px; font-weight: 600; color: var(--navy); text-decoration: none; padding: 8px 16px; border-radius: 999px; border: 1.5px solid var(--navy); transition: background .2s, color .2s; }
+  .top a.back { white-space: nowrap; font-size: 14.5px; font-weight: 600; color: var(--navy); text-decoration: none; padding: 8px 16px; border-radius: 999px; border: 1.5px solid var(--navy); transition: background .2s, color .2s; }
   .top a.back:hover { background: var(--navy); color: #fff; }
 
   main { padding-block: 36px 56px; }
@@ -110,6 +110,20 @@
   .stars svg.used { opacity: .18; transform: scale(.8); }
 
   .controls { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+  /* After each solved group: a short note on how it fits Aidan's platform */
+  .note-veil { position: fixed; inset: 0; z-index: 50; display: grid; place-items: center; padding: 20px max(16px, env(safe-area-inset-left, 0px)) calc(20px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-right, 0px)); background: rgba(16, 20, 61, .38); backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px); animation: note-fade .25s ease both; }
+  .note { width: min(440px, 100%); overflow: hidden; border-radius: 18px; background: #fff; box-shadow: 0 30px 70px rgba(16, 20, 61, .35); animation: note-pop .45s cubic-bezier(.2, 1.3, .4, 1) both; }
+  .note-band { padding: 12px 20px; font-family: var(--display); font-weight: 900; font-size: 20px; line-height: 1; letter-spacing: .02em; text-transform: uppercase; }
+  .note-band.l1 { background: var(--g1); color: var(--ink); } .note-band.l2 { background: var(--g2); color: var(--ink); }
+  .note-band.l3 { background: var(--g3); color: #fff; } .note-band.l4 { background: var(--g4); color: #fff; }
+  .note-body { display: grid; gap: 10px; padding: 20px 22px 22px; }
+  .note-body h2 { font-family: var(--display); font-weight: 900; font-size: 30px; line-height: .98; text-transform: uppercase; color: var(--navy); text-wrap: balance; }
+  .note-body p { font-size: 16px; line-height: 1.5; color: var(--ink); }
+  .note-acts { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px; margin-top: 6px; }
+  .note-link { font-weight: 700; font-size: 15px; color: var(--navy); text-decoration: none; }
+  .note-link:hover { color: var(--red); }
+  @keyframes note-fade { from { opacity: 0; } }
+  @keyframes note-pop { from { opacity: 0; transform: translateY(14px) scale(.96); } }
   .btn {
     padding: 12px 22px; border-radius: 999px; border: 1.5px solid var(--ink); background: transparent;
     font-size: 15.5px; font-weight: 600; cursor: pointer; transition: background .2s, color .2s, opacity .2s;
@@ -139,14 +153,13 @@
 <header class="top">
   <div class="wrap">
     <a class="brand" href="/"><img src="assets/brand/wordmark-color.png" alt="Aidan for Comms" width="1000" height="96"></a>
-    <a class="back" href="comm-petition.html">All games</a>
+    <a class="back" href="/">← Back to the site</a>
   </div>
 </header>
 
 <main class="wrap">
   <div class="intro">
     <h1><span>Comm</span>-nections</h1>
-    <p>Find four groups of four.</p>
   </div>
 
   <div class="board">
@@ -170,10 +183,24 @@
     <div class="controls">
       <button class="btn primary" id="share" type="button">Copy results</button>
       <button class="btn" id="again" type="button">Play again</button>
-      <a class="btn" href="comm-petition.html">More games</a>
+      <a class="btn" href="/">Back to the site</a>
     </div>
   </section>
 </main>
+
+<div class="note-veil" id="note" hidden>
+  <div class="note" role="dialog" aria-modal="true" aria-labelledby="note-title">
+    <div class="note-band" id="note-band"><span id="note-kick"></span></div>
+    <div class="note-body">
+      <h2 id="note-title"></h2>
+      <p id="note-text"></p>
+      <div class="note-acts">
+        <button class="btn primary" id="note-ok" type="button">Keep playing</button>
+        <a class="note-link" id="note-link" href="/">More on the site →</a>
+      </div>
+    </div>
+  </div>
+</div>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
@@ -181,10 +208,14 @@
   // Each group's words come straight from the campaign. GAP, CAP and PRE are IOP acronyms that read
   // like words, and HPR and HPU (Aidan's résumé) are IOP acronyms too, so "acronyms" is a trap.
   const GROUPS = [
-    { level: 1, name: 'Member Perks', words: ['Merch', 'Welcome Kits', 'Door Drops', 'Socials'] },
-    { level: 2, name: 'Comms ___', words: ['Director', 'Playbook', 'Training', 'Team'] },
-    { level: 3, name: 'IOP Acronyms That Are Also Words', words: ['GAP', 'CAP', 'PRE', 'PEP'] },
-    { level: 4, name: 'Aidan’s Résumé', words: ['HPR', 'HPU', 'Quincy', 'Econ'] },
+    { level: 1, name: 'Member Perks', words: ['Merch', 'Welcome Kits', 'Door Drops', 'Socials'],
+      note: { title: 'Being an IOP member should feel like something.', body: 'Program-specific merch supported by comms, welcome kits and door drops for new members, and more social events so members actually get to meet each other.', link: '/#platform', act: 'See Member Perks' } },
+    { level: 2, name: 'Comms ___', words: ['Director', 'Playbook', 'Training', 'Team'],
+      note: { title: 'The Comms Playbook', body: 'One brand template with the IOP’s colors, fonts and logos, custom templates for every program, and comms training for every program’s comms team, plus office hours.', link: '/#platform', act: 'See the Comms Playbook' } },
+    { level: 3, name: 'IOP Acronyms That Are Also Words', words: ['GAP', 'CAP', 'PRE', 'PEP'],
+      note: { title: 'Programs first. All of them.', body: 'Every program gets real comms support, not just Forum. Every program, especially our small and service programs, deserves to be equally highlighted at the IOP.', link: '/#programs', act: 'See every program’s plan' } },
+    { level: 4, name: 'Aidan’s Résumé', words: ['HPR', 'HPU', 'Quincy', 'Econ'],
+      note: { title: 'Comms experience that already works', body: 'At the HPR, Aidan redesigned its posts and rebuilt the marketing team: 53K views on posts this fall. He also runs external affairs for the HPU, and he’s a Quincy sophomore studying Government and Economics.', link: '/#meet', act: 'Meet Aidan' } },
   ];
   const MAX_MISTAKES = 4;
   const SQUARES = { 1: '🟨', 2: '🟦', 3: '🟪', 4: '🟥' };
@@ -266,6 +297,30 @@
     words = words.filter((w) => !g.words.includes(w));
   };
 
+  // The platform note: Keep playing (or See results after the last group) closes it
+  let noteDone = null;
+  const showNote = (g, after) => {
+    const n = g.note; if (!n) { after && after(); return; }
+    $('note-band').className = `note-band l${g.level}`;
+    $('note-kick').textContent = g.name;
+    $('note-title').textContent = n.title;
+    $('note-text').textContent = n.body;
+    $('note-link').href = n.link; $('note-link').textContent = `${n.act} →`;
+    $('note-ok').textContent = after ? 'See results' : 'Keep playing';
+    noteDone = after;
+    $('note').hidden = false;
+    $('note-ok').focus();
+  };
+  const closeNote = () => {
+    if ($('note').hidden) return;
+    $('note').hidden = true;
+    const cb = noteDone; noteDone = null;
+    if (cb) cb(); else $('submit').focus();
+  };
+  $('note-ok').addEventListener('click', closeNote);
+  $('note').addEventListener('click', (e) => { if (e.target.id === 'note') closeNote(); });
+  addEventListener('keydown', (e) => { if (e.key === 'Escape') closeNote(); });
+
   const finish = (won) => {
     $('play').hidden = true;
     $('end').hidden = false;
@@ -305,7 +360,9 @@
         setTimeout(() => {
           picked.clear(); busy = false;
           addSolved(g); renderGrid();
-          if (solved.length === GROUPS.length) setTimeout(() => finish(true), 450);
+          // Then a short note on how this group fits the platform; the last one leads to the results
+          const last = solved.length === GROUPS.length;
+          setTimeout(() => showNote(g, last ? () => finish(true) : null), 380);
         }, MOVE_MS + 40);
         return;
       }
@@ -348,6 +405,7 @@
     words = shuffle(GROUPS.flatMap((g) => g.words));
     picked = new Set(); solved = []; mistakes = 0; guesses = []; tried = new Set(); busy = false;
     solvedEl.innerHTML = '';
+    $('note').hidden = true; noteDone = null;
     $('play').hidden = false; $('end').hidden = true;
     renderStars(); renderGrid();
   }
