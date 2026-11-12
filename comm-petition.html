@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Comm-petition</title>
+<meta name="robots" content="noindex">
+<meta name="description" content="Comm-petition: word puzzles from Aidan for Comms.">
+<link rel="icon" type="image/png" sizes="64x64" href="assets/brand/favicon-star-64.png">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/brand/favicon-star-32.png">
+<link rel="apple-touch-icon" href="assets/brand/icon-star-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400..800&family=Sofia+Sans+Extra+Condensed:wght@700..900&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #1b2384;
+    --red: #d7101b;
+    --paper: #f4f1ea;
+    --ink: #10143d;
+    --muted: #5d607c;
+    --line: rgba(16, 20, 61, .2);
+    --card: #fbf8f1;
+    --tile: #e9e3d5;
+    --honey: #f4d77f;
+    --sky: #a9cdea;
+    --peri: #4f5fd6;
+    --gray: #a29b8a;
+
+    --sans: "Archivo", "Helvetica Neue", Arial, sans-serif;
+    --display: "Sofia Sans Extra Condensed", "Arial Narrow", "Helvetica Neue", sans-serif;
+    --serif: "Newsreader", Georgia, "Times New Roman", serif;
+    --ease: cubic-bezier(.2, .8, .2, 1);
+    color-scheme: light;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { min-height: 100vh; background: var(--paper); color: var(--ink); font-family: var(--sans); font-size: 16px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+
+  .wrap { width: 100%; max-width: 1080px; margin-inline: auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+
+  .top { border-bottom: 1px solid var(--line); }
+  .top .wrap { max-width: 1320px; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-block: 14px; }
+  .brand { display: flex; align-items: center; min-width: 0; }
+  .brand img { display: block; height: 26px; width: auto; max-width: 100%; }
+  @media (max-width: 560px) { .brand img { height: 20px; } }
+  .top a.back { flex: none; font-size: 14.5px; font-weight: 600; color: var(--navy); text-decoration: none; padding: 8px 16px; border-radius: 999px; border: 1.5px solid var(--navy); transition: background .2s, color .2s; }
+  .top a.back:hover { background: var(--navy); color: #fff; }
+
+  main { padding-block: 40px 72px; }
+  .intro { display: grid; gap: 10px; margin-bottom: 36px; text-align: center; }
+  h1 { font-family: var(--display); font-weight: 900; text-transform: uppercase; font-size: clamp(60px, 15vw, 120px); line-height: .82; color: var(--navy); }
+  h1 span { color: var(--red); }
+  .intro p { font-family: var(--serif); font-style: italic; font-size: clamp(19px, 2.2vw, 23px); color: var(--muted); text-wrap: balance; }
+
+  .games { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+  @media (max-width: 680px) { .games { grid-template-columns: minmax(0, 1fr); } .copy h2 { font-size: 36px; } }
+  @media (max-width: 900px) and (min-width: 681px) { .game { grid-template-columns: 104px minmax(0, 1fr); gap: 16px; } }
+
+  .game {
+    display: grid; grid-template-columns: 132px minmax(0, 1fr); gap: 20px; align-items: center;
+    padding: 20px; border-radius: 18px; background: var(--card); color: inherit; text-decoration: none;
+    box-shadow: 0 0 0 1px var(--line), 0 6px 18px rgba(16, 20, 61, .05);
+    transition: translate .25s var(--ease), box-shadow .25s;
+  }
+  .game:hover { translate: 0 -3px; box-shadow: 0 0 0 1px rgba(16, 20, 61, .3), 0 14px 28px rgba(16, 20, 61, .1); }
+  .game:focus-visible { outline: 2px solid var(--red); outline-offset: 3px; }
+  @media (max-width: 420px) { .game { grid-template-columns: 88px minmax(0, 1fr); gap: 14px; padding: 16px; } .copy h2 { font-size: 31px; white-space: nowrap; } }
+
+  .art { aspect-ratio: 1; border-radius: 14px; background: var(--paper); display: grid; place-items: center; padding: 14%; max-width: 100%; }
+  .copy { display: grid; gap: 6px; min-width: 0; }
+  .copy h2 { font-family: var(--display); font-weight: 900; text-transform: uppercase; font-size: clamp(28px, 3.5vw, 40px); line-height: .9; color: var(--navy); white-space: nowrap; }
+  .copy h2 span { color: var(--red); }
+  .copy p { font-size: 15.5px; color: var(--muted); }
+  .copy .go { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 6px; }
+  .copy .go b { display: inline-block; padding: 7px 16px; border-radius: 999px; background: var(--red); color: #fff; font-size: 14.5px; font-weight: 600; }
+  .game:hover .go b { background: #b80d17; }
+  .copy .go small { font-size: 13.5px; font-weight: 600; color: var(--navy); }
+
+  /* Little pictures of each game */
+  .a-pose { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; width: 100%; }
+  .a-pose i { aspect-ratio: 1; border-radius: 4px; background: var(--tile); }
+  .a-pose .h { background: var(--navy); } .a-pose .n { background: var(--honey); } .a-pose .m { background: var(--gray); }
+
+  .a-nect { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; width: 100%; }
+  .a-nect i { aspect-ratio: 1; border-radius: 4px; background: var(--tile); }
+  .a-nect .bar { grid-column: 1 / -1; aspect-ratio: auto; height: 100%; min-height: 14px; }
+  .a-nect .y { background: var(--honey); } .a-nect .b { background: var(--sky); }
+
+  .a-buzz { position: relative; width: 100%; aspect-ratio: 1; }
+  .a-buzz i { position: absolute; width: 31%; aspect-ratio: 1; border-radius: 50%; background: var(--card); box-shadow: inset 0 0 0 3px var(--navy); translate: -50% -50%; }
+  .a-buzz i.c { background: var(--red); box-shadow: inset 0 0 0 3px #fff, 0 0 0 1px var(--red); }
+
+  .a-line { width: 100%; }
+  .a-line svg { display: block; width: 100%; height: auto; }
+</style>
+<script>
+  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="/"><img src="assets/brand/wordmark-color.png" alt="Aidan for Comms" width="1000" height="96"></a>
+    <a class="back" href="/#platform">See the platform</a>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="intro">
+    <h1><span>Comm</span>-petition</h1>
+    <p>Three word puzzles from the Aidan for Comms campaign. Play one, then pass it on.</p>
+  </div>
+
+  <div class="games">
+    <a class="game" href="comm-le.html">
+      <div class="art"><div class="a-pose" aria-hidden="true">
+        <i class="m"></i><i class="n"></i><i class="m"></i><i class="m"></i><i class="h"></i>
+        <i class="h"></i><i class="m"></i><i class="n"></i><i class="h"></i><i class="h"></i>
+        <i class="h"></i><i class="h"></i><i class="h"></i><i class="h"></i><i class="h"></i>
+        <i></i><i></i><i></i><i></i><i></i>
+      </div></div>
+      <div class="copy">
+        <h2><span>Comm</span>-le</h2>
+        <p>Guess the five-letter campaign word in six tries.</p>
+        <div class="go"><b>Play</b><small id="pose-no">New word daily</small></div>
+      </div>
+    </a>
+
+    <a class="game" href="comm-nections.html">
+      <div class="art"><div class="a-nect" aria-hidden="true">
+        <i class="bar y"></i>
+        <i class="bar b"></i>
+        <i></i><i></i><i></i><i></i>
+        <i></i><i></i><i></i><i></i>
+      </div></div>
+      <div class="copy">
+        <h2><span>Comm</span>-nections</h2>
+        <p>Sort sixteen words into four groups of four.</p>
+        <div class="go"><b>Play</b></div>
+      </div>
+    </a>
+
+    <a class="game" href="comm-plete.html">
+      <div class="art"><div class="a-line" aria-hidden="true">
+        <svg viewBox="0 0 100 100">
+          <g stroke-linecap="round" stroke-width="9" fill="none">
+            <polyline points="12,62 31,62 50,43 69,43 88,62" stroke="#f4d77f"/>
+            <polyline points="12,24 31,24 31,43" stroke="#a9cdea"/>
+          </g>
+          <g fill="#a29b8a" opacity=".55">
+            <circle cx="50" cy="24" r="5"/><circle cx="69" cy="24" r="5"/><circle cx="88" cy="24" r="5"/>
+            <circle cx="12" cy="43" r="5"/><circle cx="88" cy="43" r="5"/>
+            <circle cx="12" cy="81" r="5"/><circle cx="31" cy="81" r="5"/><circle cx="50" cy="81" r="5"/><circle cx="69" cy="81" r="5"/><circle cx="88" cy="81" r="5"/>
+            <circle cx="69" cy="62" r="5"/><circle cx="50" cy="62" r="5"/>
+          </g>
+          <g fill="#f4d77f"><circle cx="12" cy="62" r="7"/><circle cx="31" cy="62" r="7"/><circle cx="50" cy="43" r="7"/><circle cx="69" cy="43" r="7"/><circle cx="88" cy="62" r="7"/></g>
+          <g fill="#a9cdea"><circle cx="12" cy="24" r="7"/><circle cx="31" cy="24" r="7"/><circle cx="31" cy="43" r="7"/></g>
+        </svg>
+      </div></div>
+      <div class="copy">
+        <h2><span>Comm</span>-plete</h2>
+        <p>Find the hidden theme words. One stretches all the way across.</p>
+        <div class="go"><b>Play</b></div>
+      </div>
+    </a>
+  </div>
+</main>
+
+<script>
+  // Show today's Comm-le number (puzzle #1 was Nov 9, 2026)
+  const t = new Date();
+  const n = Math.floor((Date.UTC(t.getFullYear(), t.getMonth(), t.getDate()) - Date.UTC(2026, 10, 9)) / 864e5) + 1;
+  if (n >= 1) document.getElementById('pose-no').textContent = `Today: #${n}`;
+</script>
+</body>
+</html>
