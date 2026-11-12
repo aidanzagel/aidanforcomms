@@ -2088,7 +2088,7 @@
         </div>
         ${secTitle('Every program’s template', `${PROGRAMS.length} programs`)}
         <p class="pm-gal-note">Each program gets its own color, header, type and photo frame. The IOP pattern, the date and place row and the IOP sign-off stay the same, so they all read as the IOP. Pick one to use it.</p>
-        <div class="pm-gal">${PROGRAMS.map((p) => `<button type="button" data-pmpick="${esc(p.id)}" aria-pressed="${p.id === o.p}"><img alt="" data-gal="${esc(p.id)}"><span>${esc(p.name)}</span></button>`).join('')}</div>`;
+        <div class="pm-gal">${PROGRAMS.map((p) => `<button type="button" data-pmpick="${esc(p.id)}" aria-pressed="${p.id === o.p}"><img alt="${esc(p.name)} graphic template" data-gal="${esc(p.id)}"><span>${esc(p.name)}</span></button>`).join('')}</div>`;
     },
     scorecard() {
       const rows = PROGRAMS.map((p) => [p, POSTS_THIS_TERM[p.id] || 0]).sort((a, b) => b[1] - a[1]);
