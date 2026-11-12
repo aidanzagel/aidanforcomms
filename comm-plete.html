@@ -164,8 +164,7 @@
     <p>That’s the common thread of the campaign: photos, video, posters and spotlights for every program, not just a few.</p>
     <pre id="result" aria-label="Your solve"></pre>
     <div class="controls">
-      <button class="btn primary" id="share" type="button">Copy results</button>
-      <a class="btn" href="/">Back to the site</a>
+      <a class="btn primary" href="/">Back to the site</a>
     </div>
   </section>
 </main>
@@ -322,14 +321,6 @@
     toast('Circled in red');
   });
 
-  $('share').addEventListener('click', async () => {
-    const text = `Comm-plete, an Aidan for Comms puzzle\n“Every program gets them”\n${$('result').textContent}\n${location.origin}${location.pathname}`;
-    try { await navigator.clipboard.writeText(text); toast('Copied!'); }
-    catch {
-      const r = document.createRange(); r.selectNodeContents($('result'));
-      const s = getSelection(); s.removeAllRanges(); s.addRange(r); toast('Select and copy');
-    }
-  });
 
   draw();
   document.fonts?.ready.then(draw);

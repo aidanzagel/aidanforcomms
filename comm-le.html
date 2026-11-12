@@ -161,8 +161,7 @@
     <p id="end-msg"></p>
     <pre id="grid-result" aria-label="Your guesses"></pre>
     <div class="controls">
-      <button class="btn primary" id="share" type="button">Copy results</button>
-      <a class="btn" href="/">Back to the site</a>
+      <a class="btn primary" href="/">Back to the site</a>
     </div>
     <small id="next"></small>
   </section>
@@ -310,16 +309,6 @@
     if (k) { press(k.dataset.k); k.blur(); }
   });
 
-  $('share').addEventListener('click', async () => {
-    const won = guesses[guesses.length - 1] === ANSWER;
-    const text = `Comm-le #${dayNo + 1} ${won ? guesses.length : 'X'}/6\n${$('grid-result').textContent}\n${location.origin}${location.pathname}`;
-    try { await navigator.clipboard.writeText(text); toast('Copied!'); }
-    catch {
-      const r = document.createRange(); r.selectNodeContents($('grid-result'));
-      const s = getSelection(); s.removeAllRanges(); s.addRange(r);
-      toast('Select and copy');
-    }
-  });
 
   // Pick up where today's game left off
   try { guesses = (JSON.parse(localStorage.getItem(KEY)) || []).filter((g) => typeof g === 'string' && g.length === 5).slice(0, 6); } catch { guesses = []; }

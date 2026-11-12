@@ -185,8 +185,7 @@
     <p id="end-msg"></p>
     <pre id="grid-result" aria-label="Your guesses"></pre>
     <div class="controls">
-      <button class="btn primary" id="share" type="button">Copy results</button>
-      <button class="btn" id="again" type="button">Play again</button>
+      <button class="btn primary" id="again" type="button">Play again</button>
       <a class="btn" href="/">Back to the site</a>
     </div>
   </section>
@@ -395,15 +394,6 @@
   $('clear').addEventListener('click', () => { picked.clear(); renderGrid(); });
   $('submit').addEventListener('click', submit);
   $('again').addEventListener('click', () => start());
-  $('share').addEventListener('click', async () => {
-    const text = `Comm-nections, an Aidan for Comms puzzle\n${$('grid-result').textContent}\n${location.origin}${location.pathname}`;
-    try { await navigator.clipboard.writeText(text); toast('Copied!'); }
-    catch {
-      const r = document.createRange(); r.selectNodeContents($('grid-result'));
-      const s = getSelection(); s.removeAllRanges(); s.addRange(r);
-      toast('Select and copy');
-    }
-  });
 
   function start() {
     words = shuffle(GROUPS.flatMap((g) => g.words));
