@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-11T13:25-05:00",
+ "updated": "2026-11-12T10:23-05:00",
  "events": [
   {
    "p": "FSG",
@@ -119,19 +119,6 @@
    "id": 9
   },
   {
-   "p": "Forum",
-   "date": "2026-11-17",
-   "s": "18:00",
-   "e": "19:15",
-   "where": "JFK Jr. Forum",
-   "img": "assets/iop/saudi-arabias-future-transformation-and-leadership-turbulent.webp",
-   "url": "saudi-arabias-future-transformation-and-leadership-turbulent-region",
-   "title": "Saudi Arabia's Future: Transformation and Leadership in a Turbulent Region",
-   "host": "His Excellency Yousef Al-Benyan and Ned Price",
-   "desc": "How does Saudi Arabia sustain its ambitious national transformation while navigating an increasingly uncertain regional environment?The discussion will explore how Saudi Arabia is advancing…",
-   "id": 10
-  },
-  {
    "p": "Conservative",
    "date": "2026-11-17",
    "s": "18:00",
@@ -142,7 +129,7 @@
    "title": "A Conversation with Mary Margaret Olohan | Conservative Coalition",
    "host": "Mary Margaret Olohan",
    "desc": "Join us for a discussion with Mary Margaret Olohan at the IOP (room location given with RSVP)!",
-   "id": 11
+   "id": 10
   },
   {
    "p": "IOP",
@@ -155,7 +142,7 @@
    "title": "Inside the Alliance: A Conversation with Ambassadors from America's NATO Allies",
    "host": "Ángeles Moreno Bau, Jens Hanefeld and Svanhildur Hólm Valsdóttir",
    "desc": "Join IOP Fellows Ambassador Kelly Craft (former U.S. Ambassador to the United Nations and U.S. Ambassador to Canada) and Ambassador Nathalie Rayes (former U.S. Ambassador to Croatia) for a…",
-   "id": 12
+   "id": 11
   },
   {
    "p": "IOP",
@@ -168,7 +155,7 @@
    "title": "Public Service Under Pressure: The Law, Accountability, and the Future of Government with Skye Perryman",
    "host": "Skye Perryman",
    "desc": "What happens to public service when the institutions and protections that sustain the federal workforce come under pressure?",
-   "id": 13
+   "id": 12
   },
   {
    "p": "Forum",
@@ -181,7 +168,7 @@
    "title": "A Workforce in Transition: The AI Economy and What it Means for Our Future with Secretary Gina Raimondo & Governor Eric Holcomb",
    "host": "Gina Raimondo, Eric Holcomb and David Deming",
    "desc": "With AI playing an increasing role in our economy and society, how does the workforce train and transition?",
-   "id": 14
+   "id": 13
   },
   {
    "p": "IOP",
@@ -194,7 +181,7 @@
    "title": "What Happens When Technology Moves Faster Than Democratic Institutions Can Adapt? with Katie Harbath",
    "host": "Katie Harbath",
    "desc": "Technology is transforming how campaigns communicate, how voters engage with politics, and how democratic institutions operate.",
-   "id": 15
+   "id": 14
   }
  ]
 }
