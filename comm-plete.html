@@ -23,6 +23,8 @@
     --sel: #d9d2c1;
     --theme: #a9cdea;
     --span: #f4d77f;
+    --theme-deep: #4f8fc9;
+    --card: #fbf8f1;
 
     --sans: "Archivo", "Helvetica Neue", Arial, sans-serif;
     --display: "Sofia Sans Extra Condensed", "Arial Narrow", "Helvetica Neue", sans-serif;
@@ -60,9 +62,9 @@
     h1 { font-size: clamp(46px, 12vw, 70px); }
     .intro p { display: none; }
     .side { grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 10px 12px; }
-    .theme { grid-column: 1 / -1; display: flex; align-items: stretch; text-align: left; }
-    .theme small { display: grid; place-items: center; padding: 8px 10px; font-size: 11.5px; line-height: 1.2; text-align: center; max-width: 84px; }
-    .theme b { flex: 1; padding: 10px 14px; font-size: 18px; }
+    .theme-card { grid-column: 1 / -1; display: flex; align-items: stretch; text-align: left; }
+    .side .theme-card small { display: flex; align-items: center; justify-content: center; padding: 8px 10px; font-size: 11.5px; line-height: 1.2; text-align: center; max-width: 84px; }
+    .side .theme-card b { display: flex; align-items: center; justify-content: center; flex: 1; padding: 10px 14px; font-size: 18px; }
     .progress { text-align: left; font-size: 15px; }
     .hint { padding: 8px 16px; }
     .current { min-height: 34px; font-size: 28px; }
@@ -72,9 +74,9 @@
 
   /* Theme card */
   .side { display: grid; gap: 16px; }
-  .theme { border-radius: 14px; overflow: hidden; box-shadow: 0 0 0 1px var(--line); text-align: center; }
-  .theme small { display: block; padding: 7px 12px; background: var(--navy); color: #fff; font-size: 13px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; }
-  .theme b { display: block; padding: 16px 14px 18px; background: #fbf8f1; font-family: var(--serif); font-size: 23px; font-weight: 500; line-height: 1.2; }
+  .theme-card { border-radius: 14px; overflow: hidden; box-shadow: 0 0 0 1px var(--line); text-align: center; }
+  .theme-card small { display: block; padding: 7px 12px; background: var(--theme); color: var(--ink); font-size: 13px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+  .theme-card b { display: block; padding: 16px 14px 18px; background: var(--card); font-family: var(--serif); font-size: 23px; font-weight: 500; line-height: 1.2; }
   .progress { text-align: center; font-size: 16px; color: var(--muted); }
   .progress strong { color: var(--ink); }
   .hint { justify-self: center; }
@@ -82,35 +84,47 @@
   /* Grid */
   .play { display: grid; justify-items: center; gap: 14px; }
   .current { min-height: 40px; font-family: var(--display); font-weight: 900; font-size: 34px; line-height: 1.15; text-transform: uppercase; letter-spacing: .04em; text-align: center; }
-  .current.theme-hit { color: var(--navy); }
-  .current.span-hit { color: var(--red); }
+  .current span { display: inline-block; padding: 0 12px; border-radius: 10px; }
+  .current.theme-hit span { background: var(--theme); animation: chip .45s var(--ease); }
+  .current.span-hit span { background: var(--span); animation: chip .45s var(--ease); }
+  @keyframes chip { from { transform: scale(.85); opacity: .4; } }
   .current.shake { animation: shake .4s; }
   @keyframes shake { 20%, 60% { transform: translateX(-6px); } 40%, 80% { transform: translateX(6px); } }
 
   .board { position: relative; width: min(100%, 380px); touch-action: none; user-select: none; -webkit-user-select: none; }
   .board svg { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
   .board svg line { stroke-width: 15; stroke-linecap: round; }
+  .board svg line.grow { stroke-dasharray: 1; stroke-dashoffset: 1; animation: grow .16s linear var(--d, 0ms) forwards; }
+  @keyframes grow { to { stroke-dashoffset: 0; } }
   .letters { position: relative; display: grid; grid-template-columns: repeat(6, 1fr); }
   .l {
     display: grid; place-items: center; aspect-ratio: 1; border: 0; background: transparent; cursor: pointer;
     font-family: var(--sans); font-weight: 600; font-size: clamp(19px, 5.4vw, 25px); text-transform: uppercase;
   }
-  .l span { display: grid; place-items: center; width: 78%; aspect-ratio: 1; border-radius: 50%; transition: background .15s, color .15s, transform .15s var(--ease); }
+  .l span { display: grid; place-items: center; width: 78%; aspect-ratio: 1; border-radius: 50%; transition: background .15s, color .15s, box-shadow .2s, transform .15s var(--ease); }
+  @media (hover: hover) { .l:hover span { background: rgba(16, 20, 61, .06); } }
   .l.sel span { background: var(--sel); }
   .l.theme span { background: var(--theme); }
   .l.span span { background: var(--span); }
-  .l.hinted span { box-shadow: 0 0 0 2.5px var(--red); }
-  .l.pop span { animation: pop .35s var(--ease); }
-  @keyframes pop { 45% { transform: scale(1.18); } }
+  .l.hinted span { box-shadow: inset 0 0 0 2.5px var(--theme-deep); }
+  .l.add span { animation: add .2s var(--ease); }
+  @keyframes add { from { transform: scale(.72); } }
+  .l.fill span { transition-delay: var(--d, 0ms); animation: pop .42s var(--ease) var(--d, 0ms) both; }
+  @keyframes pop { 40% { transform: translateY(-6px) scale(1.14); } }
+  .l.wave span { animation: pop .5s var(--ease) var(--d, 0ms) both; }
+  @media (prefers-reduced-motion: reduce) { .l span, .board svg line.grow, .current span { animation: none !important; transition: none !important; } .board svg line.grow { stroke-dashoffset: 0; } }
 
   .btn { padding: 12px 22px; border-radius: 999px; border: 1.5px solid var(--ink); background: transparent; font-size: 15.5px; font-weight: 600; cursor: pointer; text-decoration: none; color: inherit; transition: background .2s, color .2s, opacity .2s; }
   .btn:hover:not(:disabled) { background: var(--ink); color: var(--paper); }
   .btn.primary { background: var(--red); border-color: var(--red); color: #fff; }
   .btn.primary:hover { background: #b80d17; border-color: #b80d17; }
   .btn:disabled { opacity: .4; cursor: default; }
-  .hint-meter { display: inline-flex; gap: 3px; margin-left: 8px; vertical-align: middle; }
-  .hint-meter i { width: 7px; height: 7px; border-radius: 50%; background: currentColor; opacity: .25; }
-  .hint-meter i.on { opacity: 1; }
+  @property --p { syntax: '<percentage>'; inherits: false; initial-value: 0%; }
+  .hint { --p: 0%; min-width: 120px; background: linear-gradient(90deg, var(--sel) var(--p), transparent var(--p)); transition: --p .5s var(--ease), opacity .2s, background-color .2s; }
+  .hint:disabled { opacity: .55; }
+  .hint.ready { background: var(--ink); color: var(--paper); opacity: 1; animation: ready .5s var(--ease); }
+  .hint.ready:hover { background: var(--navy); }
+  @keyframes ready { 40% { transform: scale(1.08); } }
 
   .toast {
     position: fixed; left: 50%; top: calc(env(safe-area-inset-top, 0px) + 90px); z-index: 10;
@@ -145,9 +159,9 @@
 
   <div class="layout">
     <div class="side">
-      <div class="theme"><small>Today’s theme</small><b>Every program gets them</b></div>
+      <div class="theme-card"><small>Today’s theme</small><b>Every program gets them</b></div>
       <p class="progress"><strong id="count">0</strong> of <span id="total">7</span> theme words found</p>
-      <button class="btn hint" id="hint" type="button" disabled>Hint<span class="hint-meter" id="meter"><i></i><i></i><i></i></span></button>
+      <button class="btn hint" id="hint" type="button" disabled>Hint</button>
     </div>
 
     <div class="play">
@@ -210,7 +224,8 @@
     return [r.left - b.left + r.width / 2, r.top - b.top + r.height / 2];
   };
 
-  let path = [];
+  let path = [], shown = null, justFound = null;
+  const bump = (i) => { const el = cellEls[i]; el.classList.remove('add'); void el.offsetWidth; el.classList.add('add'); };
   const draw = () => {
     const owner = {};
     found.forEach((w) => PATHS[w].forEach(([r, c]) => { owner[id(r, c)] = w === SPAN ? 'span' : 'theme'; }));
@@ -222,18 +237,22 @@
       el.classList.toggle('hinted', hintCells.has(i) && !owner[i]);
     });
     const segs = [];
-    const add = (cells, color) => cells.slice(1).forEach((b, k) => {
+    const add = (cells, color, grow) => cells.slice(1).forEach((b, k) => {
       const [x1, y1] = center(cells[k]), [x2, y2] = center(b);
-      segs.push(`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${color}"/>`);
+      segs.push(`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${color}"${grow ? ` pathLength="1" class="grow" style="--d:${(k + 1) * 60 - 30}ms"` : ''}/>`);
     });
-    found.forEach((w) => add(PATHS[w].map(([r, c]) => id(r, c)), w === SPAN ? 'var(--span)' : 'var(--theme)'));
+    found.forEach((w) => add(PATHS[w].map(([r, c]) => id(r, c)), w === SPAN ? 'var(--span)' : 'var(--theme)', w === justFound));
     add(path, 'var(--sel)');
     $('lines').innerHTML = segs.join('');
-    $('current').textContent = path.map((i) => cellEls[i].textContent).join('');
+    const word = path.length ? path.map((i) => cellEls[i].textContent).join('') : (shown || '');
+    $('current').innerHTML = word ? `<span>${word}</span>` : '';
     $('count').textContent = found.length;
     const earned = Math.floor(extras.length / 3) - hintsUsed;
-    $('hint').disabled = earned < 1 || !!hinted || found.length === THEME.length;
-    [...$('meter').children].forEach((m, k) => m.classList.toggle('on', earned >= 1 || k < extras.length % 3));
+    const h = $('hint'), ready = earned >= 1 && !hinted && found.length < THEME.length;
+    h.disabled = !ready;
+    h.classList.toggle('ready', ready);
+    h.style.setProperty('--p', `${ready ? 100 : Math.round((extras.length % 3) / 3 * 100)}%`);
+    h.setAttribute('aria-label', ready ? 'Use a hint' : `Hint: ${extras.length % 3} of 3 words found toward the next hint`);
   };
 
   const adjacent = (a, b) => {
@@ -243,8 +262,9 @@
   const used = (i) => found.some((w) => PATHS[w].some(([r, c]) => id(r, c) === i));
 
   const flash = (cls) => {
+    $('current').classList.remove('theme-hit', 'span-hit');
     $('current').classList.add(cls);
-    setTimeout(() => $('current').classList.remove(cls), 600);
+    setTimeout(() => $('current').classList.remove(cls), 1400);
   };
 
   const submit = () => {
@@ -256,11 +276,14 @@
     if (match && !found.includes(match)) {
       found.push(match); log.push(match === SPAN ? 'span' : hinted === match ? 'hint' : 'theme');
       if (hinted === match) hinted = null;
-      flash(match === SPAN ? 'span-hit' : 'theme-hit');
       toast(match === SPAN ? 'Across the board!' : 'Theme word!');
-      cells.forEach((i, k) => setTimeout(() => { cellEls[i].classList.add('pop'); setTimeout(() => cellEls[i].classList.remove('pop'), 360); }, k * 45));
-      path = []; save(); draw();
-      if (found.length === THEME.length) setTimeout(finish, 700);
+      // The circles fill and bounce one after another while the line draws through them
+      cells.forEach((i, k) => { cellEls[i].style.setProperty('--d', `${k * 60}ms`); cellEls[i].classList.add('fill'); });
+      shown = match; justFound = match;
+      path = []; save(); draw(); flash(match === SPAN ? 'span-hit' : 'theme-hit');
+      setTimeout(() => { cells.forEach((i) => { cellEls[i].classList.remove('fill'); cellEls[i].style.removeProperty('--d'); }); justFound = null; }, cells.length * 60 + 500);
+      setTimeout(() => { if (shown === match) { shown = null; if (!path.length) draw(); } }, 1400);
+      if (found.length === THEME.length) setTimeout(finish, cells.length * 60 + 700);
       return;
     }
     if (THEME.includes(word) && found.includes(word)) toast('Already found');
@@ -273,7 +296,11 @@
     setTimeout(() => { path = []; draw(); }, 350);
   };
 
-  const finish = () => {
+  const finish = (celebrate = true) => {
+    if (celebrate) cellEls.forEach((el, i) => {
+      el.style.setProperty('--d', `${(Math.floor(i / COLS) + i % COLS) * 45}ms`); el.classList.add('wave');
+      setTimeout(() => { el.classList.remove('wave'); el.style.removeProperty('--d'); }, 1200);
+    });
     $('end').hidden = false;
     $('result').textContent = log.map((t) => (t === 'span' ? '🟨' : t === 'hint' ? '💡' : '🔵')).join('');
     $('end').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
@@ -293,7 +320,7 @@
     const last = path[path.length - 1];
     if (path.length > 1 && i === path[path.length - 2]) { path.pop(); moved = true; draw(); return; }
     if (path.includes(i)) return;
-    if (last == null || adjacent(last, i)) { path.push(i); if (path.length > 1) moved = true; draw(); }
+    if (last == null || adjacent(last, i)) { path.push(i); shown = null; if (path.length > 1) moved = true; draw(); bump(i); }
   };
 
   $('board').addEventListener('pointerdown', (e) => {
@@ -303,8 +330,9 @@
     dragging = true; moved = false; startCell = i;
     const last = path[path.length - 1];
     if (i === last && path.length) { dragging = false; submit(); return; }   // tapped the last letter again
-    if (path.length && adjacent(last, i) && !path.includes(i)) { path.push(i); draw(); return; }
-    path = [i]; draw();
+    shown = null;
+    if (path.length && adjacent(last, i) && !path.includes(i)) { path.push(i); draw(); bump(i); return; }
+    path = [i]; draw(); bump(i);
   });
   addEventListener('pointermove', (e) => { if (dragging) extend(cellAt(e.clientX, e.clientY)); });
   addEventListener('pointerup', () => {
@@ -318,13 +346,13 @@
     const left = THEME.filter((w) => !found.includes(w) && w !== SPAN);
     hinted = (left.length ? left : [SPAN])[0];
     hintsUsed++; save(); draw();
-    toast('Circled in red');
+    toast('Circled on the board');
   });
 
 
   draw();
   document.fonts?.ready.then(draw);
-  if (found.length === THEME.length) finish();
+  if (found.length === THEME.length) finish(false);
 </script>
 </body>
 </html>
