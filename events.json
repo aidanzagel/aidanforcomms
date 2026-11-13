@@ -1,19 +1,6 @@
 {
- "updated": "2026-11-13T06:25-05:00",
+ "updated": "2026-11-13T13:26-05:00",
  "events": [
-  {
-   "p": "IOP",
-   "date": "2026-11-13",
-   "s": "12:00",
-   "e": "13:00",
-   "where": "Littauer 166",
-   "img": "assets/iop/inside-story-trumps-inner-circle-stephen-millers-path-power-.webp",
-   "url": "inside-story-trumps-inner-circle-stephen-millers-path-power-chris-whipple-iop-fall-2026",
-   "title": "Inside the Story: Trump's Inner Circle & Stephen Miller's Path to Power with Chris Whipple, IOP Fall 2026 Fellow",
-   "host": "Chris Whipple",
-   "desc": "How is the balance of power inside the Trump White House shifting, and what does Stephen Miller’s rise to Chief of Staff signal about the administration’s next chapter?",
-   "id": 1
-  },
   {
    "p": "IOP",
    "date": "2026-11-13",
@@ -25,7 +12,7 @@
    "title": "Our Narratives | Fall 2026 Showcase",
    "host": "Institute of Politics",
    "desc": "View the livestream (Begins at 4:00pm ET on Friday, November 13)Join us on November 13 at 4:00pm for the Our Narratives Fall 2026 Showcase!",
-   "id": 2
+   "id": 1
   },
   {
    "p": "Forum",
@@ -38,6 +25,19 @@
    "title": "Making the Vision: Venture Capital, Creativity, and the Power of Story with David Fialkow, Oscar-Winning Filmmaker",
    "host": "David Fialkow, Reza R. Satchu and Amogh Ganjikunta",
    "desc": "David Fialkow joins us for a conversation that will explore the intersection of entrepreneurship, investing, and storytelling, drawing on his experience as a successful venture capitalist…",
+   "id": 2
+  },
+  {
+   "p": "FSG",
+   "date": "2026-11-17",
+   "s": "16:00",
+   "e": "17:15",
+   "where": "T-102",
+   "img": "assets/iop/study-group-ambassador-nathalie-rayes-outside-lines-diplomac.webp",
+   "url": "study-group-ambassador-nathalie-rayes-outside-lines-diplomacy-leadership-and-us-denmark",
+   "title": "Outside the Lines: Diplomacy, Leadership, and the U.S.–Denmark Partnership with Amb. Alan Leventhal",
+   "host": "Study group with Ambassador Nathalie Rayes",
+   "desc": "Join Ambassador Nathalie Rayes for a conversation about the enduring relationship between the United States and Denmark, the importance of transatlantic alliances, and the role of diplomacy…",
    "id": 3
   },
   {
@@ -67,6 +67,32 @@
    "id": 5
   },
   {
+   "p": "FSG",
+   "date": "2026-11-18",
+   "s": "16:00",
+   "e": "17:15",
+   "where": "L-166",
+   "img": "assets/iop/study-group-ambassador-nathalie-rayes-outside-lines-lessons-.webp",
+   "url": "study-group-ambassador-nathalie-rayes-outside-lines-lessons-learned-reflections-and-ask-me",
+   "title": "Outside the Lines: Lessons Learned, Reflections, and Ask Me Anything",
+   "host": "Study group with Ambassador Nathalie Rayes",
+   "desc": "As we bring our semester to a close, we'll reflect on the conversations, experiences, and lessons that shaped our journey. What challenged our thinking? What inspired us?",
+   "id": 6
+  },
+  {
+   "p": "FSG",
+   "date": "2026-11-18",
+   "s": "16:30",
+   "e": "17:45",
+   "where": "L-163",
+   "img": "assets/iop/study-group-governor-doug-ducey-leading-governing-rich-lowry.webp",
+   "url": "study-group-governor-doug-ducey-leading-governing-rich-lowry",
+   "title": "Leading & Governing with Rich Lowry",
+   "host": "Study group with Governor Doug Ducey",
+   "desc": "Join Governor Doug Ducey for his final study group of the semester focused on the future of the Republican Party and Conservatism, along with commentary on The Left’s future, with virtual…",
+   "id": 7
+  },
+  {
    "p": "Forum",
    "date": "2026-11-18",
    "s": "18:00",
@@ -77,7 +103,7 @@
    "title": "A Workforce in Transition: The AI Economy and What it Means for Our Future with Secretary Gina Raimondo & Governor Eric Holcomb",
    "host": "Gina Raimondo, Eric Holcomb and David Deming",
    "desc": "With AI playing an increasing role in our economy and society, how does the workforce train and transition?",
-   "id": 6
+   "id": 8
   },
   {
    "p": "IOP",
@@ -90,7 +116,33 @@
    "title": "What Happens When Technology Moves Faster Than Democratic Institutions Can Adapt? with Katie Harbath",
    "host": "Katie Harbath",
    "desc": "Technology is transforming how campaigns communicate, how voters engage with politics, and how democratic institutions operate.",
-   "id": 7
+   "id": 9
+  },
+  {
+   "p": "FSG",
+   "date": "2026-11-19",
+   "s": "16:00",
+   "e": "17:15",
+   "where": "L-163",
+   "img": "assets/iop/study-group-ambassador-chris-lu-so-what-makes-great-public-l.webp",
+   "url": "study-group-ambassador-chris-lu-so-what-makes-great-public-leader",
+   "title": "So, What Makes a Great Public Leader?",
+   "host": "Study group with Ambassador Chris Lu",
+   "desc": "We’ll return to the question that launched our semester: What makes a great public leader?",
+   "id": 10
+  },
+  {
+   "p": "FSG",
+   "date": "2026-11-19",
+   "s": "17:00",
+   "e": "18:15",
+   "where": "L-130",
+   "img": "assets/iop/study-group-secretary-gina-raimondo-future-work-ai.webp",
+   "url": "study-group-secretary-gina-raimondo-future-work-ai",
+   "title": "Future of Work & AI",
+   "host": "Study group with Secretary Gina Raimondo",
+   "desc": "Please join IOP Visiting Fellow, Gina Raimondo, for a study group on the future of work and AI.Gina M. Raimondo is the Co-Chair and CEO of RAISE US, a national, nonpartisan organization…",
+   "id": 11
   }
  ]
 }

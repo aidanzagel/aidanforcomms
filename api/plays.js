@@ -2,7 +2,7 @@
 // GET /api/plays?v=pitch returns that video's count; POST adds one play and returns the new count.
 // Storage: Upstash Redis, connected through the Vercel dashboard (Storage → Upstash → Redis).
 // Only these videos have counters (the pitch keeps its original key, so its count carries over).
-const KEYS = { pitch: 'campaign-video:plays', film: 'oneiop-film:plays' };
+const KEYS = { pitch: 'campaign-video:plays', film: 'oneiop-film:plays', final: 'final-video:plays' };
 
 module.exports = async (req, res) => {
   res.setHeader('Cache-Control', 'no-store');
