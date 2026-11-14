@@ -1,19 +1,6 @@
 {
- "updated": "2026-11-13T13:26-05:00",
+ "updated": "2026-11-14T11:51-05:00",
  "events": [
-  {
-   "p": "IOP",
-   "date": "2026-11-13",
-   "s": "16:00",
-   "e": "17:15",
-   "where": "JFK Jr. Forum",
-   "img": "assets/iop/our-narratives-fall-2026-showcase.webp",
-   "url": "our-narratives-fall-2026-showcase",
-   "title": "Our Narratives | Fall 2026 Showcase",
-   "host": "Institute of Politics",
-   "desc": "View the livestream (Begins at 4:00pm ET on Friday, November 13)Join us on November 13 at 4:00pm for the Our Narratives Fall 2026 Showcase!",
-   "id": 1
-  },
   {
    "p": "Forum",
    "date": "2026-11-16",
@@ -25,7 +12,7 @@
    "title": "Making the Vision: Venture Capital, Creativity, and the Power of Story with David Fialkow, Oscar-Winning Filmmaker",
    "host": "David Fialkow, Reza R. Satchu and Amogh Ganjikunta",
    "desc": "David Fialkow joins us for a conversation that will explore the intersection of entrepreneurship, investing, and storytelling, drawing on his experience as a successful venture capitalist…",
-   "id": 2
+   "id": 1
   },
   {
    "p": "FSG",
@@ -38,7 +25,7 @@
    "title": "Outside the Lines: Diplomacy, Leadership, and the U.S.–Denmark Partnership with Amb. Alan Leventhal",
    "host": "Study group with Ambassador Nathalie Rayes",
    "desc": "Join Ambassador Nathalie Rayes for a conversation about the enduring relationship between the United States and Denmark, the importance of transatlantic alliances, and the role of diplomacy…",
-   "id": 3
+   "id": 2
   },
   {
    "p": "Conservative",
@@ -51,7 +38,7 @@
    "title": "A Conversation with Mary Margaret Olohan | Conservative Coalition",
    "host": "Mary Margaret Olohan",
    "desc": "Join us for a discussion with Mary Margaret Olohan at the IOP (room location given with RSVP)!",
-   "id": 4
+   "id": 3
   },
   {
    "p": "IOP",
@@ -64,7 +51,7 @@
    "title": "Public Service Under Pressure: The Law, Accountability, and the Future of Government with Skye Perryman",
    "host": "Skye Perryman",
    "desc": "What happens to public service when the institutions and protections that sustain the federal workforce come under pressure?",
-   "id": 5
+   "id": 4
   },
   {
    "p": "FSG",
@@ -77,7 +64,7 @@
    "title": "Outside the Lines: Lessons Learned, Reflections, and Ask Me Anything",
    "host": "Study group with Ambassador Nathalie Rayes",
    "desc": "As we bring our semester to a close, we'll reflect on the conversations, experiences, and lessons that shaped our journey. What challenged our thinking? What inspired us?",
-   "id": 6
+   "id": 5
   },
   {
    "p": "FSG",
@@ -90,7 +77,7 @@
    "title": "Leading & Governing with Rich Lowry",
    "host": "Study group with Governor Doug Ducey",
    "desc": "Join Governor Doug Ducey for his final study group of the semester focused on the future of the Republican Party and Conservatism, along with commentary on The Left’s future, with virtual…",
-   "id": 7
+   "id": 6
   },
   {
    "p": "Forum",
@@ -103,7 +90,7 @@
    "title": "A Workforce in Transition: The AI Economy and What it Means for Our Future with Secretary Gina Raimondo & Governor Eric Holcomb",
    "host": "Gina Raimondo, Eric Holcomb and David Deming",
    "desc": "With AI playing an increasing role in our economy and society, how does the workforce train and transition?",
-   "id": 8
+   "id": 7
   },
   {
    "p": "IOP",
@@ -116,7 +103,7 @@
    "title": "What Happens When Technology Moves Faster Than Democratic Institutions Can Adapt? with Katie Harbath",
    "host": "Katie Harbath",
    "desc": "Technology is transforming how campaigns communicate, how voters engage with politics, and how democratic institutions operate.",
-   "id": 9
+   "id": 8
   },
   {
    "p": "FSG",
@@ -129,7 +116,7 @@
    "title": "So, What Makes a Great Public Leader?",
    "host": "Study group with Ambassador Chris Lu",
    "desc": "We’ll return to the question that launched our semester: What makes a great public leader?",
-   "id": 10
+   "id": 9
   },
   {
    "p": "FSG",
@@ -142,7 +129,7 @@
    "title": "Future of Work & AI",
    "host": "Study group with Secretary Gina Raimondo",
    "desc": "Please join IOP Visiting Fellow, Gina Raimondo, for a study group on the future of work and AI.Gina M. Raimondo is the Co-Chair and CEO of RAISE US, a national, nonpartisan organization…",
-   "id": 11
+   "id": 10
   }
  ]
 }
