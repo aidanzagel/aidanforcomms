@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-14T11:51-05:00",
+ "updated": "2026-11-15T12:35-05:00",
  "events": [
   {
    "p": "Forum",
@@ -43,6 +43,19 @@
   {
    "p": "IOP",
    "date": "2026-11-18",
+   "s": "12:00",
+   "e": "13:30",
+   "where": "Malkin Penthouse",
+   "img": "assets/iop/inside-alliance-conversation-ambassadors-americas-nato-allie.webp",
+   "url": "inside-alliance-conversation-ambassadors-americas-nato-allies",
+   "title": "Inside the Alliance: A Conversation with Ambassadors from America's NATO Allies",
+   "host": "Ángeles Moreno Bau, Jens Hanefeld and Svanhildur Hólm Valsdóttir",
+   "desc": "Join IOP Fellows Ambassador Kelly Craft (former U.S. Ambassador to the United Nations and U.S. Ambassador to Canada) and Ambassador Nathalie Rayes (former U.S. Ambassador to Croatia) for a…",
+   "id": 4
+  },
+  {
+   "p": "IOP",
+   "date": "2026-11-18",
    "s": "15:00",
    "e": "16:00",
    "where": "Wexner 434",
@@ -51,19 +64,6 @@
    "title": "Public Service Under Pressure: The Law, Accountability, and the Future of Government with Skye Perryman",
    "host": "Skye Perryman",
    "desc": "What happens to public service when the institutions and protections that sustain the federal workforce come under pressure?",
-   "id": 4
-  },
-  {
-   "p": "FSG",
-   "date": "2026-11-18",
-   "s": "16:00",
-   "e": "17:15",
-   "where": "L-166",
-   "img": "assets/iop/study-group-ambassador-nathalie-rayes-outside-lines-lessons-.webp",
-   "url": "study-group-ambassador-nathalie-rayes-outside-lines-lessons-learned-reflections-and-ask-me",
-   "title": "Outside the Lines: Lessons Learned, Reflections, and Ask Me Anything",
-   "host": "Study group with Ambassador Nathalie Rayes",
-   "desc": "As we bring our semester to a close, we'll reflect on the conversations, experiences, and lessons that shaped our journey. What challenged our thinking? What inspired us?",
    "id": 5
   },
   {
