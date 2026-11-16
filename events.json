@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-15T12:35-05:00",
+ "updated": "2026-11-16T15:50-05:00",
  "events": [
   {
    "p": "Forum",
@@ -11,8 +11,21 @@
    "url": "making-vision-venture-capital-creativity-and-power-story-david-fialkow-oscar-winning",
    "title": "Making the Vision: Venture Capital, Creativity, and the Power of Story with David Fialkow, Oscar-Winning Filmmaker",
    "host": "David Fialkow, Reza R. Satchu and Amogh Ganjikunta",
-   "desc": "David Fialkow joins us for a conversation that will explore the intersection of entrepreneurship, investing, and storytelling, drawing on his experience as a successful venture capitalist…",
+   "desc": "View the livestreamDavid Fialkow joins us for a conversation that will explore the intersection of entrepreneurship, investing, and storytelling, drawing on his experience as a successful…",
    "id": 1
+  },
+  {
+   "p": "IOP",
+   "date": "2026-11-17",
+   "s": "12:00",
+   "e": "13:30",
+   "where": "Littauer 166",
+   "img": "assets/iop/2026-midterms-what-voters-told-us-adam-geller.webp",
+   "url": "2026-midterms-what-voters-told-us-adam-geller",
+   "title": "The 2026 Midterms: What Voters Told Us with Adam Geller",
+   "host": "Adam Geller",
+   "desc": "What did the 2026 midterm elections reveal about the American electorate—and what do the results mean for the future of both parties?",
+   "id": 2
   },
   {
    "p": "FSG",
@@ -25,7 +38,7 @@
    "title": "Outside the Lines: Diplomacy, Leadership, and the U.S.–Denmark Partnership with Amb. Alan Leventhal",
    "host": "Study group with Ambassador Nathalie Rayes",
    "desc": "Join Ambassador Nathalie Rayes for a conversation about the enduring relationship between the United States and Denmark, the importance of transatlantic alliances, and the role of diplomacy…",
-   "id": 2
+   "id": 3
   },
   {
    "p": "Conservative",
@@ -38,7 +51,7 @@
    "title": "A Conversation with Mary Margaret Olohan | Conservative Coalition",
    "host": "Mary Margaret Olohan",
    "desc": "Join us for a discussion with Mary Margaret Olohan at the IOP (room location given with RSVP)!",
-   "id": 3
+   "id": 4
   },
   {
    "p": "IOP",
@@ -50,20 +63,7 @@
    "url": "inside-alliance-conversation-ambassadors-americas-nato-allies",
    "title": "Inside the Alliance: A Conversation with Ambassadors from America's NATO Allies",
    "host": "Ángeles Moreno Bau, Jens Hanefeld and Svanhildur Hólm Valsdóttir",
-   "desc": "Join IOP Fellows Ambassador Kelly Craft (former U.S. Ambassador to the United Nations and U.S. Ambassador to Canada) and Ambassador Nathalie Rayes (former U.S. Ambassador to Croatia) for a…",
-   "id": 4
-  },
-  {
-   "p": "IOP",
-   "date": "2026-11-18",
-   "s": "15:00",
-   "e": "16:00",
-   "where": "Wexner 434",
-   "img": "assets/iop/public-service-under-pressure-law-accountability-and-future-.webp",
-   "url": "public-service-under-pressure-law-accountability-and-future-government-skye-perryman",
-   "title": "Public Service Under Pressure: The Law, Accountability, and the Future of Government with Skye Perryman",
-   "host": "Skye Perryman",
-   "desc": "What happens to public service when the institutions and protections that sustain the federal workforce come under pressure?",
+   "desc": "Please note this event is at capacity. Join IOP Fellows Ambassador Kelly Craft (former U.S. Ambassador to the United Nations and U.S. Ambassador to Canada) and Ambassador Nathalie Rayes…",
    "id": 5
   },
   {
@@ -119,16 +119,16 @@
    "id": 9
   },
   {
-   "p": "FSG",
-   "date": "2026-11-19",
-   "s": "17:00",
-   "e": "18:15",
-   "where": "L-130",
-   "img": "assets/iop/study-group-secretary-gina-raimondo-future-work-ai.webp",
-   "url": "study-group-secretary-gina-raimondo-future-work-ai",
-   "title": "Future of Work & AI",
-   "host": "Study group with Secretary Gina Raimondo",
-   "desc": "Please join IOP Visiting Fellow, Gina Raimondo, for a study group on the future of work and AI.Gina M. Raimondo is the Co-Chair and CEO of RAISE US, a national, nonpartisan organization…",
+   "p": "Forum",
+   "date": "2026-11-30",
+   "s": "18:00",
+   "e": "19:15",
+   "where": "JFK Jr. Forum",
+   "img": "assets/iop/final-two-years-trump-new-democratic-majority-and-road-ahead.webp",
+   "url": "final-two-years-trump-new-democratic-majority-and-road-ahead-maggie-haberman-jonathan-swan",
+   "title": "The Final Two Years: Trump, the New Democratic Majority, and the Road Ahead with Maggie Haberman & Jonathan Swan",
+   "host": "Maggie Haberman, Jonathan Swan and Betsy Fischer Martin",
+   "desc": "Donald Trump faces a transformed Washington with two years left to shape his presidency. After a sweeping midterm defeat, will he change course or double down?",
    "id": 10
   }
  ]
